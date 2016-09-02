@@ -70,11 +70,13 @@ public class Log2SubBand {
         String decoded_string = "";
         
         while (!remaining_string.isEmpty()) {
-            if (debug) System.out.print("remaining: " + remaining_string + "(" + remaining_string.length() + ")\n");
             results = decode_substring(remaining_string, current_number);
             current_number = results[0];
             decoded_string += "," + current_number;
-            if (debug) System.out.println("Current number: " + current_number + "\n");
+            if (debug) {
+                System.out.print("remaining: " + remaining_string + "(" + remaining_string.length() + ")\n");
+                System.out.println("Current number: " + current_number + "\n");
+            }
             remaining_string = results[1];
         }
         decoded_string = decoded_string.substring(1); // Remove trailing comma
@@ -139,10 +141,12 @@ public class Log2SubBand {
             raw_value = MyUtils.prepend_zeroes_if_needed(raw_value);
             input += "," + raw_value;
             
-            if (debug) System.out.println("Raw value: " + raw_value);
             current_compressed = log2_sub_band_compress_number(raw_value);
-            if (debug) System.out.println("Current compressed data: " + current_compressed);
             overall_compressed += current_compressed;
+            if (debug) {
+                System.out.println("Raw value: " + raw_value);
+                System.out.println("Current compressed data: " + current_compressed);
+            }
             
             for(char c : raw_value.toCharArray()) overall_uncompressed += dec_to_bin_nibble(c);
         }
