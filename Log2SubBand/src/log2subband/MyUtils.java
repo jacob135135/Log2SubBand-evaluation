@@ -41,7 +41,7 @@ public class MyUtils {
      * @param nibble Character representation of number to convert to binary
      * @return String representation of binary number using 4 bits
      */
-    public static String decimal_to_binary(char nibble) {
+    public static String dec_to_bin_nibble(char nibble) {
         String result_string = "0000"; // case '0'
         switch (nibble) {
             case '1':  result_string = "0001"; break;
@@ -75,7 +75,7 @@ public class MyUtils {
      * @param binary Four digit binary number (e.g. 0011)
      * @return String decimal number 
      */
-    public static String get_decimal_digit(String binary) {
+    public static String bin_nibble_to_dec(String binary) {
         String decoded_digit = "";
         switch (binary) {
             case "0000":  decoded_digit = "0"; break;
@@ -114,8 +114,7 @@ public class MyUtils {
         options[0] = "Manual entry";
         options[1] = "CSV file import";
         String message = "Would you like to enter data manually or import a csv file with data?";
-        int dialog_result = JOptionPane.showOptionDialog(null,message,"Title", 0,JOptionPane.QUESTION_MESSAGE,null,options,null);
-        
+        int dialog_result = JOptionPane.showOptionDialog(null,message,"Title", 0,JOptionPane.QUESTION_MESSAGE,null,options,null);  
         return dialog_result;
     }
     

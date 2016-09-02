@@ -8,8 +8,8 @@
  */
 package log2subband;
 
-import static log2subband.MyUtils.decimal_to_binary;
-import static log2subband.MyUtils.get_decimal_digit;
+import static log2subband.MyUtils.dec_to_bin_nibble;
+import static log2subband.MyUtils.bin_nibble_to_dec;
 
 /**
  * @author Jakub
@@ -35,7 +35,7 @@ public class Log2SubBand {
      * @param input_number String 
      * @return String compressed binary number as string (e.g. "11000100010001") this is to simplify operations on the "number"
      */
-    public static String compressed_data(String input_number) {    
+    public static String log2_sub_band_compress_number(String input_number) {    
         char digit_pos2 = input_number.charAt(2);
         char digit_pos1 = input_number.charAt(1);
         char digit_pos0 = input_number.charAt(0);
@@ -48,9 +48,9 @@ public class Log2SubBand {
                 if (previous_digit_pos2 == digit_pos2) {
                     return_value = "00";
                 }
-                else {return_value = "01" + decimal_to_binary(digit_pos2);}
-            } else {return_value = "10" + decimal_to_binary(digit_pos1) + decimal_to_binary(digit_pos2);}
-        } else { return_value = "11" + decimal_to_binary(digit_pos0) + decimal_to_binary(digit_pos1) + decimal_to_binary(digit_pos2);}
+                else {return_value = "01" + dec_to_bin_nibble(digit_pos2);}
+            } else {return_value = "10" + dec_to_bin_nibble(digit_pos1) + dec_to_bin_nibble(digit_pos2);}
+        } else { return_value = "11" + dec_to_bin_nibble(digit_pos0) + dec_to_bin_nibble(digit_pos1) + dec_to_bin_nibble(digit_pos2);}
         previous_digit_pos0 = digit_pos0;
         previous_digit_pos1 = digit_pos1;
         previous_digit_pos2 = digit_pos2;
@@ -63,7 +63,7 @@ public class Log2SubBand {
      * @param encoded String to decode
      * @return Decoded numbers separated by comma
      */
-    public static String decode_string(String encoded) {
+    public static String log2_sub_band_decode_string(String encoded) {
         String remaining_string = encoded;
         String current_number = "";
         String[] results;
@@ -81,30 +81,39 @@ public class Log2SubBand {
         return decoded_string;
     }
     
+    /**
+     * Takes in remaining string to decode and last number that was decoded. Based on header 
+       binary code then reads relevant number of following binary numbers (0 to 12).
+     * Resulting string to decode is then returned as well as number decoded using header code
+       and appropriate number of bits from string to decode
+     * @param encoded_substring Substring of initial String to decode   
+     * @param current_number Last/currently decoded number
+     * @return Array of [decoded_number -> currently decoded number, remaining_string -> String still left to decode] 
+     */
     public static String[] decode_substring(String encoded_substring, String current_number) {
-        String decoded_substring = current_number;
+        String decoded_number = current_number;
         String header = encoded_substring.substring(0,2);
         if (debug) System.out.print("Header: " + header + "\n");
         String remaining_string = encoded_substring.substring(2); // Removing header from string
         
         switch (header) {
-            case "00":  decoded_substring = current_number;
+            case "00":  decoded_number = current_number;
                 break;
-            case "01":  decoded_substring = current_number.substring(0,2) + get_decimal_digit(remaining_string.substring(0,4));
+            case "01":  decoded_number = current_number.substring(0,2) + bin_nibble_to_dec(remaining_string.substring(0,4));
                         remaining_string = remaining_string.substring(4);
                 break;
-            case "10":  decoded_substring = current_number.substring(0,1) + get_decimal_digit(remaining_string.substring(0,4))
-                                       + get_decimal_digit(remaining_string.substring(4,8));
+            case "10":  decoded_number = current_number.substring(0,1) + bin_nibble_to_dec(remaining_string.substring(0,4))
+                                       + bin_nibble_to_dec(remaining_string.substring(4,8));
                         remaining_string = remaining_string.substring(8);
                 break;
-            case "11":  decoded_substring = get_decimal_digit(remaining_string.substring(0,4))
-                                       + get_decimal_digit(remaining_string.substring(4,8))
-                                       + get_decimal_digit(remaining_string.substring(8,12));
+            case "11":  decoded_number = bin_nibble_to_dec(remaining_string.substring(0,4))
+                                       + bin_nibble_to_dec(remaining_string.substring(4,8))
+                                       + bin_nibble_to_dec(remaining_string.substring(8,12));
                         remaining_string = remaining_string.substring(12);
                 break;
         }
-        if (debug) System.out.println("Current decoded: " + decoded_substring + "\n");
-        String stuff_to_return[] = {decoded_substring,remaining_string};
+        if (debug) System.out.println("Current decoded: " + decoded_number + "\n");
+        String stuff_to_return[] = {decoded_number,remaining_string};
         return stuff_to_return;
     }
     
@@ -131,11 +140,11 @@ public class Log2SubBand {
             input += "," + raw_value;
             
             if (debug) System.out.println("Raw value: " + raw_value);
-            current_compressed = compressed_data(raw_value);
+            current_compressed = log2_sub_band_compress_number(raw_value);
             if (debug) System.out.println("Current compressed data: " + current_compressed);
             overall_compressed += current_compressed;
             
-            for(char c : raw_value.toCharArray()) overall_uncompressed += decimal_to_binary(c);
+            for(char c : raw_value.toCharArray()) overall_uncompressed += dec_to_bin_nibble(c);
         }
         input = input.substring(1);
         
@@ -146,6 +155,6 @@ public class Log2SubBand {
         System.out.println("Total uncompressed length = " + overall_uncompressed.length());
         double compression_rate = compression_percentage(overall_compressed, overall_uncompressed);
         System.out.println("Overall compression rate: " + compression_rate + "%");
-        System.out.println("Decompressed data: " + decode_string(overall_compressed));
+        System.out.println("Decompressed data: " + log2_sub_band_decode_string(overall_compressed));
     }   
 }
