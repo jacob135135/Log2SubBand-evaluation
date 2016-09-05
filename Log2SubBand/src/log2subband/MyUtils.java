@@ -182,4 +182,31 @@ public class MyUtils {
     File f = new File(filepath);
         try {Desktop.getDesktop().open(f);} catch (IOException e) {System.out.println("ERROR, Can't open file.");}
     }
+
+    /**
+     * Creates CSV table outlining original and encoded values of strings using
+       <code>original</code> and <code>encoded</code>
+     * @param original array of original data
+     * @param encoded array of encoded data
+     * @return String[] of CSV table data
+     */
+    public static String[] make_export_table(String[] original, String[] encoded) {
+        String result_string = "Original,Encoded";
+        assert original.length == encoded.length;
+        for (int i=0; i<original.length; i++) result_string += "\n" + append_spaces(original[i], 8) + "," + encoded[i];
+        String[] result = result_string.split(",");
+        return result;
+    }
+
+    /**
+     * Formatting method that appends spaces to <code>input</code> to achieve
+       desired length of <code>input</code>
+     * Only works when <code>desired_length > input</code>
+     * @param input original string
+     * @param desired_length length of desired string
+     * @return Original string with appended spaces based on original and desired length
+     */
+    public static String append_spaces(String input, int desired_length) {
+        return String.format("%" + (-desired_length) + "s", input);
+    }
 }

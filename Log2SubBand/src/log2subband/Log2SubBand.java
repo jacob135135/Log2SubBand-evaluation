@@ -128,7 +128,8 @@ public class Log2SubBand {
         String overall_uncompressed = "";
         String current_compressed;
         String[] raw_values;
-        String input = "";
+        String input = ""; // Comma separated values needed for export
+        String output = ""; // Comma separated values needed for export
         
         if(MyUtils.data_entry_option_prompt() == 0) {
             raw_values = MyUtils.request_input();
@@ -138,11 +139,12 @@ public class Log2SubBand {
         }
         
         for (String raw_value : raw_values) {
-            raw_value = MyUtils.prepend_zeroes_if_needed(raw_value);
             input += "," + raw_value;
+            raw_value = MyUtils.prepend_zeroes_if_needed(raw_value);
             
             current_compressed = log2_sub_band_compress_number(raw_value);
             overall_compressed += current_compressed;
+            output += "," + current_compressed;
             if (debug) {
                 System.out.println("Raw value: " + raw_value);
                 System.out.println("Current compressed data: " + current_compressed);
@@ -151,6 +153,7 @@ public class Log2SubBand {
             for(char c : raw_value.toCharArray()) overall_uncompressed += dec_to_bin_nibble(c);
         }
         input = input.substring(1);
+        output = output.substring(1);
         
         System.out.println("Input:   " + input);
         System.out.println("Compressed data:   " + overall_compressed);
@@ -161,7 +164,10 @@ public class Log2SubBand {
         System.out.println("Overall compression rate: " + compression_rate + "%");
         System.out.println("Decompressed data: " + log2_sub_band_decode_string(overall_compressed));
 
-        MyUtils.write_CSV("compressed", raw_values);
+        String[] input_array = input.split(",");
+        String[] output_array = output.split(",");
+        String[] export_data = MyUtils.make_export_table(input_array, output_array);
+        MyUtils.write_CSV("compressed", export_data);
         MyUtils.open_file("compressed.csv");
     }   
 }
