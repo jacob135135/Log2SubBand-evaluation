@@ -198,7 +198,7 @@ public class MyUtils {
             result_string += "\n" + append_spaces(original[i], 8) + "," + append_spaces(encoded[i],14) + "," + binary_input[i];
             String orig_string = original[i];
             result_string += "," + get_huffman_encoding(orig_string);
-            if(i+1 != original.length) result_string += symbol_to_encoding_dict.get(",");
+            if(i+1 != original.length) result_string += symbol_to_encoding_dict.get(","); // Add encoding of comma unless last entry
         }
         result_string += "\n\n *Apart from last row all encodings are appended by comma";
         String[] result = result_string.split(",");
