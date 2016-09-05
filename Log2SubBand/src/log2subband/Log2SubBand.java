@@ -160,5 +160,8 @@ public class Log2SubBand {
         double compression_rate = compression_percentage(overall_compressed, overall_uncompressed);
         System.out.println("Overall compression rate: " + compression_rate + "%");
         System.out.println("Decompressed data: " + log2_sub_band_decode_string(overall_compressed));
+
+        MyUtils.write_CSV("compressed", raw_values);
+        MyUtils.open_file("compressed.csv");
     }   
 }
