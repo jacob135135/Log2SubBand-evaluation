@@ -8,6 +8,7 @@
  */
 package log2subband;
 
+import static log2subband.HuffmanCode.Huffman_compress;
 import static log2subband.MyUtils.dec_to_bin_nibble;
 import static log2subband.MyUtils.bin_nibble_to_dec;
 
@@ -66,8 +67,8 @@ public class Log2SubBand {
     public static String log2_sub_band_decode_string(String encoded) {
         String remaining_string = encoded;
         String current_number = "";
-        String[] results;
         String decoded_string = "";
+        String[] results;
         
         while (!remaining_string.isEmpty()) {
             results = decode_substring(remaining_string, current_number);
@@ -149,20 +150,22 @@ public class Log2SubBand {
                 System.out.println("Raw value: " + raw_value);
                 System.out.println("Current compressed data: " + current_compressed);
             }
-            
+
             for(char c : raw_value.toCharArray()) overall_uncompressed += dec_to_bin_nibble(c);
         }
         input = input.substring(1);
         output = output.substring(1);
-        
+
         System.out.println("Input:   " + input);
         System.out.println("Compressed data:   " + overall_compressed);
         System.out.println("Total compressed length = " + overall_compressed.length());
         System.out.println("Uncompressed data: " + overall_uncompressed);
         System.out.println("Total uncompressed length = " + overall_uncompressed.length());
         double compression_rate = compression_percentage(overall_compressed, overall_uncompressed);
-        System.out.println("Overall compression rate: " + compression_rate + "%");
+        System.out.println("Original/Compressed: " + compression_rate + "%");
         System.out.println("Decompressed data: " + log2_sub_band_decode_string(overall_compressed));
+
+        Huffman_compress(input);
 
         String[] input_array = input.split(",");
         String[] output_array = output.split(",");
@@ -170,5 +173,5 @@ public class Log2SubBand {
         String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input);
         MyUtils.write_CSV("compressed", export_data);
         MyUtils.open_file("compressed.csv");
-    }   
+    }
 }
