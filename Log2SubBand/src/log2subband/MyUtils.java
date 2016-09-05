@@ -188,12 +188,15 @@ public class MyUtils {
        <code>original</code> and <code>encoded</code>
      * @param original array of original data
      * @param encoded array of encoded data
+     * @param binary_input array of original data in binary
      * @return String[] of CSV table data
      */
-    public static String[] make_export_table(String[] original, String[] encoded) {
-        String result_string = "Original,Encoded";
+    public static String[] make_export_table(String[] original, String[] encoded, String[] binary_input) {
+        String result_string = "Original," + append_spaces("Encoded", 14) + ",Binary";
         assert original.length == encoded.length;
-        for (int i=0; i<original.length; i++) result_string += "\n" + append_spaces(original[i], 8) + "," + encoded[i];
+        for (int i=0; i<original.length; i++){
+            result_string += "\n" + append_spaces(original[i], 8) + "," + append_spaces(encoded[i],14) + "," + binary_input[i];
+        }
         String[] result = result_string.split(",");
         return result;
     }
@@ -208,5 +211,15 @@ public class MyUtils {
      */
     public static String append_spaces(String input, int desired_length) {
         return String.format("%" + (-desired_length) + "s", input);
+    }
+
+    /**
+     * Splits <code>input</code> string into substrings of length <code>length</code>
+     * @param input
+     * @param length
+     * @return String[] of substrings of original string
+     */
+    public static String[] split_by (String input, int length) {
+        return input.split("(?<=\\G.{" + length + "})"); //http://stackoverflow.com/questions/3760152/split-string-to-equal-length-substrings-in-java
     }
 }

@@ -166,7 +166,8 @@ public class Log2SubBand {
 
         String[] input_array = input.split(",");
         String[] output_array = output.split(",");
-        String[] export_data = MyUtils.make_export_table(input_array, output_array);
+        String[] binary_input = MyUtils.split_by(overall_uncompressed,12);
+        String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input);
         MyUtils.write_CSV("compressed", export_data);
         MyUtils.open_file("compressed.csv");
     }   
