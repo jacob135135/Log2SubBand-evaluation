@@ -8,7 +8,7 @@
  */
 package log2subband;
 
-import static log2subband.HuffmanCode.Huffman_compress;
+import static log2subband.HuffmanCode.Huffman_best_compression;
 import static log2subband.MyUtils.dec_to_bin_nibble;
 import static log2subband.MyUtils.bin_nibble_to_dec;
 
@@ -124,7 +124,7 @@ public class Log2SubBand {
         return Math.round(1000.0 * overall_compressed.length()/overall_uncompressed.length())/10.0;
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         String overall_compressed = "";
         String overall_uncompressed = "";
         String current_compressed;
@@ -165,7 +165,9 @@ public class Log2SubBand {
         System.out.println("Original/Compressed: " + compression_rate + "%");
         System.out.println("Decompressed data: " + log2_sub_band_decode_string(overall_compressed));
 
-        Huffman_compress(input);
+        Huffman_best_compression(input);
+//        String huf_on_the_fly_enc = encode_huffman(input, symbol_to_encoding_dict); JUST FOR TESTING
+//        System.out.println("Encoded:" + huf_on_the_fly_enc); JUST FOR TESTING
 
         String[] input_array = input.split(",");
         String[] output_array = output.split(",");
