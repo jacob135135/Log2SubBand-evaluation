@@ -150,7 +150,6 @@ public class HuffmanCode {
 
         String encoded = "";
         for (char c : string_to_encode.toCharArray()) encoded += symbol_to_encoding_dict.get(String.valueOf(c));
-        //System.out.println("Encoded:" + encoded); JUST FOR TESTING
         String decoded = decode_huffman(encoded, encoding_to_symbol_dict);
         if (decoded.equals(string_to_encode)) System.out.println("\nSUCCESS -> DECODED STRING ENCODED SAME AS ORIGINAL STRING");
         else throw new Exception("\nSOMETHING WENT WRONG -> DECODED STRING ENCODED RESULTED IN DIFFERENT STRING");

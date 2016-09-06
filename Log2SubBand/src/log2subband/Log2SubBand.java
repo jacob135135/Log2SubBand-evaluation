@@ -166,8 +166,6 @@ public class Log2SubBand {
         System.out.println("Decompressed data: " + log2_sub_band_decode_string(overall_compressed));
 
         Huffman_best_compression(input);
-//        String huf_on_the_fly_enc = encode_huffman(input, symbol_to_encoding_dict); JUST FOR TESTING
-//        System.out.println("Encoded:" + huf_on_the_fly_enc); JUST FOR TESTING
 
         String[] input_array = input.split(",");
         String[] output_array = output.split(",");
