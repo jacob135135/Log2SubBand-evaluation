@@ -165,7 +165,7 @@ public class Log2SubBand {
         System.out.println("Original/Compressed: " + compression_rate + "%");
         System.out.println("Decompressed data: " + log2_sub_band_decode_string(overall_compressed));
 
-        Huffman_best_compression(input);
+        Huffman_best_compression(raw_values);
 
         String[] input_array = input.split(",");
         String[] output_array = output.split(",");

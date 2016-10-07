@@ -14,9 +14,9 @@ abstract class HuffmanTree implements Comparable<HuffmanTree> {
 
 /* Downloaded from https://rosettacode.org/wiki/Huffman_coding under GNU Free Documentation License 1.2  */
 class HuffmanLeaf extends HuffmanTree {
-    public final char value; // the character this leaf represents
+    public final String value; // the String this leaf represents
 
-    public HuffmanLeaf(int freq, char val) {
+    public HuffmanLeaf(int freq, String val) {
         super(freq);
         value = val;
     }
@@ -45,7 +45,7 @@ public class HuffmanCode {
         // one for each non-empty character
         for (int i = 0; i < charFreqs.length; i++)
             if (charFreqs[i] > 0)
-                trees.offer(new HuffmanLeaf(charFreqs[i], (char)i));
+                trees.offer(new HuffmanLeaf(charFreqs[i], Integer.toString(i)));
 
         assert trees.size() > 0;
         // loop until there is only one tree left
@@ -69,6 +69,7 @@ public class HuffmanCode {
 
             symbol_to_encoding_dict.put(String.valueOf(leaf.value), String.valueOf(prefix));
             encoding_to_symbol_dict.put(String.valueOf(prefix), String.valueOf(leaf.value));
+            System.out.println("NUMBER/SYMBOL: " + leaf.value + " ENCODING: " + prefix);
 
         } else if (tree instanceof HuffmanNode) {
             HuffmanNode node = (HuffmanNode)tree;
@@ -96,7 +97,7 @@ public class HuffmanCode {
         String decoded = "";
         while (encoded.length()>0) {
             if (encod_to_symbol_dict.containsKey(current)) {
-                decoded += encod_to_symbol_dict.get(current);
+                decoded += encod_to_symbol_dict.get(current) + ",";
                 current = "";
             }
             encoded = encoded.substring(1);
@@ -137,21 +138,25 @@ public class HuffmanCode {
      * selects best codebook for given dataset.
      * !!! Requires reading all data twice -> can't use "on the fly"/until all data arrived
      * Populates <code>symbol_to_encoding_dict</code> and <code>encoding_to_symbol_dict</code>
-     * @param string_to_encode
+     * @param numbers_to_encode
      * @throws Exception If for some reason string after its encoding and decoding results in different string
      *         (can occur only if this implementation is erroneous)
      */
-    public static void Huffman_best_compression(String string_to_encode) throws Exception {
-        int[] charFreqs = new int[256]; // Assume max 256 different characters
-        for (char c : string_to_encode.toCharArray()) charFreqs[c]++; // read each character and record the frequencies
+    public static void Huffman_best_compression(String[] numbers_to_encode) throws Exception {
+        int[] charFreqs = new int[2048]; // Need to support all 2048 different numbers
+        for (String number : numbers_to_encode) {  // read each Number (represented as String) and record the frequencies
+            int numb = Integer.valueOf(number);
+            charFreqs[numb]++;
+        }
         HuffmanTree tree = buildTree(charFreqs); // build tree
 
         create_huffman_tree(tree, new StringBuffer());
 
         String encoded = "";
-        for (char c : string_to_encode.toCharArray()) encoded += symbol_to_encoding_dict.get(String.valueOf(c));
+        for (String number : numbers_to_encode) encoded += symbol_to_encoding_dict.get(number);
         String decoded = decode_huffman(encoded, encoding_to_symbol_dict);
-        if (decoded.equals(string_to_encode)) System.out.println("\nSUCCESS -> DECODED STRING ENCODED SAME AS ORIGINAL STRING");
+        String[] decod = decoded.split(",[ ]*");
+        if (Arrays.equals(decod, numbers_to_encode)) System.out.println("\nSUCCESS -> DECODED STRING ENCODED SAME AS ORIGINAL STRING");
         else throw new Exception("\nSOMETHING WENT WRONG -> DECODED STRING ENCODED RESULTED IN DIFFERENT STRING");
     }
 }

@@ -193,17 +193,17 @@ public class MyUtils {
      * @return String[] of CSV table data
      */
     public static String[] make_export_table(String[] original, String[] encoded, String[] binary_input) {
-        String comma_encoding = symbol_to_encoding_dict.get(",");
+//        String comma_encoding = symbol_to_encoding_dict.get(",");
         String result_string = "Original," + append_spaces("Encoded", 14) + append_spaces(",Binary", 14) + ",Best Huffman*";
         for (int i=0; i<original.length; i++) {
             result_string += "\n" + append_spaces(original[i], 8) + "," + append_spaces(encoded[i],14) + "," + binary_input[i];
             String orig_string = original[i];
             result_string += "," + get_huffman_encoding(orig_string);
-            if(i+1 != original.length) result_string += comma_encoding; // Add encoding of comma unless last entry
+            //if(i+1 != original.length) result_string += comma_encoding; // Add encoding of comma unless last entry
         }
-        result_string += "\n\n *Best Huffman means encoding began after all data arrived."
-                + " This is not always possible. Additionally, apart from last row all encodings "
-                + "are appended by comma (" + comma_encoding + ")";
+//        result_string += "\n\n *Best Huffman means encoding began after all data arrived."
+//                + " This is not always possible. Additionally, apart from last row all encodings "
+//                + "are appended by comma (" + comma_encoding + ")";
         String[] result = result_string.split(",");
         return result;
     }
@@ -216,8 +216,7 @@ public class MyUtils {
      * @return Concatenation of Huffman encodings of all symbols (characters) in <code>to_encode</code>
      */
     public static String get_huffman_encoding(String to_encode) {
-        String result = "";
-        for (char c : to_encode.toCharArray()) result += symbol_to_encoding_dict.get(String.valueOf(c));
+        String result = symbol_to_encoding_dict.get(to_encode);
         return result;
     }
 
