@@ -123,6 +123,16 @@ public class MyUtils {
     }
     
     /**
+     * Gets data from user. If user chose manual input, it will prompt for data.
+     * Otherwise if user chose csv inport, it will prompt csv import and return parsed csv.
+     * @return String array of user input
+     */
+    public static String[] get_data_from_user() {
+        if(data_entry_option_prompt() == 0) return request_input();
+        else return MyUtils.parse_CSV(request_file());
+    }
+
+    /**
      * Attempts to parse a CSV file.
      * !!! Currently no check if file is a valid csv file
      * @param file_path Path to a file to parse
