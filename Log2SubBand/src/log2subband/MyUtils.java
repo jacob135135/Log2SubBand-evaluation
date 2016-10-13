@@ -36,7 +36,6 @@ public class MyUtils {
     public static String[] request_input() {
         String answer = JOptionPane.showInputDialog(null, "Type in numbers separated by comma.");
         String[] raw_values = answer.split(",[ ]*"); // Separates numbers by comma, removes extra spaces
-        if (debug) System.out.println(answer);
         return raw_values;
     }
     
@@ -194,7 +193,7 @@ public class MyUtils {
      */
     public static String[] make_export_table(String[] original, String[] encoded, String[] binary_input) {
 //        String comma_encoding = symbol_to_encoding_dict.get(",");
-        String result_string = "Original," + append_spaces("Encoded", 14) + append_spaces(",Binary", 14) + ",Best Huffman*";
+        String result_string = "Original," + append_spaces("Encoded", 14) + append_spaces(",Binary", 14) + ",Huffman*";
         for (int i=0; i<original.length; i++) {
             result_string += "\n" + append_spaces(original[i], 8) + "," + append_spaces(encoded[i],14) + "," + binary_input[i];
             String orig_string = original[i];

@@ -29,7 +29,7 @@ public class Log2SubBand {
        on real time-data (same number will be encoded differently in various inputs)
      * Compression is dynamic using static integers (e.g. previous_digit_pos0)
      * Basic algorithm: Check if digit_pos0 (most significant bit) bit is different from previous_digit_pos0
-        if so encode all nibbles (nibble in binary = digit in decimal) and append after header, header = 11;
+        if so copy all nibbles (nibble in binary = digit in decimal) and append after header, header = 11;
         else if middle nibble changed -> encode middle & least significant bit, header = 10;
         else if least significant bit changed -> encode least significant bit, header = 01;
         else send header = 00 (This means number is same as the previous number)
@@ -71,13 +71,10 @@ public class Log2SubBand {
         String[] results;
         
         while (!remaining_string.isEmpty()) {
+            if(debug) System.out.print("remaining: " + remaining_string + "(" + remaining_string.length() + ")\n");
             results = decode_substring(remaining_string, current_number);
             current_number = results[0];
             decoded_string += "," + current_number;
-            if (debug) {
-                System.out.print("remaining: " + remaining_string + "(" + remaining_string.length() + ")\n");
-                System.out.println("Current number: " + current_number + "\n");
-            }
             remaining_string = results[1];
         }
         decoded_string = decoded_string.substring(1); // Remove trailing comma
@@ -120,8 +117,8 @@ public class Log2SubBand {
         return stuff_to_return;
     }
     
-    public static Double compression_percentage(String overall_compressed, String overall_uncompressed) {
-        return Math.round(1000.0 * overall_compressed.length()/overall_uncompressed.length())/10.0;
+    public static Double compression_rate(String overall_compressed, String overall_uncompressed) {
+        return Math.round(100.0 * overall_uncompressed.length()/overall_compressed.length())/100.0;
     }
     
     public static void main(String[] args) throws Exception {
@@ -147,7 +144,6 @@ public class Log2SubBand {
             overall_compressed += current_compressed;
             output += "," + current_compressed;
             if (debug) {
-                System.out.println("Raw value: " + raw_value);
                 System.out.println("Current compressed data: " + current_compressed);
             }
 
@@ -161,8 +157,8 @@ public class Log2SubBand {
         System.out.println("Total compressed length = " + overall_compressed.length());
         System.out.println("Uncompressed data: " + overall_uncompressed);
         System.out.println("Total uncompressed length = " + overall_uncompressed.length());
-        double compression_rate = compression_percentage(overall_compressed, overall_uncompressed);
-        System.out.println("Original/Compressed: " + compression_rate + "%");
+        double compression_rate = compression_rate(overall_compressed, overall_uncompressed);
+        System.out.println("Original/Compressed: " + compression_rate);
         System.out.println("Decompressed data: " + log2_sub_band_decode_string(overall_compressed));
 
         Huffman_best_compression(raw_values);
