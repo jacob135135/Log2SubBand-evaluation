@@ -157,6 +157,9 @@ public class HuffmanCode {
         String decoded = decode_huffman(encoded, encoding_to_symbol_dict);
         String[] decod = decoded.split(",[ ]*");
         if (Arrays.equals(decod, numbers_to_encode)) System.out.println("\nSUCCESS -> DECODED STRING ENCODED SAME AS ORIGINAL STRING");
-        else throw new Exception("\nSOMETHING WENT WRONG -> DECODED STRING ENCODED RESULTED IN DIFFERENT STRING");
+        else {
+            System.err.println("nSOMETHING WENT WRONG -> DECODED STRING ENCODED RESULTED IN DIFFERENT STRING");
+            throw new Exception("");
+        }
     }
 }
