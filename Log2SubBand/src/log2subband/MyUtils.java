@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import static log2subband.HuffmanCode.symbol_to_encoding_dict;
+import static log2subband.HuffmanCode.number_to_encoding_dict;
 import static log2subband.Log2SubBand.debug;
 
 /**
@@ -36,7 +36,6 @@ public class MyUtils {
     public static String[] request_input() {
         String answer = JOptionPane.showInputDialog(null, "Type in numbers separated by comma.");
         String[] raw_values = answer.split(",[ ]*"); // Separates numbers by comma, removes extra spaces
-        if (debug) System.out.println(answer);
         return raw_values;
     }
     
@@ -124,6 +123,16 @@ public class MyUtils {
     }
     
     /**
+     * Gets data from user. If user chose manual input, it will prompt for data.
+     * Otherwise if user chose csv inport, it will prompt csv import and return parsed csv.
+     * @return String array of user input
+     */
+    public static String[] get_data_from_user() {
+        if(data_entry_option_prompt() == 0) return request_input();
+        else return MyUtils.parse_CSV(request_file());
+    }
+
+    /**
      * Attempts to parse a CSV file.
      * !!! Currently no check if file is a valid csv file
      * @param file_path Path to a file to parse
@@ -193,17 +202,12 @@ public class MyUtils {
      * @return String[] of CSV table data
      */
     public static String[] make_export_table(String[] original, String[] encoded, String[] binary_input) {
-        String comma_encoding = symbol_to_encoding_dict.get(",");
-        String result_string = "Original," + append_spaces("Encoded", 14) + append_spaces(",Binary", 14) + ",Best Huffman*";
+        String result_string = "Original," + append_spaces("Encoded", 14) + append_spaces(",Binary", 14) + ",Huffman*";
         for (int i=0; i<original.length; i++) {
             result_string += "\n" + append_spaces(original[i], 8) + "," + append_spaces(encoded[i],14) + "," + binary_input[i];
             String orig_string = original[i];
             result_string += "," + get_huffman_encoding(orig_string);
-            if(i+1 != original.length) result_string += comma_encoding; // Add encoding of comma unless last entry
         }
-        result_string += "\n\n *Best Huffman means encoding began after all data arrived."
-                + " This is not always possible. Additionally, apart from last row all encodings "
-                + "are appended by comma (" + comma_encoding + ")";
         String[] result = result_string.split(",");
         return result;
     }
@@ -216,8 +220,7 @@ public class MyUtils {
      * @return Concatenation of Huffman encodings of all symbols (characters) in <code>to_encode</code>
      */
     public static String get_huffman_encoding(String to_encode) {
-        String result = "";
-        for (char c : to_encode.toCharArray()) result += symbol_to_encoding_dict.get(String.valueOf(c));
+        String result = number_to_encoding_dict.get(to_encode);
         return result;
     }
 

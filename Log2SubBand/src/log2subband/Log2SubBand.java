@@ -29,7 +29,7 @@ public class Log2SubBand {
        on real time-data (same number will be encoded differently in various inputs)
      * Compression is dynamic using static integers (e.g. previous_digit_pos0)
      * Basic algorithm: Check if digit_pos0 (most significant bit) bit is different from previous_digit_pos0
-        if so encode all nibbles (nibble in binary = digit in decimal) and append after header, header = 11;
+        if so copy all nibbles (nibble in binary = digit in decimal) and append after header, header = 11;
         else if middle nibble changed -> encode middle & least significant bit, header = 10;
         else if least significant bit changed -> encode least significant bit, header = 01;
         else send header = 00 (This means number is same as the previous number)
@@ -71,13 +71,10 @@ public class Log2SubBand {
         String[] results;
         
         while (!remaining_string.isEmpty()) {
+            if(debug) System.out.print("remaining: " + remaining_string + "(" + remaining_string.length() + ")\n");
             results = decode_substring(remaining_string, current_number);
             current_number = results[0];
             decoded_string += "," + current_number;
-            if (debug) {
-                System.out.print("remaining: " + remaining_string + "(" + remaining_string.length() + ")\n");
-                System.out.println("Current number: " + current_number + "\n");
-            }
             remaining_string = results[1];
         }
         decoded_string = decoded_string.substring(1); // Remove trailing comma
@@ -120,55 +117,42 @@ public class Log2SubBand {
         return stuff_to_return;
     }
     
-    public static Double compression_percentage(String overall_compressed, String overall_uncompressed) {
-        return Math.round(1000.0 * overall_compressed.length()/overall_uncompressed.length())/10.0;
+    public static Double compression_rate(String overall_compressed, String overall_uncompressed) {
+        return Math.round(100.0 * overall_uncompressed.length()/overall_compressed.length())/100.0;
     }
     
     public static void main(String[] args) throws Exception {
-        String overall_compressed = "";
-        String overall_uncompressed = "";
-        String current_compressed;
-        String[] raw_values;
-        String input = ""; // Comma separated values needed for export
-        String output = ""; // Comma separated values needed for export
-        
-        if(MyUtils.data_entry_option_prompt() == 0) {
-            raw_values = MyUtils.request_input();
-        } else {
-            String csv_file = MyUtils.request_file();
-            raw_values = MyUtils.parse_CSV(csv_file);
-        }
-        
+        String overall_compressed, overall_uncompressed, current_compressed, input_string, output_string;
+        overall_compressed = overall_uncompressed = input_string = output_string = "";
+        String[] raw_values = MyUtils.get_data_from_user();
+
         for (String raw_value : raw_values) {
-            input += "," + raw_value;
+            input_string += "," + raw_value;
             raw_value = MyUtils.prepend_zeroes_if_needed(raw_value);
             
             current_compressed = log2_sub_band_compress_number(raw_value);
             overall_compressed += current_compressed;
-            output += "," + current_compressed;
-            if (debug) {
-                System.out.println("Raw value: " + raw_value);
-                System.out.println("Current compressed data: " + current_compressed);
-            }
+            output_string += "," + current_compressed;
+            if (debug) System.out.println("Current compressed data: " + current_compressed);
 
             for(char c : raw_value.toCharArray()) overall_uncompressed += dec_to_bin_nibble(c);
         }
-        input = input.substring(1);
-        output = output.substring(1);
+        input_string = input_string.substring(1);
+        output_string = output_string.substring(1);
 
-        System.out.println("Input:   " + input);
+        System.out.println("Input:   " + input_string);
         System.out.println("Compressed data:   " + overall_compressed);
         System.out.println("Total compressed length = " + overall_compressed.length());
         System.out.println("Uncompressed data: " + overall_uncompressed);
         System.out.println("Total uncompressed length = " + overall_uncompressed.length());
-        double compression_rate = compression_percentage(overall_compressed, overall_uncompressed);
-        System.out.println("Original/Compressed: " + compression_rate + "%");
+        double compression_rate = compression_rate(overall_compressed, overall_uncompressed);
+        System.out.println("Original/Compressed: " + compression_rate);
         System.out.println("Decompressed data: " + log2_sub_band_decode_string(overall_compressed));
 
-        Huffman_best_compression(input);
+        Huffman_best_compression(raw_values);
 
-        String[] input_array = input.split(",");
-        String[] output_array = output.split(",");
+        String[] input_array = input_string.split(",");
+        String[] output_array = output_string.split(",");
         String[] binary_input = MyUtils.split_by(overall_uncompressed,12);
         String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input);
         MyUtils.write_CSV("compressed", export_data);
