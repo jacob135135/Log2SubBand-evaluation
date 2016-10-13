@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import static log2subband.HuffmanCode.symbol_to_encoding_dict;
+import static log2subband.HuffmanCode.number_to_encoding_dict;
 import static log2subband.Log2SubBand.debug;
 
 /**
@@ -202,17 +202,12 @@ public class MyUtils {
      * @return String[] of CSV table data
      */
     public static String[] make_export_table(String[] original, String[] encoded, String[] binary_input) {
-//        String comma_encoding = symbol_to_encoding_dict.get(",");
         String result_string = "Original," + append_spaces("Encoded", 14) + append_spaces(",Binary", 14) + ",Huffman*";
         for (int i=0; i<original.length; i++) {
             result_string += "\n" + append_spaces(original[i], 8) + "," + append_spaces(encoded[i],14) + "," + binary_input[i];
             String orig_string = original[i];
             result_string += "," + get_huffman_encoding(orig_string);
-            //if(i+1 != original.length) result_string += comma_encoding; // Add encoding of comma unless last entry
         }
-//        result_string += "\n\n *Best Huffman means encoding began after all data arrived."
-//                + " This is not always possible. Additionally, apart from last row all encodings "
-//                + "are appended by comma (" + comma_encoding + ")";
         String[] result = result_string.split(",");
         return result;
     }
@@ -225,7 +220,7 @@ public class MyUtils {
      * @return Concatenation of Huffman encodings of all symbols (characters) in <code>to_encode</code>
      */
     public static String get_huffman_encoding(String to_encode) {
-        String result = symbol_to_encoding_dict.get(to_encode);
+        String result = number_to_encoding_dict.get(to_encode);
         return result;
     }
 
