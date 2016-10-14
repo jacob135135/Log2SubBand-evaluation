@@ -8,6 +8,7 @@
  */
 package log2subband;
 
+import java.util.Map;
 import static log2subband.HuffmanCode.number_to_encoding_dict;
 import static log2subband.MyUtils.dec_to_bin_nibble;
 import static log2subband.MyUtils.bin_nibble_to_dec;
@@ -88,7 +89,7 @@ public class Log2SubBand {
        and appropriate number of bits from string to decode
      * @param encoded_substring Substring of initial String to decode   
      * @param current_number Last/currently decoded number
-     * @return Array of [decoded_number -> currently decoded number, remaining_string -> String still left to decode] 
+     * @return Array of [decoded_number (currently decoded number), remaining_string (String still left to decode)]
      */
     public static String[] decode_substring(String encoded_substring, String current_number) {
         String decoded_number = current_number;
@@ -116,45 +117,22 @@ public class Log2SubBand {
         String stuff_to_return[] = {decoded_number,remaining_string};
         return stuff_to_return;
     }
-    
-    public static Double compression_rate(String overall_compressed, String overall_uncompressed) {
-        return Math.round(100.0 * overall_uncompressed.length()/overall_compressed.length())/100.0;
-    }
-    
+
     public static void main(String[] args) throws Exception {
-        String overall_compressed, overall_uncompressed, current_compressed, input_string, output_string;
-        overall_compressed = overall_uncompressed = input_string = output_string = "";
         String[] raw_values = MyUtils.get_data_from_user();
+        Map<String, String> result = MyUtils.perform_log2_sub_band_compression(raw_values);
+        String overall_compressed = result.get("overall_compressed");
+        String overall_uncompressed = result.get("overall_uncompressed");
+        String input_string = result.get("input");
+        String output_string = result.get("output");
 
-        for (String raw_value : raw_values) {
-            input_string += "," + raw_value;
-            raw_value = MyUtils.prepend_zeroes_if_needed(raw_value);
-            
-            current_compressed = log2_sub_band_compress_number(raw_value);
-            overall_compressed += current_compressed;
-            output_string += "," + current_compressed;
-            if (debug) System.out.println("Current compressed data: " + current_compressed);
-
-            for(char c : raw_value.toCharArray()) overall_uncompressed += dec_to_bin_nibble(c);
-        }
-        input_string = input_string.substring(1);
-        output_string = output_string.substring(1);
-
-        System.out.println("Input:   " + input_string);
-        System.out.println("Compressed data:   " + overall_compressed);
-        System.out.println("Total compressed length = " + overall_compressed.length());
-        System.out.println("Uncompressed data: " + overall_uncompressed);
-        System.out.println("Total uncompressed length = " + overall_uncompressed.length());
-        double compression_rate = compression_rate(overall_compressed, overall_uncompressed);
-        System.out.println("Original/Compressed: " + compression_rate);
-        System.out.println("Decompressed data: " + log2_sub_band_decode_string(overall_compressed));
-
-        HuffmanCode.huffman_best_compression(raw_values);
+        MyUtils.print_compression_results(input_string, overall_compressed, overall_uncompressed);
+        HuffmanCode.huffman_best_compression(raw_values); // Does not return data but builds number_to_encoding_dict
 
         String[] input_array = input_string.split(",");
         String[] output_array = output_string.split(",");
         String[] binary_input = MyUtils.split_by(overall_uncompressed,12);
-        String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input);
+        String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input); // uses number_to_encoding_dict
         MyUtils.write_CSV("compressed", export_data);
         MyUtils.open_file("compressed.csv");
     }
