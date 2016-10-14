@@ -126,13 +126,18 @@ public class Log2SubBand {
         String input_string = result.get("input");
         String output_string = result.get("output");
 
-        MyUtils.print_compression_results(input_string, overall_compressed, overall_uncompressed);
-        HuffmanCode.huffman_best_compression(raw_values); // Does not return data but assigns to number_to_encoding_dict
+        MyUtils.print_log2subband_compression_results(input_string, overall_compressed, overall_uncompressed);
+//        HuffmanCode.huffman_best_compression(raw_values); // Does not return data but assigns to number_to_encoding_dict
+
+        // NEED TO parse codebook.csv and generate codebook
+        String[] codebook_parsed = MyUtils.parse_CSV(MyUtils.request_file("Please select codebook csv file"));
+        Map<String, String> imported_codebook = MyUtils.codebook_from_imported_codebook(codebook_parsed);
 
         String[] input_array = input_string.split(",");
         String[] output_array = output_string.split(",");
         String[] binary_input = MyUtils.split_by(overall_uncompressed,12);
-        String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input, number_to_encoding_dict);
+//        String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input, number_to_encoding_dict);
+        String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input, imported_codebook);
         MyUtils.write_CSV("compressed", export_data);
         MyUtils.open_file("compressed.csv");
     }

@@ -111,13 +111,14 @@ public class MyUtils {
     
     /**
      * Provides UI element for user to select a file.
+     * @param title Title to put on the prompt
      * @return String absolute path of the file selected by user
      */
-    public static String request_file() {
+    public static String request_file(String title) {
         JButton open_btn = new JButton();
         JFileChooser fc = new JFileChooser();
         fc.setCurrentDirectory(new java.io.File("../test files"));
-        fc.setDialogTitle("Please select a file");
+        fc.setDialogTitle(title);
         if (fc.showOpenDialog(open_btn) == JFileChooser.APPROVE_OPTION) return fc.getSelectedFile().getAbsolutePath();
         else return "";
     }
@@ -142,7 +143,7 @@ public class MyUtils {
      */
     public static String[] get_data_from_user() {
         if(data_entry_option_prompt() == 0) return request_input();
-        else return MyUtils.parse_CSV(request_file());
+        else return parse_CSV(request_file("Please select a file to compress"));
     }
 
     /**
@@ -220,11 +221,7 @@ public class MyUtils {
         for (int i=0; i<original.length; i++) {
             result_string += "\n" + append_spaces(original[i], 8) + "," + append_spaces(encoded[i],14) + "," + binary_input[i];
             String orig_string = original[i];
-            try {
-                result_string += "," + get_huffman_encoding(orig_string, number_to_encod_dict);
-            } catch (NullPointerException e){
-                throw new NoSuchElementException("Codebook ERROR, no encoding found for '" + orig_string + "'");
-            }
+            result_string += "," + get_huffman_encoding(orig_string, number_to_encod_dict);
         }
         String[] result = result_string.split(",");
         return result;
@@ -240,6 +237,7 @@ public class MyUtils {
      */
     public static String get_huffman_encoding(String to_encode, Map<String, String> numb_to_encod_dict) {
         String result = numb_to_encod_dict.get(to_encode);
+        if (result == null) throw new NoSuchElementException("Codebook ERROR, no encoding found for '" + to_encode + "'");
         return result;
     }
 
@@ -275,7 +273,7 @@ public class MyUtils {
      * @param overall_compressed full compressed string [1,0]*
      * @param overall_uncompressed original string compressed and then decompressed (ideally same as input string)
      */
-    public static void print_compression_results(String input_string, String overall_compressed, String overall_uncompressed) {
+    public static void print_log2subband_compression_results(String input_string, String overall_compressed, String overall_uncompressed) {
         System.out.println("Input:   " + input_string);
         System.out.println("Compressed data:   " + overall_compressed);
         System.out.println("Total compressed length = " + overall_compressed.length());
@@ -318,5 +316,21 @@ public class MyUtils {
         to_return.put("output", output.substring(1));
 
         return to_return;
+    }
+
+    /**
+     * Given parsed codebook data, escapes first 2 values (assumed to be column names). and assuming that
+     * <br>Every alternating number (1st, 3rd, 5th...) is number for codebook
+     * <br>Every alternating number (2nd, 4th, 6th...) is encoding for codebook
+     * <br>Creates mapping of number => encoding
+     * @param codebook_imported_data Parsed codebook data (from csv file)
+     * @return Map<String, String> generated_codebook mapping of number => encoding
+     */
+    public static Map<String, String> codebook_from_imported_codebook (String[] codebook_imported_data) {
+        Map<String, String> generated_codebook = new HashMap<>();
+        for (int i = 2; i < codebook_imported_data.length; i+=2) {
+            generated_codebook.put(codebook_imported_data[i], codebook_imported_data[i+1]);
+        }
+        return generated_codebook;
     }
 }
