@@ -8,7 +8,7 @@
  */
 package log2subband;
 
-import static log2subband.HuffmanCode.Huffman_best_compression;
+import static log2subband.HuffmanCode.number_to_encoding_dict;
 import static log2subband.MyUtils.dec_to_bin_nibble;
 import static log2subband.MyUtils.bin_nibble_to_dec;
 
@@ -149,7 +149,9 @@ public class Log2SubBand {
         System.out.println("Original/Compressed: " + compression_rate);
         System.out.println("Decompressed data: " + log2_sub_band_decode_string(overall_compressed));
 
-        Huffman_best_compression(raw_values);
+        HuffmanCode.huffman_best_compression(raw_values);
+//        String[] crap = {"1","2","3"};
+//        System.out.println(HuffmanCode.encode_huffman(crap, number_to_encoding_dict));
 
         String[] input_array = input_string.split(",");
         String[] output_array = output_string.split(",");

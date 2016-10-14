@@ -223,7 +223,7 @@ public class MyUtils {
     }
 
     /**
-     * After <code>Huffman_best_compression(String string_to_encode) </code> is run,
+     * After <code>huffman_best_compression(String string_to_encode) </code> is run,
        this method can be used to return Huffman encoding of <code>to_encode</code>
        as a concatenation of Huffman encodings of all symbols (characters) in <code>to_encode</code>
      * @param to_encode String to get Huffman encoding of

@@ -114,22 +114,18 @@ public class HuffmanCode {
     /**
      * Encodes a String input to ones and zeroes using inputted Huffman codebook
      * Does not require building Huffman tree
-     * @param to_encode String to encode
+     * @param to_encode String[] of numbers to encode
      * @param number_to_encod_dict Dictionary mapping of numbers and their respective Huffman codes
      * @return encoded String using Huffman codebook
      */
-    public static String encode_huffman(String to_encode, Map<String, String> number_to_encod_dict) {
-        String current = to_encode.substring(0,1);
+    public static String encode_huffman(String[] to_encode, Map<String, String> number_to_encod_dict) {
         String encoded = "";
-        while (to_encode.length()>0) {
-            if (number_to_encod_dict.containsKey(current)) {
-                encoded += number_to_encod_dict.get(current);
-                current = "";
-            } else {
-                throw new NoSuchElementException("Codebook ERROR, no encoding found for '" + current + "'");
+        for (String current_to_encode : to_encode) {
+            try {
+                encoded += number_to_encod_dict.get(current_to_encode) + ", ";
+            } catch (NullPointerException e){
+                throw new NoSuchElementException("Codebook ERROR, no encoding found for '" + current_to_encode + "'");
             }
-            to_encode = to_encode.substring(1);
-            if (to_encode.length()>0) current += to_encode.substring(0,1);
         }
         return encoded;
     }
@@ -143,7 +139,7 @@ public class HuffmanCode {
      * @throws Exception If for some reason string after its encoding and decoding results in different string
      *         (can occur only if this implementation is erroneous)
      */
-    public static void Huffman_best_compression(String[] numbers_to_encode) throws Exception {
+    public static void huffman_best_compression(String[] numbers_to_encode) throws Exception {
         int[] charFreqs = new int[2048]; // Need to support all 2048 different numbers
         for (String number : numbers_to_encode) {  // read each Number (represented as String) and record the frequencies
             int numb = Integer.valueOf(number);
