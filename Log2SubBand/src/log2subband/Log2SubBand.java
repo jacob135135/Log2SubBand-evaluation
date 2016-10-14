@@ -150,8 +150,6 @@ public class Log2SubBand {
         System.out.println("Decompressed data: " + log2_sub_band_decode_string(overall_compressed));
 
         HuffmanCode.huffman_best_compression(raw_values);
-//        String[] crap = {"1","2","3"};
-//        System.out.println(HuffmanCode.encode_huffman(crap, number_to_encoding_dict));
 
         String[] input_array = input_string.split(",");
         String[] output_array = output_string.split(",");
