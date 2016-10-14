@@ -113,26 +113,6 @@ public class HuffmanCode {
     }
 
     /**
-     * Encodes a String input to ones and zeroes using inputted Huffman codebook
-     * Does not require building Huffman tree
-     * @param to_encode String[] of numbers to encode
-     * @param number_to_encod_dict Dictionary mapping of numbers and their respective Huffman codes
-     * @return encoded String using Huffman codebook
-     */
-    public static String encode_huffman(String[] to_encode, Map<String, String> number_to_encod_dict) {
-        String encoded = "";
-        for (String current_to_encode : to_encode) {
-            try {
-                encoded += number_to_encod_dict.get(current_to_encode) + ",";
-            } catch (NullPointerException e){
-                throw new NoSuchElementException("Codebook ERROR, no encoding found for '" + current_to_encode + "'");
-            }
-        }
-        encoded = encoded.substring(0, encoded.length()-1);
-        return encoded;
-    }
-
-    /**
      * Encodes a string using best Huffman compression. This method creates a Huffman tree and
      * selects best codebook for given dataset.
      * !!! Requires reading all data twice -> can't use "on the fly"/until all data arrived

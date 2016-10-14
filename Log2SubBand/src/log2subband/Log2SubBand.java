@@ -9,6 +9,7 @@
 package log2subband;
 
 import java.util.Map;
+import static log2subband.HuffmanCode.number_to_encoding_dict;
 import static log2subband.MyUtils.dec_to_bin_nibble;
 import static log2subband.MyUtils.bin_nibble_to_dec;
 
@@ -126,12 +127,12 @@ public class Log2SubBand {
         String output_string = result.get("output");
 
         MyUtils.print_compression_results(input_string, overall_compressed, overall_uncompressed);
-        HuffmanCode.huffman_best_compression(raw_values); // Does not return data but builds number_to_encoding_dict
+        HuffmanCode.huffman_best_compression(raw_values); // Does not return data but assigns to number_to_encoding_dict
 
         String[] input_array = input_string.split(",");
         String[] output_array = output_string.split(",");
         String[] binary_input = MyUtils.split_by(overall_uncompressed,12);
-        String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input); // uses number_to_encoding_dict
+        String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input, number_to_encoding_dict);
         MyUtils.write_CSV("compressed", export_data);
         MyUtils.open_file("compressed.csv");
     }
