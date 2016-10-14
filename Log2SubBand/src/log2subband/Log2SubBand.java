@@ -9,7 +9,6 @@
 package log2subband;
 
 import java.util.Map;
-import static log2subband.HuffmanCode.number_to_encoding_dict;
 import static log2subband.MyUtils.dec_to_bin_nibble;
 import static log2subband.MyUtils.bin_nibble_to_dec;
 
