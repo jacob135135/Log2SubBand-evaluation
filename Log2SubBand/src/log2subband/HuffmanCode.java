@@ -108,6 +108,7 @@ public class HuffmanCode {
         if (current.length()>0) {
             throw new NoSuchElementException("Unable to decode, remaining" + current + " does not exist in dictionary");
         }
+        decoded = decoded.substring(0, decoded.length()-1);
         return decoded;
     }
 
@@ -122,11 +123,12 @@ public class HuffmanCode {
         String encoded = "";
         for (String current_to_encode : to_encode) {
             try {
-                encoded += number_to_encod_dict.get(current_to_encode) + ", ";
+                encoded += number_to_encod_dict.get(current_to_encode) + ",";
             } catch (NullPointerException e){
                 throw new NoSuchElementException("Codebook ERROR, no encoding found for '" + current_to_encode + "'");
             }
         }
+        encoded = encoded.substring(0, encoded.length()-1);
         return encoded;
     }
 
