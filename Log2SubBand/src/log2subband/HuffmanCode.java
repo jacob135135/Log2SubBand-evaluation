@@ -121,7 +121,7 @@ public class HuffmanCode {
      * @throws Exception If for some reason string after its encoding and decoding results in different string
      *         (can occur only if this implementation is erroneous)
      */
-    public static void huffman_best_compression(String[] numbers_to_encode) throws Exception {
+    public static void init_ideal_huffman_dictionaries(String[] numbers_to_encode) throws Exception {
         int[] charFreqs = new int[2048]; // Need to support all 2048 different numbers
         for (String number : numbers_to_encode) {  // read each Number (represented as String) and record the frequencies
             int numb = Integer.valueOf(number);

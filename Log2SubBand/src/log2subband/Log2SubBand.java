@@ -127,7 +127,14 @@ public class Log2SubBand {
         String output_string = result.get("output");
 
         MyUtils.print_log2subband_compression_results(input_string, overall_compressed, overall_uncompressed);
-        HuffmanCode.huffman_best_compression(raw_values); // Does not return data but assigns to number_to_encoding_dict
+
+        Boolean custom_codebook = MyUtils.codebook_option_prompt();
+        if (custom_codebook) {
+            String[] codebook_parsed = MyUtils.parse_CSV(MyUtils.request_file("Please select codebook csv file"));
+            MyUtils.init_codebook_from_imported_codebook(codebook_parsed);
+        } else {
+            HuffmanCode.init_ideal_huffman_dictionaries(raw_values);
+        }
 
         String[] input_array = input_string.split(",");
         String[] output_array = output_string.split(",");

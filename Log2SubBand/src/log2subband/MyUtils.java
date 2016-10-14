@@ -132,8 +132,21 @@ public class MyUtils {
         options[0] = "Manual entry";
         options[1] = "CSV file import";
         String message = "Would you like to enter data manually or import a csv file with data?";
-        int dialog_result = JOptionPane.showOptionDialog(null,message,"Title", 0,JOptionPane.QUESTION_MESSAGE,null,options,null);  
+        int dialog_result = JOptionPane.showOptionDialog(null,message,"DATA ENTRY OPTIONS", 0,JOptionPane.QUESTION_MESSAGE,null,options,null);
         return dialog_result;
+    }
+
+        /**
+     * Provides a panel with 2 options - manual data entry or importing a csv file
+     * @return true if user chose yes
+     */
+    public static boolean codebook_option_prompt() {
+        String question = "Would you like to use your own codebook in csv file";
+        int reply = JOptionPane.showConfirmDialog(null, question,"CODEBOOK OPTIONS", JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) {
+          return true;
+        }
+        return false;
     }
     
     /**
@@ -228,7 +241,7 @@ public class MyUtils {
     }
 
     /**
-     * After <code>huffman_best_compression(String string_to_encode) </code> is run,
+     * After <code>init_ideal_huffman_dictionaries(String string_to_encode) </code> is run,
        this method can be used to return Huffman encoding of <code>to_encode</code>
        as a concatenation of Huffman encodings of all symbols (characters) in <code>to_encode</code>
      * @param to_encode String to get Huffman encoding of
@@ -322,15 +335,12 @@ public class MyUtils {
      * Given parsed codebook data, escapes first 2 values (assumed to be column names). and assuming that
      * <br>Every alternating number (1st, 3rd, 5th...) is number for codebook
      * <br>Every alternating number (2nd, 4th, 6th...) is encoding for codebook
-     * <br>Creates mapping of number => encoding
+     * <br>Creates mapping of number => encoding and initializes <code>number_to_encoding_dict</code>
      * @param codebook_imported_data Parsed codebook data (from csv file)
-     * @return Map<String, String> generated_codebook mapping of number => encoding
      */
-    public static Map<String, String> codebook_from_imported_codebook (String[] codebook_imported_data) {
-        Map<String, String> generated_codebook = new HashMap<>();
+    public static void init_codebook_from_imported_codebook (String[] codebook_imported_data) {
         for (int i = 2; i < codebook_imported_data.length; i+=2) {
-            generated_codebook.put(codebook_imported_data[i], codebook_imported_data[i+1]);
+            number_to_encoding_dict.put(codebook_imported_data[i], codebook_imported_data[i+1]);
         }
-        return generated_codebook;
     }
 }
