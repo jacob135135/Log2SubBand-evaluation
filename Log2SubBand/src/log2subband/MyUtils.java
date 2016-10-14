@@ -35,10 +35,20 @@ public class MyUtils {
      */
     public static String[] request_input() {
         String answer = JOptionPane.showInputDialog(null, "Type in numbers separated by comma.");
-        String[] raw_values = answer.split(",[ ]*"); // Separates numbers by comma, removes extra spaces
+        String[] raw_values =  CSstring_to_array(answer);
         return raw_values;
     }
     
+    /**
+     * Splits String composed of values separated by comma into array, removing all spaces
+     * @param str_input Comma separated string of values
+     * e.g. "12, 21, 12, 43 " => ["12", "21", "12", "43"]
+     * @return Array obtained by separating commas in string and removing extra spaces
+     */
+    public static String[] CSstring_to_array(String str_input) {
+        return str_input.split(",[ ]*");
+    }
+
     /**
      * Converts number in character representation(e.g. '1') into binary String representation (e.g. "0001") 
      * Converted number has 4 digits and only supports positive numbers
@@ -153,7 +163,7 @@ public class MyUtils {
                         }
                     }
                     comma_sep_values = comma_sep_values.substring(0, comma_sep_values.length()-1); // remove last comma
-                    data_parsed = comma_sep_values.split(",[ ]*"); // Separates numbers by comma, removes extra spaces
+                    data_parsed = CSstring_to_array(comma_sep_values);
                     
                     if(debug) System.out.println(comma_sep_values);
                 } catch (IndexOutOfBoundsException e) {} // No info about size, need to try and read until we get too far         
