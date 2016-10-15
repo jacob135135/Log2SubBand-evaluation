@@ -223,18 +223,18 @@ public class MyUtils {
     /**
      * Creates CSV table outlining original and encoded values of strings using
        <code>original</code> and <code>encoded</code>
+     * <br> Uses <code>number_to_encoding_dict</code> as mapping of numbers and their respective Huffman codes
      * @param original array of original data
      * @param encoded array of encoded data
      * @param binary_input array of original data in binary
-     * @param number_to_encod_dict Mapping of numbers and their respective Huffman codes
      * @return String[] of CSV table data
      */
-    public static String[] make_export_table(String[] original, String[] encoded, String[] binary_input, Map<String, String> number_to_encod_dict) {
+    public static String[] make_export_table(String[] original, String[] encoded, String[] binary_input) {
         String result_string = "Original," + append_spaces("Encoded", 14) + append_spaces(",Binary", 14) + ",Huffman*";
         for (int i=0; i<original.length; i++) {
             result_string += "\n" + append_spaces(original[i], 8) + "," + append_spaces(encoded[i],14) + "," + binary_input[i];
             String orig_string = original[i];
-            result_string += "," + get_huffman_encoding(orig_string, number_to_encod_dict);
+            result_string += "," + get_huffman_encoding(orig_string, number_to_encoding_dict);
         }
         String[] result = result_string.split(",");
         return result;
@@ -357,5 +357,20 @@ public class MyUtils {
             numbers_frequencies[i] = previous_value * 1000 + 1;
         }
         return numbers_frequencies;
+    }
+
+    /**
+     * Uses <code>number_to_encoding_dict</code> mapping of numbers and their encodings and creates csv file with
+     * 2 columns, one for numbers and the other for their respective encodings
+     */
+    public static void export_codebook() {
+        String to_export = "Original," + append_spaces("Encoded", 14);
+        for (Map.Entry<String, String> entrySet : number_to_encoding_dict.entrySet()) {
+            String key = entrySet.getKey();
+            String value = entrySet.getValue();
+            to_export += "\n" + key + "," + value;
+        }
+        String[] export = to_export.split(",");
+        MyUtils.write_CSV("../test files/codebook", export);
     }
 }

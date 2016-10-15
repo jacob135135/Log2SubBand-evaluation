@@ -139,8 +139,9 @@ public class Log2SubBand {
         String[] input_array = input_string.split(",");
         String[] output_array = output_string.split(",");
         String[] binary_input = MyUtils.split_by(overall_uncompressed,12);
-        String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input, number_to_encoding_dict);
+        String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input);
 
+        MyUtils.export_codebook(); // uses number_to_encoding_dict
         MyUtils.write_CSV("compressed", export_data);
         MyUtils.open_file("compressed.csv");
     }
