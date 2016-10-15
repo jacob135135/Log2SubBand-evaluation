@@ -127,6 +127,7 @@ public class HuffmanCode {
             int numb = Integer.valueOf(number);
             charFreqs[numb]++;
         }
+        charFreqs = MyUtils.make_frequencies_significant(charFreqs); // also forces Huffman to create encoding for all
         HuffmanTree tree = buildTree(charFreqs); // build tree
         create_huffman_tree(tree, new StringBuffer());
 

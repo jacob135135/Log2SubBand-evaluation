@@ -343,4 +343,19 @@ public class MyUtils {
             number_to_encoding_dict.put(codebook_imported_data[i], codebook_imported_data[i+1]);
         }
     }
+
+    /**
+     * This function is used to make differences in frequencies significant.
+     * It greatly increases frequency of most frequent ones.
+     * It also adds (as last step) +1 to all frequencies so that every number has to be encoded
+     * @param numbers_frequencies Integer array recording frequencies of numbers
+     * @return numbers_frequencies Input array with differences between frequencies made more significant
+     */
+    public static int[] make_frequencies_significant(int[] numbers_frequencies) {
+        for (int i=0 ; i<numbers_frequencies.length; i++) {
+            int previous_value = numbers_frequencies[i];
+            numbers_frequencies[i] = previous_value * 1000 + 1;
+        }
+        return numbers_frequencies;
+    }
 }
