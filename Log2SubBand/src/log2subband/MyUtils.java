@@ -234,7 +234,7 @@ public class MyUtils {
         for (int i=0; i<original.length; i++) {
             result_string += "\n" + append_spaces(original[i], 8) + "," + append_spaces(encoded[i],14) + "," + binary_input[i];
             String orig_string = original[i];
-            result_string += "," + get_huffman_encoding(orig_string, number_to_encoding_dict);
+            result_string += "," + get_huffman_encoding(orig_string);
         }
         String[] result = result_string.split(",");
         return result;
@@ -244,12 +244,12 @@ public class MyUtils {
      * After <code>init_ideal_huffman_dictionaries(String string_to_encode) </code> is run,
        this method can be used to return Huffman encoding of <code>to_encode</code>
        as a concatenation of Huffman encodings of all symbols (characters) in <code>to_encode</code>
+       using <code>number_to_encoding_dict</code> (Mapping of numbers and their respective Huffman codes)
      * @param to_encode String to get Huffman encoding of
-     * @param numb_to_encod_dict Mapping of numbers and their respective Huffman codes
      * @return Concatenation of Huffman encodings of all symbols (characters) in <code>to_encode</code>
      */
-    public static String get_huffman_encoding(String to_encode, Map<String, String> numb_to_encod_dict) {
-        String result = numb_to_encod_dict.get(to_encode);
+    public static String get_huffman_encoding(String to_encode) {
+        String result = number_to_encoding_dict.get(to_encode);
         if (result == null) throw new NoSuchElementException("Codebook ERROR, no encoding found for '" + to_encode + "'");
         return result;
     }
