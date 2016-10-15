@@ -70,7 +70,6 @@ public class HuffmanCode {
 
             number_to_encoding_dict.put(String.valueOf(leaf.value), String.valueOf(prefix));
             encoding_to_number_dict.put(String.valueOf(prefix), String.valueOf(leaf.value));
-            System.out.println("NUMBER  " + leaf.value + " ENCODED AS : " + prefix);
 
         } else if (tree instanceof HuffmanNode) {
             HuffmanNode node = (HuffmanNode)tree;
