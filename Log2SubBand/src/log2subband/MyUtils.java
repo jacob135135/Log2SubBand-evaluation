@@ -293,7 +293,7 @@ public class MyUtils {
         System.out.println("Uncompressed data: " + overall_uncompressed);
         System.out.println("Total uncompressed length = " + overall_uncompressed.length());
         double compression_rate = compression_rate(overall_compressed, overall_uncompressed);
-        System.out.println("Original/Compressed: " + compression_rate);
+        System.out.println("Log2SubBand Original/Compressed: " + compression_rate);
         System.out.println("Decompressed data: " + Log2SubBand.log2_sub_band_decode_string(overall_compressed));
     }
 
@@ -372,5 +372,32 @@ public class MyUtils {
         }
         String[] export = to_export.split(",");
         MyUtils.write_CSV("../test files/codebook", export);
+    }
+
+    /**
+     * Uses <code>get_huffman_encoding</code> method and concatenates encoding of individual
+     * elements in given array
+     * @param to_encode String[] Array to encode using Huffman
+     * @return
+     */
+    public static String get_full_huffman_encoding(String[] to_encode) {
+        String encoded = "";
+        for(String element : to_encode) {
+            encoded += get_huffman_encoding(element);
+        }
+        return encoded;
+    }
+
+    /**
+     * Prints information regarding Huffman compression results.
+     * Prints Full compressed string and ratio (with respect to original/uncompressed string)
+     * @param input_array
+     * @param overall_uncompressed
+     */
+    static void print_Huffman_compression_results(String[] input_array, String overall_uncompressed) {
+        String compressed = get_full_huffman_encoding(input_array);
+        double compression_rate = compression_rate(compressed, overall_uncompressed);
+        System.out.println("Huffman compressed: " + compressed);
+        System.out.println("Huffman Original/Compressed: " + compression_rate);
     }
 }
