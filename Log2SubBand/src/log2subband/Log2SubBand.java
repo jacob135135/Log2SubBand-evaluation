@@ -153,5 +153,6 @@ public class Log2SubBand {
         MyUtils.write_CSV("compressed", export_data);
         
         if(open_exported) MyUtils.open_file("compressed.csv");
+        System.exit(0);
     }
 }
