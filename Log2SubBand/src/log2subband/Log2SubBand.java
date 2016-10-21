@@ -135,10 +135,9 @@ public class Log2SubBand {
 
         MyUtils.print_log2subband_compression_results(input_string, overall_compressed, overall_uncompressed);
 
-        Boolean custom_codebook = MyUtils.codebook_option_prompt();
-        if (custom_codebook) {
-            String[] codebook_parsed = MyUtils.parse_CSV(MyUtils.request_file("Please select codebook csv file"));
-            MyUtils.init_codebook_from_imported_codebook(codebook_parsed);
+        String[] custom_codebook = input_menu.getCodebook_data();
+        if (custom_codebook.length > 0) {
+            MyUtils.init_codebook_from_imported_codebook(custom_codebook);
         } else {
             HuffmanCode.init_ideal_huffman_dictionaries(raw_values);
         }

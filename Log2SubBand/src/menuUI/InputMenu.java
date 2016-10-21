@@ -22,12 +22,17 @@ public class InputMenu extends javax.swing.JFrame {
     }
     
     private String[] input_data;
+    private String[] codebook_data = {};
     private boolean open_exported;
     private int[] run_parameters;
     private boolean use_decimal_system;
 
     public String[] getInput_data() {
         return input_data;
+    }
+    
+    public String[] getCodebook_data() {
+        return codebook_data;
     }
     
     public Boolean getOpen_exported() {
@@ -51,6 +56,7 @@ public class InputMenu extends javax.swing.JFrame {
                     the_menu.setVisible(true);
                     the_menu.manual_input_panel.setVisible(false);
                     the_menu.input_file_panel.setVisible(false);
+                    the_menu.codebook_panel_csv_import.setVisible(false);
                     menu_created = true;
                 }      
             }
@@ -68,6 +74,7 @@ public class InputMenu extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         jComboBox2 = new javax.swing.JComboBox();
+        buttonGroup3 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         rad_btn_csv_import = new javax.swing.JRadioButton();
@@ -96,11 +103,19 @@ public class InputMenu extends javax.swing.JFrame {
         open_exported_checkbox = new javax.swing.JCheckBox();
         more_info_checkbox = new javax.swing.JCheckBox();
         btn_OK = new javax.swing.JButton();
+        codebook_panel = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        rad_btn_builtin_codebook = new javax.swing.JRadioButton();
+        rad_btn_import_codebook = new javax.swing.JRadioButton();
+        codebook_panel_csv_import = new javax.swing.JPanel();
+        btn_select_file_codebook = new javax.swing.JButton();
+        label_selected_codebook_file = new javax.swing.JLabel();
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setAlwaysOnTop(true);
+        setTitle("CONFIGURATIONS");
         setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -134,7 +149,7 @@ public class InputMenu extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(rad_btn_csv_import)
-                .addGap(37, 37, 37)
+                .addGap(18, 18, 18)
                 .addComponent(rad_btn_manual_entry)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -154,7 +169,7 @@ public class InputMenu extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("Selected file:");
+        jLabel2.setText("Selected data input file:");
 
         label_selected_file.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         label_selected_file.setText("No file selected");
@@ -194,7 +209,7 @@ public class InputMenu extends javax.swing.JFrame {
         );
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel4.setText("Input string");
+        jLabel4.setText("Data input:");
 
         javax.swing.GroupLayout manual_input_panelLayout = new javax.swing.GroupLayout(manual_input_panel);
         manual_input_panel.setLayout(manual_input_panelLayout);
@@ -223,7 +238,7 @@ public class InputMenu extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(input_file_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(manual_input_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -239,7 +254,6 @@ public class InputMenu extends javax.swing.JFrame {
 
         buttonGroup2.add(rad_btn_decimal_system);
         rad_btn_decimal_system.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        rad_btn_decimal_system.setSelected(true);
         rad_btn_decimal_system.setText("Decimal");
 
         buttonGroup2.add(rad_btn_binary_system);
@@ -256,7 +270,7 @@ public class InputMenu extends javax.swing.JFrame {
                 .addComponent(rad_btn_decimal_system)
                 .addGap(18, 18, 18)
                 .addComponent(rad_btn_binary_system)
-                .addGap(0, 203, Short.MAX_VALUE))
+                .addGap(0, 215, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,7 +294,7 @@ public class InputMenu extends javax.swing.JFrame {
 
         jLabel8.setText("Middle bits:");
 
-        jLabel9.setText("Least siginificant bits:");
+        jLabel9.setText("Least significant bits:");
 
         input_bits_most_significant.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
         input_bits_most_significant.setSelectedIndex(3);
@@ -327,7 +341,7 @@ public class InputMenu extends javax.swing.JFrame {
                     .addComponent(input_bits_most_significant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(input_bits_middle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(input_bits_least_significant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -354,7 +368,7 @@ public class InputMenu extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(open_exported_checkbox)
                     .addComponent(more_info_checkbox))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btn_OK.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -365,6 +379,100 @@ public class InputMenu extends javax.swing.JFrame {
             }
         });
 
+        codebook_panel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel11.setText("Codebook:");
+
+        buttonGroup3.add(rad_btn_builtin_codebook);
+        rad_btn_builtin_codebook.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        rad_btn_builtin_codebook.setText("Built-in");
+        rad_btn_builtin_codebook.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rad_btn_builtin_codebookActionPerformed(evt);
+            }
+        });
+
+        buttonGroup3.add(rad_btn_import_codebook);
+        rad_btn_import_codebook.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        rad_btn_import_codebook.setText("Csv import");
+        rad_btn_import_codebook.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rad_btn_import_codebookActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jLabel11)
+                .addGap(18, 18, 18)
+                .addComponent(rad_btn_import_codebook)
+                .addGap(18, 18, 18)
+                .addComponent(rad_btn_builtin_codebook)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(rad_btn_import_codebook)
+                            .addComponent(rad_btn_builtin_codebook))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        btn_select_file_codebook.setText("Select file");
+        btn_select_file_codebook.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_select_file_codebookActionPerformed(evt);
+            }
+        });
+
+        label_selected_codebook_file.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        label_selected_codebook_file.setText("No file selected");
+
+        javax.swing.GroupLayout codebook_panel_csv_importLayout = new javax.swing.GroupLayout(codebook_panel_csv_import);
+        codebook_panel_csv_import.setLayout(codebook_panel_csv_importLayout);
+        codebook_panel_csv_importLayout.setHorizontalGroup(
+            codebook_panel_csv_importLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(codebook_panel_csv_importLayout.createSequentialGroup()
+                .addComponent(label_selected_codebook_file)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(codebook_panel_csv_importLayout.createSequentialGroup()
+                .addGap(87, 87, 87)
+                .addComponent(btn_select_file_codebook)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        codebook_panel_csv_importLayout.setVerticalGroup(
+            codebook_panel_csv_importLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, codebook_panel_csv_importLayout.createSequentialGroup()
+                .addComponent(label_selected_codebook_file)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_select_file_codebook)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout codebook_panelLayout = new javax.swing.GroupLayout(codebook_panel);
+        codebook_panel.setLayout(codebook_panelLayout);
+        codebook_panelLayout.setHorizontalGroup(
+            codebook_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(codebook_panel_csv_import, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        codebook_panelLayout.setVerticalGroup(
+            codebook_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(codebook_panelLayout.createSequentialGroup()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(codebook_panel_csv_import, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -372,14 +480,15 @@ public class InputMenu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_OK, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btn_OK, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(codebook_panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -394,12 +503,12 @@ public class InputMenu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(codebook_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(btn_OK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_OK, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -440,27 +549,52 @@ public class InputMenu extends javax.swing.JFrame {
             
             if(rad_btn_csv_import.isSelected())
                 this.input_data = MyUtils.parse_CSV(label_selected_file.getText());
-            else if(rad_btn_manual_entry.isSelected())
+            else
                 this.input_data = MyUtils.CSstring_to_array(text_field_input.getText());
 
-            try {Log2SubBand.main_execution(this);} 
+            if(rad_btn_import_codebook.isSelected())
+                this.codebook_data = MyUtils.parse_CSV(label_selected_codebook_file.getText());
+                
+            try {Log2SubBand.main_execution(this);}
             catch (Exception ex) {Logger.getLogger(InputMenu.class.getName()).log(Level.SEVERE, null, ex);}
             dispose(); //Destroy the JFrame object
         }   
     }//GEN-LAST:event_btn_OKActionPerformed
 
+    private void rad_btn_import_codebookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rad_btn_import_codebookActionPerformed
+        codebook_panel_csv_import.setVisible(true);
+    }//GEN-LAST:event_rad_btn_import_codebookActionPerformed
+
+    private void rad_btn_builtin_codebookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rad_btn_builtin_codebookActionPerformed
+        codebook_panel_csv_import.setVisible(false);
+    }//GEN-LAST:event_rad_btn_builtin_codebookActionPerformed
+
+    private void btn_select_file_codebookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_select_file_codebookActionPerformed
+        JFileChooser fc = new JFileChooser();
+        fc.setCurrentDirectory(new java.io.File("../test files"));
+        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+            String filepath = fc.getSelectedFile().getAbsolutePath();
+            label_selected_codebook_file.setText(filepath);
+        }
+    }//GEN-LAST:event_btn_select_file_codebookActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_OK;
     private javax.swing.JButton btn_select_file;
+    private javax.swing.JButton btn_select_file_codebook;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.ButtonGroup buttonGroup3;
+    private javax.swing.JPanel codebook_panel;
+    private javax.swing.JPanel codebook_panel_csv_import;
     private javax.swing.JComboBox input_bits_least_significant;
     private javax.swing.JComboBox input_bits_middle;
     private javax.swing.JComboBox input_bits_most_significant;
     private javax.swing.JPanel input_file_panel;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -470,16 +604,23 @@ public class InputMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JLabel label_selected_codebook_file;
     private static javax.swing.JLabel label_selected_file;
     private javax.swing.JPanel manual_input_panel;
     private javax.swing.JCheckBox more_info_checkbox;
     private javax.swing.JCheckBox open_exported_checkbox;
     private javax.swing.JRadioButton rad_btn_binary_system;
+    private javax.swing.JRadioButton rad_btn_binary_system1;
+    private javax.swing.JRadioButton rad_btn_builtin_codebook;
     private javax.swing.JRadioButton rad_btn_csv_import;
     private javax.swing.JRadioButton rad_btn_decimal_system;
+    private javax.swing.JRadioButton rad_btn_decimal_system1;
+    private javax.swing.JRadioButton rad_btn_import_codebook;
     private javax.swing.JRadioButton rad_btn_manual_entry;
     private javax.swing.JTextField text_field_input;
     // End of variables declaration//GEN-END:variables
