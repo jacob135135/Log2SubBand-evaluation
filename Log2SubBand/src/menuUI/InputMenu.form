@@ -398,15 +398,15 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="input_nibble_most_significant" min="-2" max="-2" attributes="0"/>
+                          <Component id="input_bits_most_significant" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="input_nibble_middle" min="-2" max="-2" attributes="0"/>
+                          <Component id="input_bits_middle" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                           <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="input_nibble_least_significant" min="-2" max="-2" attributes="0"/>
+                          <Component id="input_bits_least_significant" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -422,9 +422,9 @@
                       <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="input_nibble_most_significant" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="input_nibble_middle" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="input_nibble_least_significant" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="input_bits_most_significant" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="input_bits_middle" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="input_bits_least_significant" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="22" max="32767" attributes="0"/>
               </Group>
@@ -455,7 +455,7 @@
             <Property name="text" type="java.lang.String" value="Least siginificant bits:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="input_nibble_most_significant">
+        <Component class="javax.swing.JComboBox" name="input_bits_most_significant">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="10">
@@ -471,9 +471,10 @@
                 <StringItem index="9" value="10"/>
               </StringArray>
             </Property>
+            <Property name="selectedIndex" type="int" value="3"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="input_nibble_middle">
+        <Component class="javax.swing.JComboBox" name="input_bits_middle">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="10">
@@ -489,9 +490,10 @@
                 <StringItem index="9" value="10"/>
               </StringArray>
             </Property>
+            <Property name="selectedIndex" type="int" value="3"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="input_nibble_least_significant">
+        <Component class="javax.swing.JComboBox" name="input_bits_least_significant">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="10">
@@ -507,6 +509,7 @@
                 <StringItem index="9" value="10"/>
               </StringArray>
             </Property>
+            <Property name="selectedIndex" type="int" value="3"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -555,6 +558,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="OK"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_OKActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

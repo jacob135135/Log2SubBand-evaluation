@@ -12,7 +12,7 @@ import java.util.Map;
 import static log2subband.HuffmanCode.number_to_encoding_dict;
 import static log2subband.MyUtils.dec_to_bin_nibble;
 import static log2subband.MyUtils.bin_nibble_to_dec;
-import menuUI.Menu;
+import menuUI.InputMenu;
 
 /**
  * @author Jakub
@@ -120,6 +120,7 @@ public class Log2SubBand {
     }
 
     public static void main(String[] args) throws Exception {
+        InputMenu input_menu = new InputMenu(); // ALL INPUT OBTAINED FROM THERE
 //        String[] raw_values = MyUtils.get_data_from_user();
 //        Map<String, String> result = MyUtils.perform_log2_sub_band_compression(raw_values);
 //        String overall_compressed = result.get("overall_compressed");
@@ -146,8 +147,6 @@ public class Log2SubBand {
 //        MyUtils.export_codebook(); // uses number_to_encoding_dict
 //        MyUtils.write_CSV("compressed", export_data);
 //        MyUtils.open_file("compressed.csv");
-
-        Menu input_menu = new Menu();
 
     }
 }
