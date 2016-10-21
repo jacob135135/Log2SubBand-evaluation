@@ -154,10 +154,10 @@ public class MyUtils {
      * Otherwise if user chose csv inport, it will prompt csv import and return parsed csv.
      * @return String array of user input
      */
-    public static String[] get_data_from_user() {
-        if(data_entry_option_prompt() == 0) return request_input();
-        else return parse_CSV(request_file("Please select a file to compress"));
-    }
+//    public static String[] get_data_from_user() {
+//        if(data_entry_option_prompt() == 0) return request_input();
+//        else return parse_CSV(request_file("Please select a file to compress"));
+//    }
 
     /**
      * Attempts to parse a CSV file.

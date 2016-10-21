@@ -1,7 +1,11 @@
 package menuUI;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import log2subband.Log2SubBand;
+import log2subband.MyUtils;
 
 /**
  *
@@ -17,6 +21,27 @@ public class InputMenu extends javax.swing.JFrame {
         post_init_code();
     }
     
+    private String[] input_data;
+    private boolean open_exported;
+    private int[] run_parameters;
+    private boolean use_decimal_system;
+
+    public String[] getInput_data() {
+        return input_data;
+    }
+    
+    public Boolean getOpen_exported() {
+        return open_exported;
+    }
+    
+    public int[] getRun_parameters() {
+        return run_parameters;
+    }
+    
+    public boolean getUse_decimal_system() {
+        return use_decimal_system;
+    }
+
     public static boolean menu_created = false;
     private void post_init_code() {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -68,7 +93,8 @@ public class InputMenu extends javax.swing.JFrame {
         input_bits_middle = new javax.swing.JComboBox();
         input_bits_least_significant = new javax.swing.JComboBox();
         jPanel7 = new javax.swing.JPanel();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        open_exported_checkbox = new javax.swing.JCheckBox();
+        more_info_checkbox = new javax.swing.JCheckBox();
         btn_OK = new javax.swing.JButton();
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
@@ -306,7 +332,9 @@ public class InputMenu extends javax.swing.JFrame {
 
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jCheckBox1.setText("Open csv with results");
+        open_exported_checkbox.setText("Open csv with results");
+
+        more_info_checkbox.setText("Print more  info");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -314,14 +342,18 @@ public class InputMenu extends javax.swing.JFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jCheckBox1)
-                .addContainerGap(97, Short.MAX_VALUE))
+                .addComponent(open_exported_checkbox)
+                .addGap(18, 18, 18)
+                .addComponent(more_info_checkbox)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jCheckBox1)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(open_exported_checkbox)
+                    .addComponent(more_info_checkbox))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -345,8 +377,8 @@ public class InputMenu extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btn_OK, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -401,8 +433,20 @@ public class InputMenu extends javax.swing.JFrame {
         if (total != 12) {
             JOptionPane.showMessageDialog(this, "ERROR, PARAMETER BITS MUST ADD UP TO EXACTLY 12!");
         } else {
+            this.run_parameters = new int[]{most_sign, middle, least_sign};
+            this.open_exported = open_exported_checkbox.isSelected();
+            this.use_decimal_system = rad_btn_decimal_system.isSelected();
+            Log2SubBand.debug = more_info_checkbox.isSelected();
             
-        }
+            if(rad_btn_csv_import.isSelected())
+                this.input_data = MyUtils.parse_CSV(label_selected_file.getText());
+            else if(rad_btn_manual_entry.isSelected())
+                this.input_data = MyUtils.CSstring_to_array(text_field_input.getText());
+
+            try {Log2SubBand.main_execution(this);} 
+            catch (Exception ex) {Logger.getLogger(InputMenu.class.getName()).log(Level.SEVERE, null, ex);}
+            dispose(); //Destroy the JFrame object
+        }   
     }//GEN-LAST:event_btn_OKActionPerformed
 
 
@@ -415,7 +459,6 @@ public class InputMenu extends javax.swing.JFrame {
     private javax.swing.JComboBox input_bits_middle;
     private javax.swing.JComboBox input_bits_most_significant;
     private javax.swing.JPanel input_file_panel;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -432,6 +475,8 @@ public class InputMenu extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private static javax.swing.JLabel label_selected_file;
     private javax.swing.JPanel manual_input_panel;
+    private javax.swing.JCheckBox more_info_checkbox;
+    private javax.swing.JCheckBox open_exported_checkbox;
     private javax.swing.JRadioButton rad_btn_binary_system;
     private javax.swing.JRadioButton rad_btn_csv_import;
     private javax.swing.JRadioButton rad_btn_decimal_system;

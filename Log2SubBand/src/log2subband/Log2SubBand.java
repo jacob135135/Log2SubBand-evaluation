@@ -24,7 +24,7 @@ public class Log2SubBand {
     static int previous_digit_pos2 = 0;
     static int previous_digit_pos1 = 0; 
     static int previous_digit_pos0 = 0;
-    static boolean debug = false;
+    public static boolean debug;
     
     /**
      * Takes a decimal number in string representation (e.g. "10") and returns compressed binary version based
@@ -119,34 +119,39 @@ public class Log2SubBand {
         return stuff_to_return;
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         InputMenu input_menu = new InputMenu(); // ALL INPUT OBTAINED FROM THERE
-//        String[] raw_values = MyUtils.get_data_from_user();
-//        Map<String, String> result = MyUtils.perform_log2_sub_band_compression(raw_values);
-//        String overall_compressed = result.get("overall_compressed");
-//        String overall_uncompressed = result.get("overall_uncompressed");
-//        String input_string = result.get("input");
-//        String output_string = result.get("output");
-//
-//        MyUtils.print_log2subband_compression_results(input_string, overall_compressed, overall_uncompressed);
-//
-//        Boolean custom_codebook = MyUtils.codebook_option_prompt();
-//        if (custom_codebook) {
-//            String[] codebook_parsed = MyUtils.parse_CSV(MyUtils.request_file("Please select codebook csv file"));
-//            MyUtils.init_codebook_from_imported_codebook(codebook_parsed);
-//        } else {
-//            HuffmanCode.init_ideal_huffman_dictionaries(raw_values);
-//        }
-//
-//        String[] input_array = input_string.split(",");
-//        String[] output_array = output_string.split(",");
-//        String[] binary_input = MyUtils.split_by(overall_uncompressed,12);
-//        String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input);
-//        MyUtils.print_Huffman_compression_results(input_array, overall_uncompressed);
-//
-//        MyUtils.export_codebook(); // uses number_to_encoding_dict
-//        MyUtils.write_CSV("compressed", export_data);
-//        MyUtils.open_file("compressed.csv");
+    }
+    
+    public static void main_execution(InputMenu input_menu) throws Exception {
+        String[] raw_values = input_menu.getInput_data();
+        boolean open_exported = input_menu.getOpen_exported();
+        
+        Map<String, String> result = MyUtils.perform_log2_sub_band_compression(raw_values);
+        String overall_compressed = result.get("overall_compressed");
+        String overall_uncompressed = result.get("overall_uncompressed");
+        String input_string = result.get("input");
+        String output_string = result.get("output");
 
+        MyUtils.print_log2subband_compression_results(input_string, overall_compressed, overall_uncompressed);
+
+        Boolean custom_codebook = MyUtils.codebook_option_prompt();
+        if (custom_codebook) {
+            String[] codebook_parsed = MyUtils.parse_CSV(MyUtils.request_file("Please select codebook csv file"));
+            MyUtils.init_codebook_from_imported_codebook(codebook_parsed);
+        } else {
+            HuffmanCode.init_ideal_huffman_dictionaries(raw_values);
+        }
+
+        String[] input_array = input_string.split(",");
+        String[] output_array = output_string.split(",");
+        String[] binary_input = MyUtils.split_by(overall_uncompressed,12);
+        String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input);
+        MyUtils.print_Huffman_compression_results(input_array, overall_uncompressed);
+
+        MyUtils.export_codebook(); // uses number_to_encoding_dict
+        MyUtils.write_CSV("compressed", export_data);
+        
+        if(open_exported) MyUtils.open_file("compressed.csv");
     }
 }
