@@ -19,9 +19,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import static log2subband.HuffmanCode.number_to_encoding_dict;
 import static log2subband.Log2SubBand.debug;
 
