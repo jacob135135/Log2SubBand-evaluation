@@ -250,7 +250,7 @@ public class InputMenu extends javax.swing.JFrame {
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel5.setText("Number system:");
+        jLabel5.setText("Number system: (PLACEHOLDER, NOT IMPLEMENTED)");
 
         buttonGroup2.add(rad_btn_decimal_system);
         rad_btn_decimal_system.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -265,30 +265,30 @@ public class InputMenu extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jLabel5)
-                .addGap(18, 18, 18)
-                .addComponent(rad_btn_decimal_system)
-                .addGap(18, 18, 18)
-                .addComponent(rad_btn_binary_system)
-                .addGap(0, 215, Short.MAX_VALUE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(102, 102, 102)
+                        .addComponent(rad_btn_decimal_system)
+                        .addGap(18, 18, 18)
+                        .addComponent(rad_btn_binary_system)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jLabel5)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rad_btn_decimal_system)
                     .addComponent(rad_btn_binary_system))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel6.setText("Parameters' size (total 12):");
+        jLabel6.setText("Parameters' size (total 12): (PLACEHOLDER, NOT IMPLEMENTED)");
 
         jLabel7.setText("Most significant bits:");
 
@@ -359,7 +359,7 @@ public class InputMenu extends javax.swing.JFrame {
                 .addComponent(open_exported_checkbox)
                 .addGap(18, 18, 18)
                 .addComponent(more_info_checkbox)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -593,7 +593,6 @@ public class InputMenu extends javax.swing.JFrame {
     private javax.swing.JPanel input_file_panel;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
@@ -608,18 +607,15 @@ public class InputMenu extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JLabel label_selected_codebook_file;
     private static javax.swing.JLabel label_selected_file;
     private javax.swing.JPanel manual_input_panel;
     private javax.swing.JCheckBox more_info_checkbox;
     private javax.swing.JCheckBox open_exported_checkbox;
     private javax.swing.JRadioButton rad_btn_binary_system;
-    private javax.swing.JRadioButton rad_btn_binary_system1;
     private javax.swing.JRadioButton rad_btn_builtin_codebook;
     private javax.swing.JRadioButton rad_btn_csv_import;
     private javax.swing.JRadioButton rad_btn_decimal_system;
-    private javax.swing.JRadioButton rad_btn_decimal_system1;
     private javax.swing.JRadioButton rad_btn_import_codebook;
     private javax.swing.JRadioButton rad_btn_manual_entry;
     private javax.swing.JTextField text_field_input;
