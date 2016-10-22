@@ -346,6 +346,7 @@ public class InputMenu extends javax.swing.JFrame {
 
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        open_exported_checkbox.setSelected(true);
         open_exported_checkbox.setText("Open csv with results");
 
         more_info_checkbox.setText("Print more  info");

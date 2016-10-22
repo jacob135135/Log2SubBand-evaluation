@@ -553,6 +553,7 @@
       <SubComponents>
         <Component class="javax.swing.JCheckBox" name="open_exported_checkbox">
           <Properties>
+            <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Open csv with results"/>
           </Properties>
         </Component>
