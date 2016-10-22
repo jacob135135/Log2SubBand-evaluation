@@ -19,9 +19,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import static log2subband.HuffmanCode.number_to_encoding_dict;
 import static log2subband.Log2SubBand.debug;
 
@@ -30,18 +27,7 @@ import static log2subband.Log2SubBand.debug;
  * @author Jakub
  */
 public class MyUtils {
-    
-    /**
-     * Prompts the user to enter an input.
-     * The input numbers are then separated by comma and extra spaces are removed
-     * @return raw_values Array of integers given by user
-     */
-    public static String[] request_input() {
-        String answer = JOptionPane.showInputDialog(null, "Type in numbers separated by comma.");
-        String[] raw_values =  CSstring_to_array(answer);
-        return raw_values;
-    }
-    
+        
     /**
      * Splits String composed of values separated by comma into array, removing all spaces
      * @param str_input Comma separated string of values
@@ -107,56 +93,6 @@ public class MyUtils {
             case "1001":  decoded_digit = "9"; break;
         }
         return decoded_digit;
-    }
-    
-    /**
-     * Provides UI element for user to select a file.
-     * @param title Title to put on the prompt
-     * @return String absolute path of the file selected by user
-     */
-    public static String request_file(String title) {
-        JButton open_btn = new JButton();
-        JFileChooser fc = new JFileChooser();
-        fc.setCurrentDirectory(new java.io.File("../test files"));
-        fc.setDialogTitle(title);
-        if (fc.showOpenDialog(open_btn) == JFileChooser.APPROVE_OPTION) return fc.getSelectedFile().getAbsolutePath();
-        else return "";
-    }
-    
-    /**
-     * Provides a panel with 2 options - manual data entry or importing a csv file
-     * @return int 0 if user selected manual data entry; 1 when user selected import from a file 
-     */
-    public static int data_entry_option_prompt() {
-        String[] options = new String[2];
-        options[0] = "Manual entry";
-        options[1] = "CSV file import";
-        String message = "Would you like to enter data manually or import a csv file with data?";
-        int dialog_result = JOptionPane.showOptionDialog(null,message,"DATA ENTRY OPTIONS", 0,JOptionPane.QUESTION_MESSAGE,null,options,null);
-        return dialog_result;
-    }
-
-        /**
-     * Provides a panel with 2 options - manual data entry or importing a csv file
-     * @return true if user chose yes
-     */
-    public static boolean codebook_option_prompt() {
-        String question = "Would you like to use your own codebook in csv file";
-        int reply = JOptionPane.showConfirmDialog(null, question,"CODEBOOK OPTIONS", JOptionPane.YES_NO_OPTION);
-        if (reply == JOptionPane.YES_OPTION) {
-          return true;
-        }
-        return false;
-    }
-    
-    /**
-     * Gets data from user. If user chose manual input, it will prompt for data.
-     * Otherwise if user chose csv inport, it will prompt csv import and return parsed csv.
-     * @return String array of user input
-     */
-    public static String[] get_data_from_user() {
-        if(data_entry_option_prompt() == 0) return request_input();
-        else return parse_CSV(request_file("Please select a file to compress"));
     }
 
     /**
