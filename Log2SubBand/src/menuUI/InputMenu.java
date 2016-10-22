@@ -254,6 +254,7 @@ public class InputMenu extends javax.swing.JFrame {
 
         buttonGroup2.add(rad_btn_decimal_system);
         rad_btn_decimal_system.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        rad_btn_decimal_system.setSelected(true);
         rad_btn_decimal_system.setText("Decimal");
 
         buttonGroup2.add(rad_btn_binary_system);
@@ -387,6 +388,7 @@ public class InputMenu extends javax.swing.JFrame {
 
         buttonGroup3.add(rad_btn_builtin_codebook);
         rad_btn_builtin_codebook.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        rad_btn_builtin_codebook.setSelected(true);
         rad_btn_builtin_codebook.setText("Built-in");
         rad_btn_builtin_codebook.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -543,22 +545,35 @@ public class InputMenu extends javax.swing.JFrame {
         if (total != 12) {
             JOptionPane.showMessageDialog(this, "ERROR, PARAMETER BITS MUST ADD UP TO EXACTLY 12!");
         } else {
+            boolean cont = true;
             this.run_parameters = new int[]{most_sign, middle, least_sign};
             this.open_exported = open_exported_checkbox.isSelected();
             this.use_decimal_system = rad_btn_decimal_system.isSelected();
             Log2SubBand.debug = more_info_checkbox.isSelected();
             
             if(rad_btn_csv_import.isSelected())
-                this.input_data = MyUtils.parse_CSV(label_selected_file.getText());
+                if (!"No file selected".equals(label_selected_file.getText()))
+                    this.input_data = MyUtils.parse_CSV(label_selected_file.getText());
+                else {
+                    JOptionPane.showMessageDialog(this, "ERROR, NO CSV FILE SELECTED!");
+                    cont = false;
+                }
             else
-                this.input_data = MyUtils.CSstring_to_array(text_field_input.getText());
+                if (!"".equals(text_field_input.getText()))
+                    this.input_data = MyUtils.CSstring_to_array(text_field_input.getText());
+                else {
+                    JOptionPane.showMessageDialog(this, "ERROR, NO DATA INPUT!");
+                    cont = false;
+                }
 
             if(rad_btn_import_codebook.isSelected())
                 this.codebook_data = MyUtils.parse_CSV(label_selected_codebook_file.getText());
                 
-            try {Log2SubBand.main_execution(this);}
-            catch (Exception ex) {Logger.getLogger(InputMenu.class.getName()).log(Level.SEVERE, null, ex);}
-            dispose(); //Destroy the JFrame object
+            if (cont) {
+                try {Log2SubBand.main_execution(this);}
+                catch (Exception ex) {Logger.getLogger(InputMenu.class.getName()).log(Level.SEVERE, null, ex);}
+                dispose(); //Destroy the JFrame object
+            }
         }   
     }//GEN-LAST:event_btn_OKActionPerformed
 
