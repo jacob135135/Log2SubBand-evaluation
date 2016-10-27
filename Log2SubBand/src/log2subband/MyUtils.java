@@ -110,11 +110,11 @@ public class MyUtils {
      * @return String[] of CSV table data
      */
     public static String[] make_export_table(String[] original, String[] encoded, String[] binary_input) {
-        String result_string = "Original," + append_spaces("Encoded", 14) + append_spaces(",Binary", 14) + ",Huffman*";
+        String result_string = "Original(bin)," + append_spaces("Original(dec)", 14) + append_spaces("Encoded", 14) + append_spaces(",Binary", 14) + ",Huffman*";
         for (int i=0; i<original.length; i++) {
-            result_string += "\n" + append_spaces(original[i], 8) + "," + append_spaces(encoded[i],14) + "," + binary_input[i];
-            String orig_string = original[i];
-            result_string += "," + get_huffman_encoding(orig_string);
+            result_string += "\n" + append_spaces(original[i], 8) + "," + "A" + "," + append_spaces(encoded[i],14) + "," + binary_input[i];
+            int orig_transformed = Integer.valueOf(original[i]);// - HuffmanCode.HUFFMAN_ADDITION;
+            result_string += "," + "B";//get_huffman_encoding(String.valueOf(orig_transformed));
         }
         String[] result = result_string.split(",");
         return result;
@@ -129,6 +129,8 @@ public class MyUtils {
      * @return Concatenation of Huffman encodings of all symbols (characters) in <code>to_encode</code>
      */
     public static String get_huffman_encoding(String to_encode) {
+        int transformed = Integer.valueOf(to_encode) + 2048;  //binary_to_decimal(to_encode);
+        to_encode = binary_to_decimal(String.valueOf(transformed));
         String result = number_to_encoding_dict.get(to_encode);
         if (result == null) throw new NoSuchElementException("Codebook ERROR, no encoding found for '" + to_encode + "'");
         return result;
@@ -178,7 +180,7 @@ public class MyUtils {
     }
 
     /**
-     * Compressed inputted array of numbers, saving data through the process
+     * Compresses input array of numbers, saving data through the process
      * @param raw_values String[] of numbers to compress
      * @return Map<String, String> to_return  (almost like an associative array), to get values:
      *  <br><b>to_return.get("overall_compressed");</b> Binary concatenated string of all compressed values in given array
@@ -191,13 +193,14 @@ public class MyUtils {
         ovrl_compr = ovrl_uncompr = input = output = "";
 
         for (String raw_value : raw_values) {
-                input += "," + raw_value;
+            raw_value = decimal_to_binary(raw_value);
+            input += "," + raw_value;
 
-                String current_compressed = Log2SubBand.log2_sub_band_compress_number(raw_value);
-                ovrl_compr += current_compressed;
-                output += "," + current_compressed;
-                if (debug) System.out.println("Current compressed data: " + current_compressed);
-                ovrl_uncompr += raw_value;
+            String current_compressed = Log2SubBand.log2_sub_band_compress_number(raw_value);
+            ovrl_compr += current_compressed;
+            output += "," + current_compressed;
+            if (debug) System.out.println("Current compressed data: " + current_compressed);
+            ovrl_uncompr += raw_value;
         }
 
         Map<String, String> to_return = new HashMap<>();
@@ -273,31 +276,34 @@ public class MyUtils {
      * @param overall_uncompressed
      */
     static void print_Huffman_compression_results(String[] input_array, String overall_uncompressed) {
-        String compressed = get_full_huffman_encoding(input_array);
+        String compressed = "C";//get_full_huffman_encoding(input_array);
         double compression_rate = compression_rate(compressed, overall_uncompressed);
         System.out.println("Huffman compressed: " + compressed);
         System.out.println("Huffman Original/Compressed: " + compression_rate);
     }
 
     /**
+     * WARNING: returns "" if string is not long enough
      * Uses static <code>parameters</code> variable and return substring of input.
      * Returns last <code>parameters[2]</code> digits (represented as String) of input
      * @param binary_input String input of length 12
      * @return Last <code>parameters[2]</code> digits of input
      */
     static String get_LS_nibble(String binary_input) {
-        return binary_input.substring(parameters[0] + parameters[1]);
+        if (binary_input.length() > 11) return binary_input.substring(parameters[0] + parameters[1], 12);
+        else {System.out.println("NO LS NIBBLE FOUND"); return "";}
     }
 
     /**
-     * ASSUMES input is of length 12
+     * WARNING: returns "" if string is not long enough
      * Uses static <code>parameters</code> variable and return substring of input.
      * Returns middle <code>parameters[1]</code> digits (represented as String) of input
      * @param binary_input String input of length 12
      * @return Input string without first <code>parameters[0]</code> digits and last <code>parameters[2]</code> digits of input
      */
     static String get_middle_nibble(String binary_input) {
-        return binary_input.substring(parameters[0], parameters[0] + parameters[1]);
+        if (binary_input.length() > (11 - parameters[2])) return binary_input.substring(parameters[0], parameters[0] + parameters[1]);
+        else {System.out.println("NO MIDDLE NIBBLE FOUND"); return "";}
     }
 
     /**
@@ -308,7 +314,7 @@ public class MyUtils {
      * @return First <code>parameters[0]</code> digits of input string
      */
     static String get_MS_nibble(String binary_input) {
-        return binary_input.substring(0, parameters[0] + 1);
+        return binary_input.substring(0, parameters[0]);
     }
 
     /**
@@ -348,7 +354,7 @@ public class MyUtils {
     public static String binary_to_12_bits(String binary_input) {
         int cur_length = binary_input.length();
         if (cur_length < 12) {
-            for(int i = cur_length; i < 13; i++) {
+            for(int i = cur_length; i < 12; i++) {
                 binary_input = "0" + binary_input;
             }
         }

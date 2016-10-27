@@ -43,12 +43,12 @@ public class Log2SubBand {
         String middle_nibble = MyUtils.get_middle_nibble(binary_input);
         String most_significant_nibble = MyUtils.get_MS_nibble(binary_input);
 
-        if (debug) System.out.println("Nibbles): " + most_significant_nibble + " " + middle_nibble + " " + least_significant_nibble);
+        if (debug) System.out.println("Nibbles: " + most_significant_nibble + " " + middle_nibble + " " + least_significant_nibble);
    
         String return_value;
-        if (previous_most_significant_nibble == most_significant_nibble) {
-            if (previous_middle_nibble == middle_nibble){
-                if (previous_least_significant_nibble == least_significant_nibble) {
+        if (most_significant_nibble.equals(previous_most_significant_nibble)) {
+            if (middle_nibble.equals(previous_middle_nibble)){
+                if (least_significant_nibble.equals(previous_least_significant_nibble)) {
                     return_value = "00";
                 }
                 else {return_value = "01" + least_significant_nibble;}
@@ -145,6 +145,11 @@ public class Log2SubBand {
         if (custom_codebook.length > 0) {
             MyUtils.init_codebook_from_imported_codebook(custom_codebook);
         } else {
+            for(int i=0; i<raw_values.length; i++) {
+                int transformed_value = Integer.valueOf(raw_values[i]) + HuffmanCode.HUFFMAN_ADDITION;
+                System.out.println("transformed:" + transformed_value);
+                raw_values[i] = String.valueOf(transformed_value);
+            }
             HuffmanCode.init_ideal_huffman_dictionaries(raw_values);
         }
 
