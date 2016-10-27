@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static log2subband.HuffmanCode.number_to_encoding_dict;
 import static log2subband.Log2SubBand.debug;
+import static log2subband.Log2SubBand.parameters;
 
 /**
  *
@@ -36,63 +37,6 @@ public class MyUtils {
      */
     public static String[] CSstring_to_array(String str_input) {
         return str_input.split(",[ ]*");
-    }
-
-    /**
-     * Converts number in character representation(e.g. '1') into binary String representation (e.g. "0001") 
-     * Converted number has 4 digits and only supports positive numbers
-     * @param nibble Character representation of number to convert to binary
-     * @return String representation of binary number using 4 bits
-     */
-    public static String dec_to_bin_nibble(char nibble) {
-        String result_string = "0000"; // case '0'
-        switch (nibble) {
-            case '1':  result_string = "0001"; break;
-            case '2':  result_string = "0010"; break;
-            case '3':  result_string = "0011"; break;
-            case '4':  result_string = "0100"; break;
-            case '5':  result_string = "0101"; break;
-            case '6':  result_string = "0110"; break;
-            case '7':  result_string = "0111"; break;
-            case '8':  result_string = "1000"; break;
-            case '9':  result_string = "1001"; break;
-        }
-        return result_string;
-    }
-    
-    /**
-     * Prepends values lower than 100 by up to two zeroes to make sure number
-     * is in "3-digit number representation" (e.g. 3 -> 003)
-     * @param raw_value number
-     * @return 
-     */
-    public static String prepend_zeroes_if_needed(String raw_value) {
-        if (raw_value.length() == 1) raw_value = "00" + raw_value;
-        else if (raw_value.length() == 2) raw_value = "0" + raw_value;
-        return raw_value;
-    }
-    
-    /**
-     * Takes in binary 4-digit number as a String and returns decimal digit in String type
-     * !!! Works only for numbers inclusively between 0000 and 1001 in binary; or 0 and 9 both in decimal 
-     * @param binary Four digit binary number (e.g. 0011)
-     * @return String decimal number 
-     */
-    public static String bin_nibble_to_dec(String binary) {
-        String decoded_digit = "";
-        switch (binary) {
-            case "0000":  decoded_digit = "0"; break;
-            case "0001":  decoded_digit = "1"; break;
-            case "0010":  decoded_digit = "2"; break;
-            case "0011":  decoded_digit = "3"; break;
-            case "0100":  decoded_digit = "4"; break;
-            case "0101":  decoded_digit = "5"; break;
-            case "0110":  decoded_digit = "6"; break;
-            case "0111":  decoded_digit = "7"; break;
-            case "1000":  decoded_digit = "8"; break;
-            case "1001":  decoded_digit = "9"; break;
-        }
-        return decoded_digit;
     }
 
     /**
@@ -248,14 +192,12 @@ public class MyUtils {
 
         for (String raw_value : raw_values) {
                 input += "," + raw_value;
-                raw_value = prepend_zeroes_if_needed(raw_value);
 
                 String current_compressed = Log2SubBand.log2_sub_band_compress_number(raw_value);
                 ovrl_compr += current_compressed;
                 output += "," + current_compressed;
                 if (debug) System.out.println("Current compressed data: " + current_compressed);
-
-                for(char c : raw_value.toCharArray()) ovrl_uncompr += dec_to_bin_nibble(c);
+                ovrl_uncompr += raw_value;
         }
 
         Map<String, String> to_return = new HashMap<>();
@@ -335,5 +277,61 @@ public class MyUtils {
         double compression_rate = compression_rate(compressed, overall_uncompressed);
         System.out.println("Huffman compressed: " + compressed);
         System.out.println("Huffman Original/Compressed: " + compression_rate);
+    }
+
+    /**
+     * Uses static <code>parameters</code> variable and return substring of input.
+     * Returns last <code>parameters[2]</code> digits (represented as String) of input
+     * @param binary_input String input of length 12
+     * @return Last <code>parameters[2]</code> digits of input
+     */
+    static String get_LS_nibble(String binary_input) {
+        return binary_input.substring(parameters[0] + parameters[1]);
+    }
+
+    /**
+     * ASSUMES input is of length 12
+     * Uses static <code>parameters</code> variable and return substring of input.
+     * Returns middle <code>parameters[1]</code> digits (represented as String) of input
+     * @param binary_input String input of length 12
+     * @return Input string without first <code>parameters[0]</code> digits and last <code>parameters[2]</code> digits of input
+     */
+    static String get_middle_nibble(String binary_input) {
+        return binary_input.substring(parameters[0], parameters[0] + parameters[1]);
+    }
+
+    /**
+     * ASSUMES input is of length 12
+     * Uses static <code>parameters</code> variable and return substring of input.
+     * Returns middle <code>parameters[1]</code> digits (represented as String) of input
+     * @param binary_input String input of length 12
+     * @return First <code>parameters[0]</code> digits of input string
+     */
+    static String get_MS_nibble(String binary_input) {
+        return binary_input.substring(0, parameters[0] + 1);
+    }
+
+    static String decimal_to_binary(String decimal_n) {
+        Integer dec_int = Integer.valueOf(decimal_n);
+        String binary_repr = Integer.toBinaryString(dec_int);
+        if (binary_repr.length()>12) binary_repr = binary_repr.substring(binary_repr.length()-12,binary_repr.length());
+        else binary_repr = MyUtils.binary_to_12_bits(binary_repr);
+        return binary_repr;
+    }
+
+    /**
+     * Prepends spaces (if needed) to <code>binary_input</code> to achieve length of 12 bits
+     * If input has 12 bit, no action performed
+     * @param binary_input original binary string
+     * @return Original string with appended spaces (if applicable)
+     */
+    public static String binary_to_12_bits(String binary_input) {
+        int cur_length = binary_input.length();
+        if (cur_length < 12) {
+            for(int i = cur_length; i < 13; i++) {
+                binary_input = "0" + binary_input;
+            }
+        }
+        return binary_input;
     }
 }

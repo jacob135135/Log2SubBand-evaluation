@@ -9,8 +9,9 @@
 package log2subband;
 
 import java.util.Map;
-import static log2subband.MyUtils.dec_to_bin_nibble;
-import static log2subband.MyUtils.bin_nibble_to_dec;
+import static log2subband.MyUtils.get_LS_nibble;
+import static log2subband.MyUtils.get_MS_nibble;
+import static log2subband.MyUtils.get_middle_nibble;
 import menuUI.InputMenu;
 
 /**
@@ -18,44 +19,44 @@ import menuUI.InputMenu;
  */
 public class Log2SubBand {
         
-    // position 0 is most signifficant bit, position n is least signifficant bit
     // static so that they can be referenced and changed in get_compressed_data method 
-    static int previous_digit_pos2 = 0;
-    static int previous_digit_pos1 = 0; 
-    static int previous_digit_pos0 = 0;
+    static String previous_least_significant_nibble;
+    static String previous_middle_nibble;
+    static String previous_most_significant_nibble;
+    static int[] parameters;
     public static boolean debug;
     
     /**
-     * Takes a decimal number in string representation (e.g. "10") and returns compressed binary version based
+     * Takes a BINARY number in string representation (e.g. "10") and returns compressed binary version based
        on real time-data (same number will be encoded differently in various inputs)
-     * Compression is dynamic using static integers (e.g. previous_digit_pos0)
-     * Basic algorithm: Check if digit_pos0 (most significant bit) bit is different from previous_digit_pos0
+       Compression is dynamic using static integers (e.g. previous_most_significant_nibble)
+       Basic algorithm: Check if most_significant_nibble (most significant bit) bit is different from previous_most_significant_nibble
         if so copy all nibbles (nibble in binary = digit in decimal) and append after header, header = 11;
         else if middle nibble changed -> encode middle & least significant bit, header = 10;
         else if least significant bit changed -> encode least significant bit, header = 01;
         else send header = 00 (This means number is same as the previous number)
-     * @param input_number String 
+     * @param binary_input String binary number
      * @return String compressed binary number as string (e.g. "11000100010001") this is to simplify operations on the "number"
      */
-    public static String log2_sub_band_compress_number(String input_number) {    
-        char digit_pos2 = input_number.charAt(2);
-        char digit_pos1 = input_number.charAt(1);
-        char digit_pos0 = input_number.charAt(0);
+    public static String log2_sub_band_compress_number(String binary_input) {
+        String least_significant_nibble = MyUtils.get_LS_nibble(binary_input);
+        String middle_nibble = MyUtils.get_middle_nibble(binary_input);
+        String most_significant_nibble = MyUtils.get_MS_nibble(binary_input);
 
-        if (debug) System.out.println("Digits(decimal): " + digit_pos0 + " " + digit_pos1 + " " + digit_pos2);
+        if (debug) System.out.println("Nibbles): " + most_significant_nibble + " " + middle_nibble + " " + least_significant_nibble);
    
         String return_value;
-        if (previous_digit_pos0 == digit_pos0) {
-            if (previous_digit_pos1 == digit_pos1){
-                if (previous_digit_pos2 == digit_pos2) {
+        if (previous_most_significant_nibble == most_significant_nibble) {
+            if (previous_middle_nibble == middle_nibble){
+                if (previous_least_significant_nibble == least_significant_nibble) {
                     return_value = "00";
                 }
-                else {return_value = "01" + dec_to_bin_nibble(digit_pos2);}
-            } else {return_value = "10" + dec_to_bin_nibble(digit_pos1) + dec_to_bin_nibble(digit_pos2);}
-        } else { return_value = "11" + dec_to_bin_nibble(digit_pos0) + dec_to_bin_nibble(digit_pos1) + dec_to_bin_nibble(digit_pos2);}
-        previous_digit_pos0 = digit_pos0;
-        previous_digit_pos1 = digit_pos1;
-        previous_digit_pos2 = digit_pos2;
+                else {return_value = "01" + least_significant_nibble;}
+            } else {return_value = "10" + middle_nibble + least_significant_nibble;}
+        } else { return_value = "11" + most_significant_nibble + middle_nibble + least_significant_nibble;}
+        previous_most_significant_nibble = most_significant_nibble;
+        previous_middle_nibble = middle_nibble;
+        previous_least_significant_nibble = least_significant_nibble;
         return return_value;
     }
           
@@ -88,29 +89,29 @@ public class Log2SubBand {
      * Resulting string to decode is then returned as well as number decoded using header code
        and appropriate number of bits from string to decode
      * @param encoded_substring Substring of initial String to decode   
-     * @param current_number Last/currently decoded number
+     * @param previous_number Last/currently decoded number
      * @return Array of [decoded_number (currently decoded number), remaining_string (String still left to decode)]
      */
-    public static String[] decode_substring(String encoded_substring, String current_number) {
-        String decoded_number = current_number;
+    public static String[] decode_substring(String encoded_substring, String previous_number) {
+        String decoded_number = previous_number;
+        int middle_nibble_bits = parameters[1];
+        int least_signif_nibble_bits = parameters[2];
+
         String header = encoded_substring.substring(0,2);
         if (debug) System.out.print("Header: " + header + "\n");
         String remaining_string = encoded_substring.substring(2); // Removing header from string
         
         switch (header) {
-            case "00":  decoded_number = current_number;
+            case "00":  decoded_number = previous_number;
                 break;
-            case "01":  decoded_number = current_number.substring(0,2) + bin_nibble_to_dec(remaining_string.substring(0,4));
-                        remaining_string = remaining_string.substring(4);
+            case "01":  decoded_number = get_MS_nibble(previous_number) + get_middle_nibble(previous_number) + get_LS_nibble(remaining_string);
+                        remaining_string = remaining_string.substring(least_signif_nibble_bits); // Exclude bits that were encoding
                 break;
-            case "10":  decoded_number = current_number.substring(0,1) + bin_nibble_to_dec(remaining_string.substring(0,4))
-                                       + bin_nibble_to_dec(remaining_string.substring(4,8));
-                        remaining_string = remaining_string.substring(8);
+            case "10":  decoded_number = get_MS_nibble(previous_number) + get_middle_nibble(remaining_string) + get_LS_nibble(remaining_string);
+                        remaining_string = remaining_string.substring(least_signif_nibble_bits + middle_nibble_bits); // Exclude bits that were encoding
                 break;
-            case "11":  decoded_number = bin_nibble_to_dec(remaining_string.substring(0,4))
-                                       + bin_nibble_to_dec(remaining_string.substring(4,8))
-                                       + bin_nibble_to_dec(remaining_string.substring(8,12));
-                        remaining_string = remaining_string.substring(12);
+            case "11":  decoded_number = get_MS_nibble(remaining_string) + get_middle_nibble(remaining_string) + get_LS_nibble(remaining_string);
+                        remaining_string = remaining_string.substring(12); // Exclude bits that were encoding
                 break;
         }
         if (debug) System.out.println("Current decoded: " + decoded_number + "\n");
@@ -119,12 +120,16 @@ public class Log2SubBand {
     }
 
     public static void main(String[] args) {
+//        for (int i = -2047; i < 2048; i++) {
+//            System.out.println(i + ":  " + MyUtils.decimal_to_binary(String.valueOf(i)));
+//        }
         InputMenu input_menu = new InputMenu(); // ALL INPUT OBTAINED FROM THERE
     }
     
     public static void main_execution(InputMenu input_menu) throws Exception {
         String[] raw_values = input_menu.getInput_data();
         boolean open_exported = input_menu.getOpen_exported();
+        parameters = new int[]{4,4,4};
         
         Map<String, String> result = MyUtils.perform_log2_sub_band_compression(raw_values);
         String overall_compressed = result.get("overall_compressed");
