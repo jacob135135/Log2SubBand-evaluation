@@ -311,12 +311,32 @@ public class MyUtils {
         return binary_input.substring(0, parameters[0] + 1);
     }
 
+    /**
+     * Converts a number in decimal into SIGNED binary number
+     *
+     * @param decimal_n String decimal number
+     * @return SIGNED binary number corresponding to decimal input
+     */
     static String decimal_to_binary(String decimal_n) {
         Integer dec_int = Integer.valueOf(decimal_n);
         String binary_repr = Integer.toBinaryString(dec_int);
         if (binary_repr.length()>12) binary_repr = binary_repr.substring(binary_repr.length()-12,binary_repr.length());
         else binary_repr = MyUtils.binary_to_12_bits(binary_repr);
         return binary_repr;
+    }
+
+    /**
+     * Converts SIGNED binary number into its equivalent decimal number
+     * @param binary_n String representation of binary number
+     * @return Decimal value of input string
+     */
+    static String binary_to_decimal(String binary_n) {
+        String first_bit = binary_n.substring(0,1); // "1" means number is negative
+        Integer decimal_val = Integer.parseInt(binary_n, 2);
+        if ("1".equals(first_bit)) {
+            decimal_val -= 4096;
+        }
+        return String.valueOf(decimal_val);
     }
 
     /**

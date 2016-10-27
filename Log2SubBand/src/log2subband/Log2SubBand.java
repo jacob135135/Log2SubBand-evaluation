@@ -121,7 +121,9 @@ public class Log2SubBand {
 
     public static void main(String[] args) {
 //        for (int i = -2047; i < 2048; i++) {
-//            System.out.println(i + ":  " + MyUtils.decimal_to_binary(String.valueOf(i)));
+//            String binary_val = MyUtils.decimal_to_binary(String.valueOf(i));
+//            System.out.println(i + ":  " + binary_val);
+//            System.out.println("Back to dec: " + MyUtils.binary_to_decimal(binary_val));
 //        }
         InputMenu input_menu = new InputMenu(); // ALL INPUT OBTAINED FROM THERE
     }
