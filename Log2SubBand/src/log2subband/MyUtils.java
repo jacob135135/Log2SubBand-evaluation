@@ -380,4 +380,15 @@ public class MyUtils {
         }
         return input_array;
     }
+
+    /**
+     * Produces number of zeroes based on input
+     * @param total_number number of zeroes to output
+     * @return <code>total_number</code> of zeroes as String
+     */
+    public static String generate_zeroes(int total_number) {
+        String to_return = new String(new char[total_number]).replace("\0", "0");
+        return to_return;
+    }
+
 }

@@ -68,7 +68,7 @@ public class Log2SubBand {
      */
     public static String log2_sub_band_decode_string(String encoded) {
         String remaining_string = encoded;
-        String current_number = "0000";
+        String current_number = MyUtils.generate_zeroes(12);
         String decoded_string = "";
         String[] results;
         
@@ -126,11 +126,11 @@ public class Log2SubBand {
     public static void main_execution(InputMenu input_menu) throws Exception {
         String[] raw_values = input_menu.getInput_data();
         boolean open_exported = input_menu.getOpen_exported();
-        parameters = new int[]{4,4,4};
+        parameters = input_menu.getRun_parameters();
         
-        previous_least_significant_nibble = "0000";
-        previous_middle_nibble = "0000";
-        previous_most_significant_nibble = "0000";
+        previous_least_significant_nibble = MyUtils.generate_zeroes(parameters[2]);
+        previous_middle_nibble = MyUtils.generate_zeroes(parameters[1]);
+        previous_most_significant_nibble = MyUtils.generate_zeroes(parameters[0]);
 
         Map<String, String> result = MyUtils.perform_log2_sub_band_compression(raw_values);
         String overall_compressed = result.get("overall_compressed");

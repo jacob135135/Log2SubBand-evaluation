@@ -289,7 +289,7 @@ public class InputMenu extends javax.swing.JFrame {
         jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel6.setText("Parameters' size (total 12): (PLACEHOLDER, NOT IMPLEMENTED)");
+        jLabel6.setText("Parameters' size (total 12):");
 
         jLabel7.setText("Most significant bits:");
 
