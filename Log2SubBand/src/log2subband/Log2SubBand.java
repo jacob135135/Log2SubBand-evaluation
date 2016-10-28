@@ -120,11 +120,6 @@ public class Log2SubBand {
     }
 
     public static void main(String[] args) {
-//        for (int i = -2047; i < 2048; i++) {
-//            String binary_val = MyUtils.decimal_to_binary(String.valueOf(i));
-//            System.out.println(i + ":  " + binary_val);
-//            System.out.println("Back to dec: " + MyUtils.binary_to_decimal(binary_val));
-//        }
         InputMenu input_menu = new InputMenu(); // ALL INPUT OBTAINED FROM THERE
     }
     
@@ -142,16 +137,8 @@ public class Log2SubBand {
         MyUtils.print_log2subband_compression_results(input_string, overall_compressed, overall_uncompressed);
 
         String[] custom_codebook = input_menu.getCodebook_data();
-        if (custom_codebook.length > 0) {
-            MyUtils.init_codebook_from_imported_codebook(custom_codebook);
-        } else {
-            for(int i=0; i<raw_values.length; i++) {
-                int transformed_value = Integer.valueOf(raw_values[i]) + HuffmanCode.HUFFMAN_ADDITION;
-                System.out.println("transformed:" + transformed_value);
-                raw_values[i] = String.valueOf(transformed_value);
-            }
-            HuffmanCode.init_ideal_huffman_dictionaries(raw_values);
-        }
+        if (custom_codebook.length > 0) MyUtils.init_codebook_from_imported_codebook(custom_codebook);
+        else HuffmanCode.init_ideal_huffman_dictionaries(raw_values);
 
         String[] input_array = input_string.split(",");
         String[] output_array = output_string.split(",");

@@ -110,15 +110,11 @@ public class MyUtils {
      * @return String[] of CSV table data
      */
     public static String[] make_export_table(String[] original, String[] encoded, String[] binary_input) {
-        String result_string = "Original(bin)," + append_spaces("Original(dec),", 14) + append_spaces("Encoded", 14) + append_spaces(",Binary", 14) + ",Huffman*";
+        String result_string = "Original(dec)," + append_spaces("Original(bin),", 14) + append_spaces("Encoded", 14) + ",Huffman*";
         for (int i=0; i<original.length; i++) {
-            //int transf = Integer.valueOf(original[i]) - HuffmanCode.HUFFMAN_ADDITION;
-            //String transformed = String.valueOf(transf);
             String crap = binary_to_decimal(original[i]);
-            result_string += "\n" + append_spaces(original[i], 10) + "," + append_spaces(crap, 12) + "," + append_spaces(encoded[i],14) + "," + append_spaces(binary_input[i],10);
-            int orig_transformed = Integer.valueOf(original[i]);// - HuffmanCode.HUFFMAN_ADDITION;
-            result_string += "," + get_huffman_encoding(String.valueOf(orig_transformed));
-            System.out.println("ALL GOOD");
+            result_string += "\n" + append_spaces(crap, 13) + "," + append_spaces(original[i], 13) + "," + append_spaces(encoded[i],14);
+            result_string += "," + get_huffman_encoding(original[i]);
         }
         String[] result = result_string.split(",");
         return result;
@@ -133,15 +129,13 @@ public class MyUtils {
      * @return Concatenation of Huffman encodings of all symbols (characters) in <code>to_encode</code>
      */
     public static String get_huffman_encoding(String to_encode) {
-        System.out.println("INITIAL TO ENCODE: " + to_encode);
+        if(debug) System.out.println("INITIAL TO ENCODE: " + to_encode);
         to_encode = binary_to_decimal(binary_to_12_bits(to_encode));//binary_to_decimal(String.valueOf(transformed));
-        System.out.println("DECIMAL TO ENCODE: " + to_encode);
-        to_encode = String.valueOf(Integer.valueOf(to_encode) + 2048);
-        System.out.println("TRANSFORMED TO ENCODE: " + to_encode);
-        //int transformed = Integer.valueOf(to_encode) + 2048;  //binary_to_decimal(to_encode);
-        //System.out.println("TRANSFORMED TO ENCODE: " + dec_to_encode);
+        if(debug) System.out.println("DECIMAL TO ENCODE: " + to_encode);
+        to_encode = String.valueOf(Integer.valueOf(to_encode) + HuffmanCode.HUFFMAN_ADDITION);
+        if(debug) System.out.println("TRANSFORMED TO ENCODE: " + to_encode);
         String result = number_to_encoding_dict.get(to_encode);
-        System.out.println("ENCODED INTO :" + result);
+        if(debug) System.out.println("ENCODED INTO :" + result);
         if (result == null) throw new NoSuchElementException("Codebook ERROR, no encoding found for '" + to_encode + "'");
         return result;
     }
@@ -286,7 +280,7 @@ public class MyUtils {
      * @param overall_uncompressed
      */
     static void print_Huffman_compression_results(String[] input_array, String overall_uncompressed) {
-        String compressed = "C";//get_full_huffman_encoding(input_array);
+        String compressed = get_full_huffman_encoding(input_array);
         double compression_rate = compression_rate(compressed, overall_uncompressed);
         System.out.println("Huffman compressed: " + compressed);
         System.out.println("Huffman Original/Compressed: " + compression_rate);
@@ -369,5 +363,21 @@ public class MyUtils {
             }
         }
         return binary_input;
+    }
+
+    /**
+     * Adds a constant to every element of array.
+     * Can be used to add/subtract a constant value from all elements of the array
+     * @param input_array Input array
+     * @param constant Number to sum with each individual element of <code>input_array</code>
+     * @return <code>input_array</code> with every element summed by <code>constant</code>
+     */
+    public static String[] add_to_string_array(String[] input_array, int constant) {
+        for(int i=0; i< input_array.length;i++){
+            int prev_val = Integer.valueOf(input_array[i]);
+            int new_val = prev_val + constant;
+            input_array[i] = String.valueOf(new_val);
+        }
+        return input_array;
     }
 }
