@@ -110,11 +110,15 @@ public class MyUtils {
      * @return String[] of CSV table data
      */
     public static String[] make_export_table(String[] original, String[] encoded, String[] binary_input) {
-        String result_string = "Original(bin)," + append_spaces("Original(dec)", 14) + append_spaces("Encoded", 14) + append_spaces(",Binary", 14) + ",Huffman*";
+        String result_string = "Original(bin)," + append_spaces("Original(dec),", 14) + append_spaces("Encoded", 14) + append_spaces(",Binary", 14) + ",Huffman*";
         for (int i=0; i<original.length; i++) {
-            result_string += "\n" + append_spaces(original[i], 8) + "," + "A" + "," + append_spaces(encoded[i],14) + "," + binary_input[i];
+            //int transf = Integer.valueOf(original[i]) - HuffmanCode.HUFFMAN_ADDITION;
+            //String transformed = String.valueOf(transf);
+            String crap = binary_to_decimal(original[i]);
+            result_string += "\n" + append_spaces(original[i], 10) + "," + append_spaces(crap, 12) + "," + append_spaces(encoded[i],14) + "," + append_spaces(binary_input[i],10);
             int orig_transformed = Integer.valueOf(original[i]);// - HuffmanCode.HUFFMAN_ADDITION;
-            result_string += "," + "B";//get_huffman_encoding(String.valueOf(orig_transformed));
+            result_string += "," + get_huffman_encoding(String.valueOf(orig_transformed));
+            System.out.println("ALL GOOD");
         }
         String[] result = result_string.split(",");
         return result;
@@ -129,9 +133,15 @@ public class MyUtils {
      * @return Concatenation of Huffman encodings of all symbols (characters) in <code>to_encode</code>
      */
     public static String get_huffman_encoding(String to_encode) {
-        int transformed = Integer.valueOf(to_encode) + 2048;  //binary_to_decimal(to_encode);
-        to_encode = binary_to_decimal(String.valueOf(transformed));
+        System.out.println("INITIAL TO ENCODE: " + to_encode);
+        to_encode = binary_to_decimal(binary_to_12_bits(to_encode));//binary_to_decimal(String.valueOf(transformed));
+        System.out.println("DECIMAL TO ENCODE: " + to_encode);
+        to_encode = String.valueOf(Integer.valueOf(to_encode) + 2048);
+        System.out.println("TRANSFORMED TO ENCODE: " + to_encode);
+        //int transformed = Integer.valueOf(to_encode) + 2048;  //binary_to_decimal(to_encode);
+        //System.out.println("TRANSFORMED TO ENCODE: " + dec_to_encode);
         String result = number_to_encoding_dict.get(to_encode);
+        System.out.println("ENCODED INTO :" + result);
         if (result == null) throw new NoSuchElementException("Codebook ERROR, no encoding found for '" + to_encode + "'");
         return result;
     }
