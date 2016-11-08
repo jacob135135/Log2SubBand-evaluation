@@ -146,7 +146,7 @@ public class Log2SubBand {
 
         String[] input_array = input_string.split(",");
         String[] output_array = output_string.split(",");
-        String[] binary_input = MyUtils.split_by(overall_uncompressed,12);
+        String[] binary_input = MyUtils.split_by_length(overall_uncompressed,12);
         String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input);
         MyUtils.print_Huffman_compression_results(input_array, overall_uncompressed);
 

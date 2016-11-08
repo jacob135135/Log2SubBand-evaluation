@@ -158,7 +158,7 @@ public class MyUtils {
      * @param length
      * @return String[] of substrings of original string
      */
-    public static String[] split_by (String input, int length) {
+    public static String[] split_by_length (String input, int length) {
         return input.split("(?<=\\G.{" + length + "})"); //http://stackoverflow.com/questions/3760152/split-string-to-equal-length-substrings-in-java
     }
 
