@@ -9,7 +9,6 @@ abstract class HuffmanTree implements Comparable<HuffmanTree> {
     public HuffmanTree(int freq) { frequency = freq; }
 
     /* Downloaded from https://rosettacode.org/wiki/Huffman_coding under GNU Free Documentation License 1.2  */
-    // compares on the frequency
     public int compareTo(HuffmanTree tree) {return frequency - tree.frequency;}
 }
 
@@ -41,6 +40,7 @@ public class HuffmanCode {
     public static Map<String, String> number_to_encoding_dict = new HashMap<>(); // number => encoding
     public static Map<String, String> encoding_to_number_dict = new HashMap<>(); // encoding => number
     public static final int HUFFMAN_ADDITION = 2048; // NEED TO ADD TO HUFFMAN TO PREVENT NEGATIVE NUMBER INDEXES
+    static final int FREQUENCY_SIGNIFICANCE_MULTIPLIER = 1000;
 
     public static HuffmanTree buildTree(int[] charFreqs) {
         PriorityQueue<HuffmanTree> trees = new PriorityQueue<>();

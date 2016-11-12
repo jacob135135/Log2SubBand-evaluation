@@ -239,7 +239,7 @@ public class MyUtils {
     public static int[] make_frequencies_significant(int[] numbers_frequencies) {
         for (int i=0 ; i<numbers_frequencies.length; i++) {
             int previous_value = numbers_frequencies[i];
-            numbers_frequencies[i] = previous_value * 1000 + 1;
+            numbers_frequencies[i] = previous_value * HuffmanCode.FREQUENCY_SIGNIFICANCE_MULTIPLIER + 1;
         }
         return numbers_frequencies;
     }
