@@ -11,6 +11,7 @@ package log2subband;
 import static log2subband.CompressionUtils.get_LS_nibble;
 import static log2subband.CompressionUtils.get_MS_nibble;
 import static log2subband.CompressionUtils.get_middle_nibble;
+import static log2subband.MainExecution.debug;
 
 /**
  * @author Jakub
@@ -22,7 +23,6 @@ public class Log2SubBand {
     static String previous_middle_nibble;
     static String previous_most_significant_nibble;
     static int[] parameters;
-    public static boolean debug;
     
     /**
      * Takes a BINARY number in string representation (e.g. "10") and returns compressed binary version based

@@ -14,6 +14,7 @@ import menuUI.InputMenu;
  * @author JAKUB
  */
 public class MainExecution {
+    public static boolean debug;
     
     public static void main(String[] args) {
         InputMenu input_menu = new InputMenu(); // ALL INPUT OBTAINED FROM THERE

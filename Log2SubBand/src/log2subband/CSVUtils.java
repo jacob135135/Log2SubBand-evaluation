@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static log2subband.HuffmanCode.number_to_encoding_dict;
-import static log2subband.Log2SubBand.debug;
+import static log2subband.MainExecution.debug;
 import static log2subband.MyUtils.CSstring_to_array;
 import static log2subband.MyUtils.append_spaces;
 

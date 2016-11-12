@@ -551,7 +551,7 @@ public class InputMenu extends javax.swing.JFrame {
             this.run_parameters = new int[]{most_sign, middle, least_sign};
             this.open_exported = open_exported_checkbox.isSelected();
             this.use_decimal_system = rad_btn_decimal_system.isSelected();
-            Log2SubBand.debug = more_info_checkbox.isSelected();
+            MainExecution.debug = more_info_checkbox.isSelected();
             
             if(rad_btn_csv_import.isSelected())
                 if (!"No file selected".equals(label_selected_file.getText()))

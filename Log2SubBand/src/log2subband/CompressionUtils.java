@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import static log2subband.HuffmanCode.number_to_encoding_dict;
-import static log2subband.Log2SubBand.debug;
+import static log2subband.MainExecution.debug;
 import static log2subband.Log2SubBand.parameters;
 import static log2subband.MyUtils.binary_to_12_bits;
 import static log2subband.MyUtils.binary_to_decimal;

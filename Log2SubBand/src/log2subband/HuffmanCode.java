@@ -1,7 +1,7 @@
 
 package log2subband;
 import java.util.*;
-import static log2subband.Log2SubBand.debug;
+import static log2subband.MainExecution.debug;
 
 /* Downloaded from https://rosettacode.org/wiki/Huffman_coding under GNU Free Documentation License 1.2  */
 abstract class HuffmanTree implements Comparable<HuffmanTree> {
