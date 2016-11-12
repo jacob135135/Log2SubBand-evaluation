@@ -5,6 +5,7 @@ package log2subband;
 
 import java.util.HashMap;
 import java.util.Map;
+import static log2subband.MyUtils.decimal_to_binary;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -106,5 +107,23 @@ public class HuffmanCodeTest {
         
         assertEquals(HuffmanCode.number_to_encoding_dict.get("2179"),"100");
         assertEquals(HuffmanCode.encoding_to_number_dict.get("100"),"2179");
+    }
+
+    @Test
+    public void import_file_full_compression_test() {
+        String path = System.getProperty("user.dir");
+        String[] file_contents = CSVUtils.parse_CSV(path + "/test/log2subband/test2.csv");
+        CompressionUtils.init_codebook_from_imported_codebook(CSVUtils.parse_CSV(path + "/test/log2subband/codebook.csv"));
+
+        String input = "";
+        for (String raw_value : file_contents) {
+            raw_value = decimal_to_binary(raw_value);
+            input += "," + raw_value;
+        }
+        String[] input_data = MyUtils.CSstring_to_array(input);
+        String encoding = CompressionUtils.get_full_huffman_encoding(input_data);
+
+        String expected = "011101000110110111010001101101110100011011110010110010100000101101110001001011011100010110111010001101101110100011011011101000110110111010001101101110100011011011101000110110111010001101101110100011011110001101000011001100100111010110100101010100000111011101010001110111010001101101110100011011011101000110110111010001101101110100011011011101000110110111010001101101110100011011";
+        assertEquals(expected, encoding);
     }
 }
