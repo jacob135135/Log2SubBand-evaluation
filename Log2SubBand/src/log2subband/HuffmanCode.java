@@ -1,6 +1,7 @@
 
 package log2subband;
 import java.util.*;
+import static log2subband.Log2SubBand.debug;
 
 /* Downloaded from https://rosettacode.org/wiki/Huffman_coding under GNU Free Documentation License 1.2  */
 abstract class HuffmanTree implements Comparable<HuffmanTree> {
@@ -8,7 +9,6 @@ abstract class HuffmanTree implements Comparable<HuffmanTree> {
     public HuffmanTree(int freq) { frequency = freq; }
 
     /* Downloaded from https://rosettacode.org/wiki/Huffman_coding under GNU Free Documentation License 1.2  */
-    // compares on the frequency
     public int compareTo(HuffmanTree tree) {return frequency - tree.frequency;}
 }
 
@@ -39,6 +39,8 @@ public class HuffmanCode {
     /* Needs to be static as using recursive function to add data to it */
     public static Map<String, String> number_to_encoding_dict = new HashMap<>(); // number => encoding
     public static Map<String, String> encoding_to_number_dict = new HashMap<>(); // encoding => number
+    public static final int HUFFMAN_ADDITION = 2048; // NEED TO ADD TO HUFFMAN TO PREVENT NEGATIVE NUMBER INDEXES
+    static final int FREQUENCY_SIGNIFICANCE_MULTIPLIER = 1000;
 
     public static HuffmanTree buildTree(int[] charFreqs) {
         PriorityQueue<HuffmanTree> trees = new PriorityQueue<>();
@@ -69,6 +71,7 @@ public class HuffmanCode {
             HuffmanLeaf leaf = (HuffmanLeaf)tree;
 
             number_to_encoding_dict.put(String.valueOf(leaf.value), String.valueOf(prefix));
+            if(debug) System.out.println("ADDING number: " + leaf.value + " ; encoding: " + prefix);
             encoding_to_number_dict.put(String.valueOf(prefix), String.valueOf(leaf.value));
 
         } else if (tree instanceof HuffmanNode) {
@@ -93,11 +96,15 @@ public class HuffmanCode {
      * @return decoded String of decoded values
      */
     public static String decode_huffman(String encoded, Map<String, String> encod_to_number_dict) {
+        if(debug) System.out.println("DECODE HUFF encoded: " + encoded);
         String current = encoded.substring(0,1);
         String decoded = "";
         while (encoded.length()>0) {
             if (encod_to_number_dict.containsKey(current)) {
-                decoded += encod_to_number_dict.get(current) + ",";
+                String before_transformation = encod_to_number_dict.get(current);
+                int transformed = Integer.valueOf(before_transformation) - HUFFMAN_ADDITION;
+                decoded +=  transformed + ",";
+                if(debug) System.out.println("DECODED SO FAR : " + decoded + " (" + current + ")");
                 current = "";
             }
             encoded = encoded.substring(1);
@@ -105,7 +112,7 @@ public class HuffmanCode {
         }
 
         if (current.length()>0) {
-            throw new NoSuchElementException("Unable to decode, remaining" + current + " does not exist in dictionary");
+            throw new NoSuchElementException("Unable to decode, remaining " + current + " does not exist in dictionary");
         }
         decoded = decoded.substring(0, decoded.length()-1);
         return decoded;
@@ -121,10 +128,15 @@ public class HuffmanCode {
      *         (can occur only if this implementation is erroneous)
      */
     public static void init_ideal_huffman_dictionaries(String[] numbers_to_encode) throws Exception {
-        int[] charFreqs = new int[2048]; // Need to support all 2048 different numbers
-        for (String number : numbers_to_encode) {  // read each Number (represented as String) and record the frequencies
-            int numb = Integer.valueOf(number);
-            charFreqs[numb]++;
+        int[] charFreqs = new int[4096]; // Need to support all 4096 different numbers
+
+        // Adds constant to every element to avoid negative numbers
+        numbers_to_encode = MyUtils.add_to_string_array(numbers_to_encode, HUFFMAN_ADDITION);
+
+        for (String numb : numbers_to_encode) {
+            int number = Integer.valueOf(numb);
+            charFreqs[number]++; // Read each Number (represented as String) and record the frequencies
+            if(debug) System.out.println(numb + ": " + charFreqs[number]);
         }
         charFreqs = MyUtils.make_frequencies_significant(charFreqs); // also forces Huffman to create encoding for all
         HuffmanTree tree = buildTree(charFreqs); // build tree
@@ -134,6 +146,9 @@ public class HuffmanCode {
         for (String number : numbers_to_encode) encoded += number_to_encoding_dict.get(number);
         String decoded = decode_huffman(encoded, encoding_to_number_dict);
         String[] decod = decoded.split(",[ ]*");
+
+        // CHECK that original data is same as one that was encoded and then decoded
+        numbers_to_encode = MyUtils.add_to_string_array(numbers_to_encode, -HUFFMAN_ADDITION);
         if (Arrays.equals(decod, numbers_to_encode)) System.out.println("\nSUCCESS -> DECODED STRING ENCODED SAME AS ORIGINAL STRING");
         else {
             System.err.println("nSOMETHING WENT WRONG -> DECODED STRING ENCODED RESULTED IN DIFFERENT STRING");
