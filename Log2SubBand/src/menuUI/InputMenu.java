@@ -4,7 +4,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import log2subband.CSVUtils;
 import log2subband.Log2SubBand;
+import log2subband.MainExecution;
 import log2subband.MyUtils;
 
 /**
@@ -553,7 +555,7 @@ public class InputMenu extends javax.swing.JFrame {
             
             if(rad_btn_csv_import.isSelected())
                 if (!"No file selected".equals(label_selected_file.getText()))
-                    this.input_data = MyUtils.parse_CSV(label_selected_file.getText());
+                    this.input_data = CSVUtils.parse_CSV(label_selected_file.getText());
                 else {
                     JOptionPane.showMessageDialog(this, "ERROR, NO CSV FILE SELECTED!");
                     cont = false;
@@ -567,10 +569,10 @@ public class InputMenu extends javax.swing.JFrame {
                 }
 
             if(rad_btn_import_codebook.isSelected())
-                this.codebook_data = MyUtils.parse_CSV(label_selected_codebook_file.getText());
+                this.codebook_data = CSVUtils.parse_CSV(label_selected_codebook_file.getText());
                 
             if (cont) {
-                try {Log2SubBand.main_execution(this);}
+                try {MainExecution.main_execution(this);}
                 catch (Exception ex) {Logger.getLogger(InputMenu.class.getName()).log(Level.SEVERE, null, ex);}
                 dispose(); //Destroy the JFrame object
             }
