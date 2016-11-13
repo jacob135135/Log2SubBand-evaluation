@@ -8,11 +8,10 @@
  */
 package log2subband;
 
-import java.util.Map;
-import static log2subband.MyUtils.get_LS_nibble;
-import static log2subband.MyUtils.get_MS_nibble;
-import static log2subband.MyUtils.get_middle_nibble;
-import menuUI.InputMenu;
+import static log2subband.CompressionUtils.get_LS_nibble;
+import static log2subband.CompressionUtils.get_MS_nibble;
+import static log2subband.CompressionUtils.get_middle_nibble;
+import static log2subband.MainExecution.debug;
 
 /**
  * @author Jakub
@@ -24,7 +23,6 @@ public class Log2SubBand {
     static String previous_middle_nibble;
     static String previous_most_significant_nibble;
     static int[] parameters;
-    public static boolean debug;
     
     /**
      * Takes a BINARY number in string representation (e.g. "10") and returns compressed binary version based
@@ -39,9 +37,9 @@ public class Log2SubBand {
      * @return String compressed binary number as string (e.g. "11000100010001") this is to simplify operations on the "number"
      */
     public static String log2_sub_band_compress_number(String binary_input) {
-        String least_significant_nibble = MyUtils.get_LS_nibble(binary_input);
-        String middle_nibble = MyUtils.get_middle_nibble(binary_input);
-        String most_significant_nibble = MyUtils.get_MS_nibble(binary_input);
+        String least_significant_nibble = get_LS_nibble(binary_input);
+        String middle_nibble = get_middle_nibble(binary_input);
+        String most_significant_nibble = get_MS_nibble(binary_input);
 
         if (debug) System.out.println("Nibbles: " + most_significant_nibble + " " + middle_nibble + " " + least_significant_nibble);
    
@@ -119,41 +117,4 @@ public class Log2SubBand {
         return stuff_to_return;
     }
 
-    public static void main(String[] args) {
-        InputMenu input_menu = new InputMenu(); // ALL INPUT OBTAINED FROM THERE
-    }
-    
-    public static void main_execution(InputMenu input_menu) throws Exception {
-        String[] raw_values = input_menu.getInput_data();
-        boolean open_exported = input_menu.getOpen_exported();
-        parameters = input_menu.getRun_parameters();
-        
-        previous_least_significant_nibble = MyUtils.generate_zeroes(parameters[2]);
-        previous_middle_nibble = MyUtils.generate_zeroes(parameters[1]);
-        previous_most_significant_nibble = MyUtils.generate_zeroes(parameters[0]);
-
-        Map<String, String> result = MyUtils.perform_log2_sub_band_compression(raw_values);
-        String overall_compressed = result.get("overall_compressed");
-        String overall_uncompressed = result.get("overall_uncompressed");
-        String input_string = result.get("input");
-        String output_string = result.get("output");
-
-        MyUtils.print_log2subband_compression_results(input_string, overall_compressed, overall_uncompressed);
-
-        String[] custom_codebook = input_menu.getCodebook_data();
-        if (custom_codebook.length > 0) MyUtils.init_codebook_from_imported_codebook(custom_codebook);
-        else HuffmanCode.init_ideal_huffman_dictionaries(raw_values);
-
-        String[] input_array = input_string.split(",");
-        String[] output_array = output_string.split(",");
-        String[] binary_input = MyUtils.split_by_length(overall_uncompressed,12);
-        String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input);
-        MyUtils.print_Huffman_compression_results(input_array, overall_uncompressed);
-
-        MyUtils.export_codebook(); // uses number_to_encoding_dict
-        MyUtils.write_CSV("compressed", export_data);
-        
-        if(open_exported) MyUtils.open_file("compressed.csv");
-        System.exit(0);
-    }
 }

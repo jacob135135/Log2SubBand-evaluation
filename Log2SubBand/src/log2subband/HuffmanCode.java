@@ -1,7 +1,7 @@
 
 package log2subband;
 import java.util.*;
-import static log2subband.Log2SubBand.debug;
+import static log2subband.MainExecution.debug;
 
 /* Downloaded from https://rosettacode.org/wiki/Huffman_coding under GNU Free Documentation License 1.2  */
 abstract class HuffmanTree implements Comparable<HuffmanTree> {
@@ -40,7 +40,7 @@ public class HuffmanCode {
     public static Map<String, String> number_to_encoding_dict = new HashMap<>(); // number => encoding
     public static Map<String, String> encoding_to_number_dict = new HashMap<>(); // encoding => number
     public static final int HUFFMAN_ADDITION = 2048; // NEED TO ADD TO HUFFMAN TO PREVENT NEGATIVE NUMBER INDEXES
-    static final int FREQUENCY_SIGNIFICANCE_MULTIPLIER = 1000;
+    public static final int FREQUENCY_SIGNIFICANCE_MULTIPLIER = 1000;
 
     public static HuffmanTree buildTree(int[] charFreqs) {
         PriorityQueue<HuffmanTree> trees = new PriorityQueue<>();
@@ -138,7 +138,7 @@ public class HuffmanCode {
             charFreqs[number]++; // Read each Number (represented as String) and record the frequencies
             if(debug) System.out.println(numb + ": " + charFreqs[number]);
         }
-        charFreqs = MyUtils.make_frequencies_significant(charFreqs); // also forces Huffman to create encoding for all
+        charFreqs = CompressionUtils.make_frequencies_significant(charFreqs); // also forces Huffman to create encoding for all
         HuffmanTree tree = buildTree(charFreqs); // build tree
         create_huffman_tree(tree, new StringBuffer());
 
