@@ -5,10 +5,13 @@
  */
 package log2subband;
 
+import java.util.Arrays;
 import java.util.Map;
+import static log2subband.Log2SubBand.log2_sub_band_decode_string;
 import static log2subband.Log2SubBand.parameters;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,6 +36,8 @@ public class Log2SubBandTest {
     
     @Before
     public void setUp() {
+        parameters = new int[]{4,4,4};
+        Log2SubBand.update_previous_bands(parameters);
     }
     
     @After
@@ -41,11 +46,6 @@ public class Log2SubBandTest {
 
     @Test
     public void compression_test() {
-        parameters = new int[]{4,4,4};
-        Log2SubBand.previous_least_significant_band = MyUtils.generate_zeroes(parameters[2]);
-        Log2SubBand.previous_middle_band = MyUtils.generate_zeroes(parameters[1]);
-        Log2SubBand.previous_most_significant_band = MyUtils.generate_zeroes(parameters[0]);
-        
         String[] input = new String[]{"1","2","3","4","5","6","7","8","9","10","15","20","40","80","120","131","131","131"};
         String expected_compressed = "010001010010010011010100010101010110010111011000011001011010011111100001010010001010001001010000100111100010100000110000";
         
@@ -53,5 +53,17 @@ public class Log2SubBandTest {
         String compressed = result.get("overall_compressed");
 
         assertEquals(expected_compressed, compressed);   
+    }
+
+    @Test
+    public void decompression_test() {
+        String[] input = new String[]{"1","2","3","4","5","6","7","8","9","10","15","20","40","80","120","131","131","131"};
+        String compressed = "010001010010010011010100010101010110010111011000011001011010011111100001010010001010001001010000100111100010100000110000";
+        String decoded = log2_sub_band_decode_string(compressed);
+        String[] decoded_arr = MyUtils.CSstring_to_array(decoded);
+        for (int i=0; i<decoded_arr.length;i++) {
+            decoded_arr[i] = MyUtils.binary_to_decimal(decoded_arr[i]);
+        }
+        Assert.assertArrayEquals(decoded_arr, input);
     }
 }

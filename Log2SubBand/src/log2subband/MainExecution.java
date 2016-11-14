@@ -62,10 +62,7 @@ public class MainExecution {
         raw_values_array = input_menu.getInput_data();
         open_exported = input_menu.getOpen_exported();
         parameters = input_menu.getRun_parameters();
-
-        Log2SubBand.previous_least_significant_band = MyUtils.generate_zeroes(parameters[2]);
-        Log2SubBand.previous_middle_band = MyUtils.generate_zeroes(parameters[1]);
-        Log2SubBand.previous_most_significant_band = MyUtils.generate_zeroes(parameters[0]);
+        Log2SubBand.update_previous_bands(parameters);
     }
 
 }

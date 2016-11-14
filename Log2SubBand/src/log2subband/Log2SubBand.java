@@ -8,10 +8,10 @@
  */
 package log2subband;
 
-import static log2subband.CompressionUtils.get_LS_band;
-import static log2subband.CompressionUtils.get_MS_band;
-import static log2subband.CompressionUtils.get_middle_band;
 import static log2subband.MainExecution.debug;
+import static log2subband.CompressionUtils.get_band3;
+import static log2subband.CompressionUtils.get_band0;
+import static log2subband.CompressionUtils.get_band1;
 
 /**
  * @author Jakub
@@ -19,16 +19,16 @@ import static log2subband.MainExecution.debug;
 public class Log2SubBand {
         
     // static so that they can be referenced and changed in get_compressed_data method 
-    static String previous_least_significant_band;
-    static String previous_middle_band;
-    static String previous_most_significant_band;
+    static String previous_band0;
+    static String previous_band1;
+    static String previous_band3;
     static int[] parameters;
     
     /**
      * Takes a BINARY number in string representation (e.g. "10") and returns compressed binary version based
        on real time-data (same number will be encoded differently in various inputs)
-       Compression is dynamic using static integers (e.g. previous_most_significant_band)
-       Basic algorithm: Check if most_significant_band (most significant bit) bit is different from previous_most_significant_band
+       Compression is dynamic using static integers (e.g. previous_band0)
+       Basic algorithm: Check if band0 (most significant bit) bit is different from previous_band0
         if so copy all bands (band in binary = digit in decimal) and append after header, header = 11;
         else if middle band changed -> encode middle & least significant bit, header = 10;
         else if least significant bit changed -> encode least significant bit, header = 01;
@@ -37,24 +37,24 @@ public class Log2SubBand {
      * @return String compressed binary number as string (e.g. "11000100010001") this is to simplify operations on the "number"
      */
     public static String log2_sub_band_compress_number(String binary_input) {
-        String least_significant_band = get_LS_band(binary_input);
-        String middle_band = get_middle_band(binary_input);
-        String most_significant_band = get_MS_band(binary_input);
+        String band0 = get_band0(binary_input);
+        String band1 = get_band1(binary_input);
+        String band3 = get_band3(binary_input);
 
-        if (debug) System.out.println("Bands: " + most_significant_band + " " + middle_band + " " + least_significant_band);
+        if (debug) System.out.println("Bands: " + band0 + " " + band1 + " " + band3);
    
         String return_value;
-        if (most_significant_band.equals(previous_most_significant_band)) {
-            if (middle_band.equals(previous_middle_band)){
-                if (least_significant_band.equals(previous_least_significant_band)) {
+        if (band0.equals(previous_band0)) {
+            if (band1.equals(previous_band1)){
+                if (band3.equals(previous_band3)) {
                     return_value = "00";
                 }
-                else {return_value = "01" + least_significant_band;}
-            } else {return_value = "10" + middle_band + least_significant_band;}
-        } else { return_value = "11" + most_significant_band + middle_band + least_significant_band;}
-        previous_most_significant_band = most_significant_band;
-        previous_middle_band = middle_band;
-        previous_least_significant_band = least_significant_band;
+                else {return_value = "01" + band3;}
+            } else {return_value = "10" + band1 + band3;}
+        } else { return_value = "11" + band0 + band1 + band3;}
+        previous_band0 = band0;
+        previous_band1 = band1;
+        previous_band3 = band3;
         return return_value;
     }
           
@@ -98,23 +98,30 @@ public class Log2SubBand {
         String header = encoded_substring.substring(0,2);
         if (debug) System.out.print("Header: " + header + "\n");
         String remaining_string = encoded_substring.substring(2); // Removing header from string
-        
+
+        if(debug)System.out.println("PREV NUMBER " + previous_number);
         switch (header) {
             case "00":  decoded_number = previous_number;
                 break;
-            case "01":  decoded_number = get_MS_band(previous_number) + get_middle_band(previous_number) + get_LS_band(remaining_string);
+            case "01":  decoded_number = get_band0(previous_number) + get_band1(previous_number) + remaining_string.substring(0, parameters[2]);
                         remaining_string = remaining_string.substring(least_signif_band_bits); // Exclude bits that were encoding
                 break;
-            case "10":  decoded_number = get_MS_band(previous_number) + get_middle_band(remaining_string) + get_LS_band(remaining_string);
+            case "10":  decoded_number = get_band0(previous_number) + remaining_string.substring(0, 12 - parameters[0]);
                         remaining_string = remaining_string.substring(least_signif_band_bits + middle_band_bits); // Exclude bits that were encoding
                 break;
-            case "11":  decoded_number = get_MS_band(remaining_string) + get_middle_band(remaining_string) + get_LS_band(remaining_string);
+            case "11":  decoded_number = remaining_string.substring(0,12);
                         remaining_string = remaining_string.substring(12); // Exclude bits that were encoding
                 break;
         }
         if (debug) System.out.println("Current decoded: " + decoded_number + "\n");
         String stuff_to_return[] = {decoded_number,remaining_string};
         return stuff_to_return;
+    }
+
+    public static void update_previous_bands(int[] parameters) {
+        Log2SubBand.previous_band0 = MyUtils.generate_zeroes(parameters[0]);
+        Log2SubBand.previous_band1 = MyUtils.generate_zeroes(parameters[1]);
+        Log2SubBand.previous_band3 = MyUtils.generate_zeroes(parameters[2]); // parameters[2] @TODO NEEDS TO BE CHANGED TO parameters[3]
     }
 
 }
