@@ -5,7 +5,6 @@
  */
 package log2subband;
 
-import java.util.Arrays;
 import java.util.Map;
 import static log2subband.Log2SubBand.log2_sub_band_decode_string;
 import static log2subband.Log2SubBand.parameters;
@@ -57,13 +56,21 @@ public class Log2SubBandTest {
 
     @Test
     public void decompression_test() {
-        String[] input = new String[]{"1","2","3","4","5","6","7","8","9","10","15","20","40","80","120","131","131","131"};
+        String input = "1,2,3,4,5,6,7,8,9,10,15,20,40,80,120,131,131,131";
         String compressed = "010001010010010011010100010101010110010111011000011001011010011111100001010010001010001001010000100111100010100000110000";
         String decoded = log2_sub_band_decode_string(compressed);
-        String[] decoded_arr = MyUtils.CSstring_to_array(decoded);
-        for (int i=0; i<decoded_arr.length;i++) {
-            decoded_arr[i] = MyUtils.binary_to_decimal(decoded_arr[i]);
-        }
-        Assert.assertArrayEquals(decoded_arr, input);
+
+        Assert.assertEquals(decoded, input);
+    }
+
+    @Test
+    public void full_log2subBand_test() {
+        String[] input = new String[]{"11","23","23","24","45","46","47","68","9","10","15","20","40","80","120","131","131"};
+        String compressed = CompressionUtils.perform_log2_sub_band_compression(input).get("overall_compressed");
+        System.out.println("COMPRESSED :" + compressed);
+        String decoded = log2_sub_band_decode_string(compressed);
+        String[] decoded_array = MyUtils.CSstring_to_array(decoded);
+
+        Assert.assertArrayEquals(decoded_array, input);
     }
 }

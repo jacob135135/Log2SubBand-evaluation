@@ -62,7 +62,7 @@ public class Log2SubBand {
      * Uses Log2SubBand algorithm for decoding.
      * Decodes String of zeroes and ones into comma separated String of numbers
      * @param encoded String to decode
-     * @return Decoded numbers separated by comma
+     * @return Decoded decimal numbers separated by comma
      */
     public static String log2_sub_band_decode_string(String encoded) {
         String remaining_string = encoded;
@@ -74,7 +74,7 @@ public class Log2SubBand {
             if(debug) System.out.print("remaining: " + remaining_string + "(" + remaining_string.length() + ")\n");
             results = decode_substring(remaining_string, current_number);
             current_number = results[0];
-            decoded_string += "," + current_number;
+            decoded_string += "," + MyUtils.binary_to_decimal(current_number);
             remaining_string = results[1];
         }
         decoded_string = decoded_string.substring(1); // Remove trailing comma
