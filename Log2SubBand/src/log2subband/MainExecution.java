@@ -15,21 +15,20 @@ import menuUI.InputMenu;
  */
 public class MainExecution {
     public static boolean debug;
+    static String[] raw_values_array;
+    static boolean open_exported;
     
     public static void main(String[] args) {
         InputMenu input_menu = new InputMenu(); // ALL INPUT OBTAINED FROM THERE
     }
     
     public static void main_execution(InputMenu input_menu) throws Exception {
-        String[] raw_values = input_menu.getInput_data();
-        boolean open_exported = input_menu.getOpen_exported();
-        parameters = input_menu.getRun_parameters();
+        set_up(input_menu);
         
-        Log2SubBand.previous_least_significant_nibble = MyUtils.generate_zeroes(parameters[2]);
-        Log2SubBand.previous_middle_nibble = MyUtils.generate_zeroes(parameters[1]);
-        Log2SubBand.previous_most_significant_nibble = MyUtils.generate_zeroes(parameters[0]);
-
-        Map<String, String> result = CompressionUtils.perform_log2_sub_band_compression(raw_values);
+        // @TODO I need to create fields for compressed/input/output variables to reduce clutter
+        // perform_log2_sub_band_compression() method should just populate those fields then
+        // I should create corresponding tests first though
+        Map<String, String> result = CompressionUtils.perform_log2_sub_band_compression(raw_values_array);
         String overall_compressed = result.get("overall_compressed");
         String overall_uncompressed = result.get("overall_uncompressed");
         String input_string = result.get("input");
@@ -39,7 +38,7 @@ public class MainExecution {
 
         String[] custom_codebook = input_menu.getCodebook_data();
         if (custom_codebook.length > 0) CompressionUtils.init_codebook_from_imported_codebook(custom_codebook);
-        else HuffmanCode.init_ideal_huffman_dictionaries(raw_values);
+        else HuffmanCode.init_ideal_huffman_dictionaries(raw_values_array);
 
         String[] input_array = input_string.split(",");
         String[] output_array = output_string.split(",");
@@ -52,6 +51,21 @@ public class MainExecution {
         
         if(open_exported) MyUtils.open_file("compressed.csv");
         System.exit(0);
+    }
+
+    /**
+     * Initialises variables with values given by input menu.
+     * This function reduces clutter in main_execution function
+     * @param input_menu
+     */
+    public static void set_up(InputMenu input_menu) {
+        raw_values_array = input_menu.getInput_data();
+        open_exported = input_menu.getOpen_exported();
+        parameters = input_menu.getRun_parameters();
+
+        Log2SubBand.previous_least_significant_band = MyUtils.generate_zeroes(parameters[2]);
+        Log2SubBand.previous_middle_band = MyUtils.generate_zeroes(parameters[1]);
+        Log2SubBand.previous_most_significant_band = MyUtils.generate_zeroes(parameters[0]);
     }
 
 }

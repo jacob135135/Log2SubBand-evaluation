@@ -8,9 +8,9 @@
  */
 package log2subband;
 
-import static log2subband.CompressionUtils.get_LS_nibble;
-import static log2subband.CompressionUtils.get_MS_nibble;
-import static log2subband.CompressionUtils.get_middle_nibble;
+import static log2subband.CompressionUtils.get_LS_band;
+import static log2subband.CompressionUtils.get_MS_band;
+import static log2subband.CompressionUtils.get_middle_band;
 import static log2subband.MainExecution.debug;
 
 /**
@@ -19,42 +19,42 @@ import static log2subband.MainExecution.debug;
 public class Log2SubBand {
         
     // static so that they can be referenced and changed in get_compressed_data method 
-    static String previous_least_significant_nibble;
-    static String previous_middle_nibble;
-    static String previous_most_significant_nibble;
+    static String previous_least_significant_band;
+    static String previous_middle_band;
+    static String previous_most_significant_band;
     static int[] parameters;
     
     /**
      * Takes a BINARY number in string representation (e.g. "10") and returns compressed binary version based
        on real time-data (same number will be encoded differently in various inputs)
-       Compression is dynamic using static integers (e.g. previous_most_significant_nibble)
-       Basic algorithm: Check if most_significant_nibble (most significant bit) bit is different from previous_most_significant_nibble
-        if so copy all nibbles (nibble in binary = digit in decimal) and append after header, header = 11;
-        else if middle nibble changed -> encode middle & least significant bit, header = 10;
+       Compression is dynamic using static integers (e.g. previous_most_significant_band)
+       Basic algorithm: Check if most_significant_band (most significant bit) bit is different from previous_most_significant_band
+        if so copy all bands (band in binary = digit in decimal) and append after header, header = 11;
+        else if middle band changed -> encode middle & least significant bit, header = 10;
         else if least significant bit changed -> encode least significant bit, header = 01;
         else send header = 00 (This means number is same as the previous number)
      * @param binary_input String binary number
      * @return String compressed binary number as string (e.g. "11000100010001") this is to simplify operations on the "number"
      */
     public static String log2_sub_band_compress_number(String binary_input) {
-        String least_significant_nibble = get_LS_nibble(binary_input);
-        String middle_nibble = get_middle_nibble(binary_input);
-        String most_significant_nibble = get_MS_nibble(binary_input);
+        String least_significant_band = get_LS_band(binary_input);
+        String middle_band = get_middle_band(binary_input);
+        String most_significant_band = get_MS_band(binary_input);
 
-        if (debug) System.out.println("Nibbles: " + most_significant_nibble + " " + middle_nibble + " " + least_significant_nibble);
+        if (debug) System.out.println("Bands: " + most_significant_band + " " + middle_band + " " + least_significant_band);
    
         String return_value;
-        if (most_significant_nibble.equals(previous_most_significant_nibble)) {
-            if (middle_nibble.equals(previous_middle_nibble)){
-                if (least_significant_nibble.equals(previous_least_significant_nibble)) {
+        if (most_significant_band.equals(previous_most_significant_band)) {
+            if (middle_band.equals(previous_middle_band)){
+                if (least_significant_band.equals(previous_least_significant_band)) {
                     return_value = "00";
                 }
-                else {return_value = "01" + least_significant_nibble;}
-            } else {return_value = "10" + middle_nibble + least_significant_nibble;}
-        } else { return_value = "11" + most_significant_nibble + middle_nibble + least_significant_nibble;}
-        previous_most_significant_nibble = most_significant_nibble;
-        previous_middle_nibble = middle_nibble;
-        previous_least_significant_nibble = least_significant_nibble;
+                else {return_value = "01" + least_significant_band;}
+            } else {return_value = "10" + middle_band + least_significant_band;}
+        } else { return_value = "11" + most_significant_band + middle_band + least_significant_band;}
+        previous_most_significant_band = most_significant_band;
+        previous_middle_band = middle_band;
+        previous_least_significant_band = least_significant_band;
         return return_value;
     }
           
@@ -92,8 +92,8 @@ public class Log2SubBand {
      */
     public static String[] decode_substring(String encoded_substring, String previous_number) {
         String decoded_number = previous_number;
-        int middle_nibble_bits = parameters[1];
-        int least_signif_nibble_bits = parameters[2];
+        int middle_band_bits = parameters[1];
+        int least_signif_band_bits = parameters[2];
 
         String header = encoded_substring.substring(0,2);
         if (debug) System.out.print("Header: " + header + "\n");
@@ -102,13 +102,13 @@ public class Log2SubBand {
         switch (header) {
             case "00":  decoded_number = previous_number;
                 break;
-            case "01":  decoded_number = get_MS_nibble(previous_number) + get_middle_nibble(previous_number) + get_LS_nibble(remaining_string);
-                        remaining_string = remaining_string.substring(least_signif_nibble_bits); // Exclude bits that were encoding
+            case "01":  decoded_number = get_MS_band(previous_number) + get_middle_band(previous_number) + get_LS_band(remaining_string);
+                        remaining_string = remaining_string.substring(least_signif_band_bits); // Exclude bits that were encoding
                 break;
-            case "10":  decoded_number = get_MS_nibble(previous_number) + get_middle_nibble(remaining_string) + get_LS_nibble(remaining_string);
-                        remaining_string = remaining_string.substring(least_signif_nibble_bits + middle_nibble_bits); // Exclude bits that were encoding
+            case "10":  decoded_number = get_MS_band(previous_number) + get_middle_band(remaining_string) + get_LS_band(remaining_string);
+                        remaining_string = remaining_string.substring(least_signif_band_bits + middle_band_bits); // Exclude bits that were encoding
                 break;
-            case "11":  decoded_number = get_MS_nibble(remaining_string) + get_middle_nibble(remaining_string) + get_LS_nibble(remaining_string);
+            case "11":  decoded_number = get_MS_band(remaining_string) + get_middle_band(remaining_string) + get_LS_band(remaining_string);
                         remaining_string = remaining_string.substring(12); // Exclude bits that were encoding
                 break;
         }
