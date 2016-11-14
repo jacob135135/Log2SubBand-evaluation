@@ -159,7 +159,7 @@ public class CompressionUtils {
      * @param binary_input String input of length 12
      * @return Last <code>parameters[2]</code> digits of input
      */
-    static String get_band3(String binary_input) {
+    static String get_band2(String binary_input) {
         if (binary_input.length() > 11) return binary_input.substring(parameters[0] + parameters[1], 12);
         else {System.out.println("NO LS BAND FOUND"); return "";}
     }

@@ -9,9 +9,9 @@
 package log2subband;
 
 import static log2subband.MainExecution.debug;
-import static log2subband.CompressionUtils.get_band3;
 import static log2subband.CompressionUtils.get_band0;
 import static log2subband.CompressionUtils.get_band1;
+import static log2subband.CompressionUtils.get_band2;
 
 /**
  * @author Jakub
@@ -21,7 +21,7 @@ public class Log2SubBand {
     // static so that they can be referenced and changed in get_compressed_data method 
     static String previous_band0;
     static String previous_band1;
-    static String previous_band3;
+    static String previous_band2;
     static int[] parameters;
     
     /**
@@ -39,22 +39,22 @@ public class Log2SubBand {
     public static String log2_sub_band_compress_number(String binary_input) {
         String band0 = get_band0(binary_input);
         String band1 = get_band1(binary_input);
-        String band3 = get_band3(binary_input);
+        String band2 = get_band2(binary_input);
 
-        if (debug) System.out.println("Bands: " + band0 + " " + band1 + " " + band3);
+        if (debug) System.out.println("Bands: " + band0 + " " + band1 + " " + band2);
    
         String return_value;
         if (band0.equals(previous_band0)) {
             if (band1.equals(previous_band1)){
-                if (band3.equals(previous_band3)) {
+                if (band2.equals(previous_band2)) {
                     return_value = "00";
                 }
-                else {return_value = "01" + band3;}
-            } else {return_value = "10" + band1 + band3;}
-        } else { return_value = "11" + band0 + band1 + band3;}
+                else {return_value = "01" + band2;}
+            } else {return_value = "10" + band1 + band2;}
+        } else { return_value = "11" + band0 + band1 + band2;}
         previous_band0 = band0;
         previous_band1 = band1;
-        previous_band3 = band3;
+        previous_band2 = band2;
         return return_value;
     }
           
@@ -121,7 +121,7 @@ public class Log2SubBand {
     public static void update_previous_bands(int[] parameters) {
         Log2SubBand.previous_band0 = MyUtils.generate_zeroes(parameters[0]);
         Log2SubBand.previous_band1 = MyUtils.generate_zeroes(parameters[1]);
-        Log2SubBand.previous_band3 = MyUtils.generate_zeroes(parameters[2]); // parameters[2] @TODO NEEDS TO BE CHANGED TO parameters[3]
+        Log2SubBand.previous_band2 = MyUtils.generate_zeroes(parameters[2]); // parameters[2] @TODO NEEDS TO BE CHANGED TO parameters[3]
     }
 
 }
