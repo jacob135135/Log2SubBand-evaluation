@@ -28,7 +28,7 @@ public class MainExecution {
         // @TODO I need to create fields for compressed/input/output variables to reduce clutter
         // perform_log2_sub_band_compression() method should just populate those fields then
         // I should create corresponding tests first though
-        Map<String, String> result = CompressionUtils.perform_log2_sub_band_compression(raw_values_array);
+        Map<String, String> result = CompressionUtils.perform_log2_sub_band_compression(raw_values_array, false);
         String overall_compressed = result.get("overall_compressed");
         String overall_uncompressed = result.get("overall_uncompressed");
         String input_string = result.get("input");

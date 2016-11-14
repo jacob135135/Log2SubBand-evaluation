@@ -61,18 +61,19 @@ public class CompressionUtils {
     /**
      * Compresses input array of numbers, saving data through the process
      * @param raw_values String[] of numbers to compress
+     * @param is_binary Boolean Set to true if input numbers are in binary
      * @return Map<String, String> to_return  (almost like an associative array), to get values:
      *  <br><b>to_return.get("overall_compressed");</b> Binary concatenated string of all compressed values in given array
         <br><b>to_return.get("overall_uncompressed");</b> Binary concatenated string of all compressed values in given array
         <br><b>to_return.get("input");</b> Comma separated String of values in inputted <code>raw_values_array</code>
         <br><b>to_return.get("output");</b> Comma separated String of compressed values (i.e. overall_compressed with commas in between)
      */
-    public static Map<String, String> perform_log2_sub_band_compression(String[] raw_values) {
+    public static Map<String, String> perform_log2_sub_band_compression(String[] raw_values, boolean is_binary) {
         String ovrl_compr, ovrl_uncompr, input, output;
         ovrl_compr = ovrl_uncompr = input = output = "";
 
         for (String raw_value : raw_values) {
-            raw_value = decimal_to_binary(raw_value);
+            if(!is_binary) raw_value = decimal_to_binary(raw_value);
             input += "," + raw_value;
 
             String current_compressed = Log2SubBand.log2_sub_band_compress_number(raw_value);
