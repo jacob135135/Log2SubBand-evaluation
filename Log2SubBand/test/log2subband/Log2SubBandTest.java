@@ -42,9 +42,9 @@ public class Log2SubBandTest {
     @Test
     public void compression_test() {
         parameters = new int[]{4,4,4};
-        Log2SubBand.previous_least_significant_nibble = MyUtils.generate_zeroes(parameters[2]);
-        Log2SubBand.previous_middle_nibble = MyUtils.generate_zeroes(parameters[1]);
-        Log2SubBand.previous_most_significant_nibble = MyUtils.generate_zeroes(parameters[0]);
+        Log2SubBand.previous_least_significant_band = MyUtils.generate_zeroes(parameters[2]);
+        Log2SubBand.previous_middle_band = MyUtils.generate_zeroes(parameters[1]);
+        Log2SubBand.previous_most_significant_band = MyUtils.generate_zeroes(parameters[0]);
         
         String[] input = new String[]{"1","2","3","4","5","6","7","8","9","10","15","20","40","80","120","131","131","131"};
         String expected_compressed = "010001010010010011010100010101010110010111011000011001011010011111100001010010001010001001010000100111100010100000110000";

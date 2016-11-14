@@ -157,9 +157,9 @@ public class CompressionUtils {
      * @param binary_input String input of length 12
      * @return Last <code>parameters[2]</code> digits of input
      */
-    static String get_LS_nibble(String binary_input) {
+    static String get_LS_band(String binary_input) {
         if (binary_input.length() > 11) return binary_input.substring(parameters[0] + parameters[1], 12);
-        else {System.out.println("NO LS NIBBLE FOUND"); return "";}
+        else {System.out.println("NO LS BAND FOUND"); return "";}
     }
 
     /**
@@ -169,9 +169,9 @@ public class CompressionUtils {
      * @param binary_input String input of length 12
      * @return Input string without first <code>parameters[0]</code> digits and last <code>parameters[2]</code> digits of input
      */
-    static String get_middle_nibble(String binary_input) {
+    static String get_middle_band(String binary_input) {
         if (binary_input.length() > (11 - parameters[2])) return binary_input.substring(parameters[0], parameters[0] + parameters[1]);
-        else {System.out.println("NO MIDDLE NIBBLE FOUND"); return "";}
+        else {System.out.println("NO MIDDLE BAND FOUND"); return "";}
     }
 
     /**
@@ -181,7 +181,7 @@ public class CompressionUtils {
      * @param binary_input String input of length 12
      * @return First <code>parameters[0]</code> digits of input string
      */
-    static String get_MS_nibble(String binary_input) {
+    static String get_MS_band(String binary_input) {
         return binary_input.substring(0, parameters[0]);
     }
     
