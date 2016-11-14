@@ -3,8 +3,8 @@
  * Algorithm should (hopefully) be semantically same (work the same) as one on pages 141 & 142 in thesis
  *
  * Current implementation assumptions:
- * Range of numbers "allowed" is from 0 to 999 (inclusive)
- * Result will have 12 bits -> [4,4,4]
+ * Range of numbers "allowed" is from -2048 to 2047 (inclusive)
+ * Result will have 12 bits
  */
 package log2subband;
 
@@ -12,6 +12,7 @@ import static log2subband.MainExecution.debug;
 import static log2subband.CompressionUtils.get_band0;
 import static log2subband.CompressionUtils.get_band1;
 import static log2subband.CompressionUtils.get_band2;
+import static log2subband.CompressionUtils.get_band3;
 
 /**
  * @author Jakub
@@ -22,6 +23,7 @@ public class Log2SubBand {
     static String previous_band0;
     static String previous_band1;
     static String previous_band2;
+    static String previous_band3;
     static int[] parameters;
     
     /**
@@ -40,18 +42,29 @@ public class Log2SubBand {
         String band0 = get_band0(binary_input);
         String band1 = get_band1(binary_input);
         String band2 = get_band2(binary_input);
+        String band3 = get_band3(binary_input);
 
-        if (debug) System.out.println("Bands: " + band0 + " " + band1 + " " + band2);
+        if (debug) System.out.println("Bands: " + band0 + " " + band1 + " " + band2 + " " + band3);
    
         String return_value;
         if (band0.equals(previous_band0)) {
             if (band1.equals(previous_band1)){
                 if (band2.equals(previous_band2)) {
                     return_value = "00";
+                    if (parameters[3] != 0) return_value += band3;
                 }
-                else {return_value = "01" + band2;}
-            } else {return_value = "10" + band1 + band2;}
-        } else { return_value = "11" + band0 + band1 + band2;}
+                else {
+                    return_value = "01" + band2;
+                    if (parameters[3] != 0) return_value += band3;
+                }
+            } else {
+                return_value = "10" + band1 + band2;
+                if (parameters[3] != 0) return_value += band3;
+            }
+        } else {
+            return_value = "11" + band0 + band1 + band2;
+            if (parameters[3] != 0) return_value += band3;
+        }
         previous_band0 = band0;
         previous_band1 = band1;
         previous_band2 = band2;
@@ -92,26 +105,47 @@ public class Log2SubBand {
      */
     public static String[] decode_substring(String encoded_substring, String previous_number) {
         String decoded_number = previous_number;
-        int middle_band_bits = parameters[1];
-        int least_signif_band_bits = parameters[2];
+        int band0_bits = parameters[0];
+        int band1_bits = parameters[1];
+        int band2_bits = parameters[2];
+        int band3_bits = parameters[3];
 
         String header = encoded_substring.substring(0,2);
         if (debug) System.out.print("Header: " + header + "\n");
         String remaining_string = encoded_substring.substring(2); // Removing header from string
 
         if(debug)System.out.println("PREV NUMBER " + previous_number);
-        switch (header) {
-            case "00":  decoded_number = previous_number;
-                break;
-            case "01":  decoded_number = get_band0(previous_number) + get_band1(previous_number) + remaining_string.substring(0, parameters[2]);
-                        remaining_string = remaining_string.substring(least_signif_band_bits); // Exclude bits that were encoding
-                break;
-            case "10":  decoded_number = get_band0(previous_number) + remaining_string.substring(0, 12 - parameters[0]);
-                        remaining_string = remaining_string.substring(least_signif_band_bits + middle_band_bits); // Exclude bits that were encoding
-                break;
-            case "11":  decoded_number = remaining_string.substring(0,12);
-                        remaining_string = remaining_string.substring(12); // Exclude bits that were encoding
-                break;
+        if(band3_bits == 0) {
+            switch (header) {
+                case "00":  decoded_number = previous_number;
+                    break;
+                case "01":  decoded_number = get_band0(previous_number) + get_band1(previous_number) + remaining_string.substring(0, parameters[2]);
+                            remaining_string = remaining_string.substring(band2_bits); // Exclude bits that were encoding
+                    break;
+                case "10":  decoded_number = get_band0(previous_number) + remaining_string.substring(0, 12 - parameters[0]);
+                            remaining_string = remaining_string.substring(band2_bits + band1_bits); // Exclude bits that were encoding
+                    break;
+                case "11":  decoded_number = remaining_string.substring(0,12);
+                            remaining_string = remaining_string.substring(12); // Exclude bits that were encoding
+                    break;
+            }
+        } else {
+            switch (header) {
+                case "00":  decoded_number = previous_number.substring(0, 12 - band3_bits) + remaining_string.substring(0,band3_bits);
+                            remaining_string = remaining_string.substring(band3_bits);
+                    break;
+                case "01":  decoded_number = get_band0(previous_number) + get_band1(previous_number) +
+                                             remaining_string.substring(0, 12 - band2_bits - band3_bits);
+                                             remaining_string = remaining_string.substring(12 - band2_bits - band3_bits);
+                                             System.out.println("REmaining: " + remaining_string);
+                    break;
+                case "10":  decoded_number = get_band0(previous_number) + remaining_string.substring(0, 12 - band0_bits);
+                            remaining_string = remaining_string.substring(12-band0_bits); // Exclude bits that were encoding
+                    break;
+                case "11":  decoded_number = remaining_string.substring(0,12);
+                            remaining_string = remaining_string.substring(12); // Exclude bits that were encoding
+                    break;
+            }
         }
         if (debug) System.out.println("Current decoded: " + decoded_number + "\n");
         String stuff_to_return[] = {decoded_number,remaining_string};
@@ -121,7 +155,8 @@ public class Log2SubBand {
     public static void update_previous_bands(int[] parameters) {
         Log2SubBand.previous_band0 = MyUtils.generate_zeroes(parameters[0]);
         Log2SubBand.previous_band1 = MyUtils.generate_zeroes(parameters[1]);
-        Log2SubBand.previous_band2 = MyUtils.generate_zeroes(parameters[2]); // parameters[2] @TODO NEEDS TO BE CHANGED TO parameters[3]
+        Log2SubBand.previous_band2 = MyUtils.generate_zeroes(parameters[2]);
+        Log2SubBand.previous_band3 = MyUtils.generate_zeroes(parameters[3]);
     }
 
 }

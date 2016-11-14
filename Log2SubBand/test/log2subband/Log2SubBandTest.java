@@ -35,7 +35,7 @@ public class Log2SubBandTest {
     
     @Before
     public void setUp() {
-        parameters = new int[]{4,4,4};
+        parameters = new int[]{4,4,4,0};
         Log2SubBand.update_previous_bands(parameters);
     }
     
@@ -64,7 +64,7 @@ public class Log2SubBandTest {
 
     @Test
     public void binary_input_test_345() {
-        parameters = new int[]{3,4,5};
+        parameters = new int[]{3,4,5,0};
         Log2SubBand.update_previous_bands(parameters);
         String[] input = new String[]{"111111100000","111111101111","111111101111","111100001111","000000000000","011000000000"};
         String compressed = CompressionUtils.perform_log2_sub_band_compression(input, true).get("overall_compressed");
@@ -93,8 +93,21 @@ public class Log2SubBandTest {
     }
 
     @Test
+    public void full_log2_sub_band_test_3333() {
+        parameters = new int[]{3,3,3,3};
+        Log2SubBand.update_previous_bands(parameters);
+        String[] input = new String[]{"11","23","23","24","45","46","47","68","9","10","15","20","40","80","120","131","131"};
+        String compressed = CompressionUtils.perform_log2_sub_band_compression(input, false).get("overall_compressed");
+
+        String decoded = log2_sub_band_decode_string(compressed);
+        String[] decoded_array = MyUtils.CSstring_to_array(decoded);
+
+        Assert.assertArrayEquals(decoded_array, input);
+    }
+
+    @Test
     public void full_log2_sub_band_test_with_354_test() {
-        parameters = new int[]{3,5,4};
+        parameters = new int[]{3,5,4,0};
         Log2SubBand.update_previous_bands(parameters);
 
         String[] input = new String[]{"11","23","23","24","45","46","47","68","9","10","15","20","40","80","120","131","131"};
@@ -109,7 +122,7 @@ public class Log2SubBandTest {
 
     @Test
     public void full_log2_sub_band_test_with_273_test() {
-        parameters = new int[]{2,7,3};
+        parameters = new int[]{2,7,3,0};
         Log2SubBand.update_previous_bands(parameters);
 
         String[] input = new String[]{"11","23","23","24","45","46","47","68","9","10","15","20","40","80","120","131","131"};

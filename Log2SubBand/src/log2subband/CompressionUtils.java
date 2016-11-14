@@ -150,6 +150,19 @@ public class CompressionUtils {
         }
         return encoded;
     }
+
+    /**
+     * WARNING: returns "" if string is not long enough
+     * Gets least significant band
+     * Uses static <code>parameters</code> variable and return substring of input.
+     * Returns last <code>parameters[2]</code> digits (represented as String) of input
+     * @param binary_input String input of length 12
+     * @return Last <code>parameters[2]</code> digits of input
+     */
+    static String get_band3(String binary_input) {
+        if (binary_input.length() > 11) return binary_input.substring(parameters[0] + parameters[1] + parameters[2], 12);
+        else {System.out.println("NO BAND3 FOUND"); return "";}
+    }
     
      /**
      * WARNING: returns "" if string is not long enough
@@ -160,8 +173,8 @@ public class CompressionUtils {
      * @return Last <code>parameters[2]</code> digits of input
      */
     static String get_band2(String binary_input) {
-        if (binary_input.length() > 11) return binary_input.substring(parameters[0] + parameters[1], 12);
-        else {System.out.println("NO LS BAND FOUND"); return "";}
+        if (binary_input.length() > 11) return binary_input.substring(parameters[0] + parameters[1], 12 - parameters[3]);
+        else {System.out.println("NO BAND2 FOUND"); return "";}
     }
 
     /**
@@ -173,7 +186,7 @@ public class CompressionUtils {
      */
     static String get_band1(String binary_input) {
         if (binary_input.length() > (11 - parameters[2])) return binary_input.substring(parameters[0], parameters[0] + parameters[1]);
-        else {System.out.println("NO MIDDLE BAND FOUND"); return "";}
+        else {System.out.println("NO BAND1 FOUND"); return "";}
     }
 
     /**
