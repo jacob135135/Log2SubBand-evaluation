@@ -28,7 +28,8 @@ public class MainExecution {
         // @TODO I need to create fields for compressed/input/output variables to reduce clutter
         // perform_log2_sub_band_compression() method should just populate those fields then
         // I should create corresponding tests first though
-        Map<String, String> result = CompressionUtils.perform_log2_sub_band_compression(raw_values_array);
+        boolean is_bin_system = input_menu.is_binary_number_system();
+        Map<String, String> result = CompressionUtils.perform_log2_sub_band_compression(raw_values_array, is_bin_system);
         String overall_compressed = result.get("overall_compressed");
         String overall_uncompressed = result.get("overall_uncompressed");
         String input_string = result.get("input");
@@ -38,7 +39,7 @@ public class MainExecution {
 
         String[] custom_codebook = input_menu.getCodebook_data();
         if (custom_codebook.length > 0) CompressionUtils.init_codebook_from_imported_codebook(custom_codebook);
-        else HuffmanCode.init_ideal_huffman_dictionaries(raw_values_array);
+        else HuffmanCode.init_ideal_huffman_dictionaries(raw_values_array, is_bin_system);
 
         String[] input_array = input_string.split(",");
         String[] output_array = output_string.split(",");
@@ -62,10 +63,7 @@ public class MainExecution {
         raw_values_array = input_menu.getInput_data();
         open_exported = input_menu.getOpen_exported();
         parameters = input_menu.getRun_parameters();
-
-        Log2SubBand.previous_least_significant_band = MyUtils.generate_zeroes(parameters[2]);
-        Log2SubBand.previous_middle_band = MyUtils.generate_zeroes(parameters[1]);
-        Log2SubBand.previous_most_significant_band = MyUtils.generate_zeroes(parameters[0]);
+        Log2SubBand.update_previous_bands(parameters);
     }
 
 }

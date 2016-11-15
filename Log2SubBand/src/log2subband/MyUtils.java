@@ -112,11 +112,8 @@ public class MyUtils {
      * @return Original string with appended spaces (if applicable)
      */
     public static String binary_to_12_bits(String binary_input) {
-        int cur_length = binary_input.length();
-        if (cur_length < 12) {
-            for(int i = cur_length; i < 12; i++) {
-                binary_input = "0" + binary_input;
-            }
+        if (binary_input.length() < 12) {
+            binary_input = generate_zeroes(12 - binary_input.length()) + binary_input;
         }
         return binary_input;
     }
@@ -145,6 +142,18 @@ public class MyUtils {
     public static String generate_zeroes(int total_number) {
         String to_return = new String(new char[total_number]).replace("\0", "0");
         return to_return;
+    }
+
+    /**
+     * Converts binary array into decimal array. All numbers as strings
+     * @param input_arr Input binary array
+     * @return Decimal array from input array
+     */
+    public static String[] bin_array_to_dec_array(String[] input_arr) {
+        for (int i=0; i<input_arr.length; i++) {
+            input_arr[i] = binary_to_decimal(binary_to_12_bits(input_arr[i]));
+        }
+        return input_arr;
     }
 
 }

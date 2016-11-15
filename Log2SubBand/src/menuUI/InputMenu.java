@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import log2subband.CSVUtils;
-import log2subband.Log2SubBand;
 import log2subband.MainExecution;
 import log2subband.MyUtils;
 
@@ -28,6 +27,11 @@ public class InputMenu extends javax.swing.JFrame {
     private boolean open_exported;
     private int[] run_parameters;
     private boolean use_decimal_system;
+    private boolean is_bin_number_system;
+
+    public boolean is_binary_number_system() {
+        return this.is_bin_number_system;
+    }
 
     public String[] getInput_data() {
         return input_data;
@@ -98,9 +102,12 @@ public class InputMenu extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        input_bits_most_significant = new javax.swing.JComboBox();
-        input_bits_middle = new javax.swing.JComboBox();
-        input_bits_least_significant = new javax.swing.JComboBox();
+        band0_bits = new javax.swing.JComboBox();
+        band1_bits = new javax.swing.JComboBox();
+        band2_bits = new javax.swing.JComboBox();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        band3_bits = new javax.swing.JComboBox();
         jPanel7 = new javax.swing.JPanel();
         open_exported_checkbox = new javax.swing.JCheckBox();
         more_info_checkbox = new javax.swing.JCheckBox();
@@ -252,7 +259,7 @@ public class InputMenu extends javax.swing.JFrame {
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel5.setText("Number system: (PLACEHOLDER, NOT IMPLEMENTED)");
+        jLabel5.setText("Number system:");
 
         buttonGroup2.add(rad_btn_decimal_system);
         rad_btn_decimal_system.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -293,57 +300,75 @@ public class InputMenu extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setText("Parameters' size (total 12):");
 
-        jLabel7.setText("Most significant bits:");
+        jLabel7.setText("band0");
 
-        jLabel8.setText("Middle bits:");
+        jLabel8.setText("band1");
 
-        jLabel9.setText("Least significant bits:");
+        jLabel9.setText("band2");
 
-        input_bits_most_significant.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
-        input_bits_most_significant.setSelectedIndex(3);
+        band0_bits.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+        band0_bits.setSelectedIndex(4);
 
-        input_bits_middle.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
-        input_bits_middle.setSelectedIndex(3);
+        band1_bits.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+        band1_bits.setSelectedIndex(4);
 
-        input_bits_least_significant.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
-        input_bits_least_significant.setSelectedIndex(3);
+        band2_bits.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+        band2_bits.setSelectedIndex(4);
+
+        jLabel3.setText("Band0 is most significant band");
+
+        jLabel10.setText("band3");
+
+        band3_bits.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(input_bits_most_significant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(input_bits_middle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(band0_bits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(70, 70, 70)
+                        .addComponent(jLabel8))
+                    .addComponent(jLabel6))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(band1_bits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(59, 59, 59)
                         .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(input_bits_least_significant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(band2_bits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(45, 45, 45)
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(band3_bits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addContainerGap())))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jLabel6)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(jLabel8)
                     .addComponent(jLabel9)
-                    .addComponent(input_bits_most_significant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(input_bits_middle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(input_bits_least_significant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(band0_bits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(band1_bits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(band2_bits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10)
+                    .addComponent(band3_bits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -540,15 +565,17 @@ public class InputMenu extends javax.swing.JFrame {
 
     private void btn_OKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_OKActionPerformed
         //Check that parameters are good
-        int most_sign = Integer.parseInt((String) input_bits_most_significant.getSelectedItem());
-        int middle = Integer.parseInt((String) input_bits_middle.getSelectedItem());
-        int least_sign = Integer.parseInt((String) input_bits_least_significant.getSelectedItem());
-        int total  = most_sign + middle + least_sign;
+        int band0 = Integer.parseInt((String) band0_bits.getSelectedItem());
+        int band1 = Integer.parseInt((String) band1_bits.getSelectedItem());
+        int band2 = Integer.parseInt((String) band2_bits.getSelectedItem());
+        int band3 = Integer.parseInt((String) band3_bits.getSelectedItem());
+        int total  = band0 + band1 + band2 + band3;
         if (total != 12) {
             JOptionPane.showMessageDialog(this, "ERROR, PARAMETER BITS MUST ADD UP TO EXACTLY 12!");
         } else {
+            is_bin_number_system = rad_btn_binary_system.isSelected();
             boolean cont = true;
-            this.run_parameters = new int[]{most_sign, middle, least_sign};
+            this.run_parameters = new int[]{band0, band1, band2, band3};
             this.open_exported = open_exported_checkbox.isSelected();
             this.use_decimal_system = rad_btn_decimal_system.isSelected();
             MainExecution.debug = more_info_checkbox.isSelected();
@@ -597,6 +624,10 @@ public class InputMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_select_file_codebookActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox band0_bits;
+    private javax.swing.JComboBox band1_bits;
+    private javax.swing.JComboBox band2_bits;
+    private javax.swing.JComboBox band3_bits;
     private javax.swing.JButton btn_OK;
     private javax.swing.JButton btn_select_file;
     private javax.swing.JButton btn_select_file_codebook;
@@ -605,14 +636,13 @@ public class InputMenu extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.JPanel codebook_panel;
     private javax.swing.JPanel codebook_panel_csv_import;
-    private javax.swing.JComboBox input_bits_least_significant;
-    private javax.swing.JComboBox input_bits_middle;
-    private javax.swing.JComboBox input_bits_most_significant;
     private javax.swing.JPanel input_file_panel;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

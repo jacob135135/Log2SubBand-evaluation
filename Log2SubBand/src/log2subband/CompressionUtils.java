@@ -61,18 +61,20 @@ public class CompressionUtils {
     /**
      * Compresses input array of numbers, saving data through the process
      * @param raw_values String[] of numbers to compress
+     * @param is_binary Boolean Set to true if input numbers are in binary
      * @return Map<String, String> to_return  (almost like an associative array), to get values:
      *  <br><b>to_return.get("overall_compressed");</b> Binary concatenated string of all compressed values in given array
         <br><b>to_return.get("overall_uncompressed");</b> Binary concatenated string of all compressed values in given array
         <br><b>to_return.get("input");</b> Comma separated String of values in inputted <code>raw_values_array</code>
         <br><b>to_return.get("output");</b> Comma separated String of compressed values (i.e. overall_compressed with commas in between)
      */
-    public static Map<String, String> perform_log2_sub_band_compression(String[] raw_values) {
+    public static Map<String, String> perform_log2_sub_band_compression(String[] raw_values, boolean is_binary) {
         String ovrl_compr, ovrl_uncompr, input, output;
         ovrl_compr = ovrl_uncompr = input = output = "";
 
         for (String raw_value : raw_values) {
-            raw_value = decimal_to_binary(raw_value);
+            if(!is_binary) {raw_value = decimal_to_binary(raw_value);}
+            else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
             input += "," + raw_value;
 
             String current_compressed = Log2SubBand.log2_sub_band_compress_number(raw_value);
@@ -149,17 +151,31 @@ public class CompressionUtils {
         }
         return encoded;
     }
-    
-        /**
+
+    /**
      * WARNING: returns "" if string is not long enough
+     * Gets least significant band
      * Uses static <code>parameters</code> variable and return substring of input.
      * Returns last <code>parameters[2]</code> digits (represented as String) of input
      * @param binary_input String input of length 12
      * @return Last <code>parameters[2]</code> digits of input
      */
-    static String get_LS_band(String binary_input) {
-        if (binary_input.length() > 11) return binary_input.substring(parameters[0] + parameters[1], 12);
-        else {System.out.println("NO LS BAND FOUND"); return "";}
+    static String get_band3(String binary_input) {
+        if (binary_input.length() > 11) return binary_input.substring(parameters[0] + parameters[1] + parameters[2], 12);
+        else {System.out.println("NO BAND3 FOUND"); return "";}
+    }
+    
+     /**
+     * WARNING: returns "" if string is not long enough
+     * Gets least significant band
+     * Uses static <code>parameters</code> variable and return substring of input.
+     * Returns last <code>parameters[2]</code> digits (represented as String) of input
+     * @param binary_input String input of length 12
+     * @return Last <code>parameters[2]</code> digits of input
+     */
+    static String get_band2(String binary_input) {
+        if (binary_input.length() > 11) return binary_input.substring(parameters[0] + parameters[1], 12 - parameters[3]);
+        else {System.out.println("NO BAND2 FOUND"); return "";}
     }
 
     /**
@@ -169,9 +185,9 @@ public class CompressionUtils {
      * @param binary_input String input of length 12
      * @return Input string without first <code>parameters[0]</code> digits and last <code>parameters[2]</code> digits of input
      */
-    static String get_middle_band(String binary_input) {
+    static String get_band1(String binary_input) {
         if (binary_input.length() > (11 - parameters[2])) return binary_input.substring(parameters[0], parameters[0] + parameters[1]);
-        else {System.out.println("NO MIDDLE BAND FOUND"); return "";}
+        else {System.out.println("NO BAND1 FOUND"); return "";}
     }
 
     /**
@@ -181,7 +197,7 @@ public class CompressionUtils {
      * @param binary_input String input of length 12
      * @return First <code>parameters[0]</code> digits of input string
      */
-    static String get_MS_band(String binary_input) {
+    static String get_band0(String binary_input) {
         return binary_input.substring(0, parameters[0]);
     }
     
