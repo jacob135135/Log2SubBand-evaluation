@@ -91,7 +91,7 @@ public class HuffmanCodeTest {
     @Test
     public void init_ideal_huffman_dictionaries_test() throws Exception {
         String[] input = new String[]{"1","2","3","4","5","6","7","8","9","10","15","20","40","80","120","131","131","131"};
-        HuffmanCode.init_ideal_huffman_dictionaries(input);
+        HuffmanCode.init_ideal_huffman_dictionaries(input, false);
         
         assertEquals(HuffmanCode.number_to_encoding_dict.get("2049"),"11111");
         assertEquals(HuffmanCode.encoding_to_number_dict.get("11111"),"2049");

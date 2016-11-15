@@ -27,6 +27,11 @@ public class InputMenu extends javax.swing.JFrame {
     private boolean open_exported;
     private int[] run_parameters;
     private boolean use_decimal_system;
+    private boolean is_bin_number_system;
+
+    public boolean is_binary_number_system() {
+        return this.is_bin_number_system;
+    }
 
     public String[] getInput_data() {
         return input_data;
@@ -254,7 +259,7 @@ public class InputMenu extends javax.swing.JFrame {
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel5.setText("Number system: (PLACEHOLDER, NOT IMPLEMENTED)");
+        jLabel5.setText("Number system:");
 
         buttonGroup2.add(rad_btn_decimal_system);
         rad_btn_decimal_system.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -568,6 +573,7 @@ public class InputMenu extends javax.swing.JFrame {
         if (total != 12) {
             JOptionPane.showMessageDialog(this, "ERROR, PARAMETER BITS MUST ADD UP TO EXACTLY 12!");
         } else {
+            is_bin_number_system = rad_btn_binary_system.isSelected();
             boolean cont = true;
             this.run_parameters = new int[]{band0, band1, band2, band3};
             this.open_exported = open_exported_checkbox.isSelected();

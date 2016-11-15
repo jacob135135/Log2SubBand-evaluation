@@ -73,7 +73,8 @@ public class CompressionUtils {
         ovrl_compr = ovrl_uncompr = input = output = "";
 
         for (String raw_value : raw_values) {
-            if(!is_binary) raw_value = decimal_to_binary(raw_value);
+            if(!is_binary) {raw_value = decimal_to_binary(raw_value);}
+            else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
             input += "," + raw_value;
 
             String current_compressed = Log2SubBand.log2_sub_band_compress_number(raw_value);

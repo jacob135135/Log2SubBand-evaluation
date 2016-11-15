@@ -137,7 +137,6 @@ public class Log2SubBand {
                 case "01":  decoded_number = get_band0(previous_number) + get_band1(previous_number) +
                                              remaining_string.substring(0, 12 - band2_bits - band3_bits);
                                              remaining_string = remaining_string.substring(12 - band2_bits - band3_bits);
-                                             System.out.println("REmaining: " + remaining_string);
                     break;
                 case "10":  decoded_number = get_band0(previous_number) + remaining_string.substring(0, 12 - band0_bits);
                             remaining_string = remaining_string.substring(12-band0_bits); // Exclude bits that were encoding
