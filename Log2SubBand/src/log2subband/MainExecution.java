@@ -9,7 +9,6 @@ import menuUI.InputMenu;
  */
 public class MainExecution {
     public static boolean debug;
-    static String[] raw_values_array;
     static boolean open_exported;
     
     public static void main(String[] args) {
@@ -18,6 +17,7 @@ public class MainExecution {
     
     public static void main_execution(InputMenu input_menu) throws Exception {
         set_up(input_menu);
+        String[] raw_values_array = input_menu.getInput_data();
         
         // @TODO I need to create fields for compressed/input/output variables to reduce clutter
         // perform_log2_sub_band_compression() method should just populate those fields then
@@ -52,7 +52,6 @@ public class MainExecution {
      * @param input_menu
      */
     public static void set_up(InputMenu input_menu) {
-        raw_values_array = input_menu.getInput_data();
         open_exported = input_menu.getOpen_exported();
         parameters = input_menu.getRun_parameters();
         Log2SubBand.update_previous_bands(parameters);
