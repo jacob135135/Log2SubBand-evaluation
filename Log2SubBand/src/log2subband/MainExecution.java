@@ -31,11 +31,11 @@ public class MainExecution {
         boolean is_bin_system = input_menu.is_binary_number_system();
         Map<String, String> result = CompressionUtils.perform_log2_sub_band_compression(raw_values_array, is_bin_system);
         String overall_compressed = result.get("overall_compressed");
-        String overall_uncompressed = result.get("overall_uncompressed");
+        String bin_concat_input = result.get("bin_concat_input");
         String input_string = result.get("input");
         String output_string = result.get("output");
 
-        CompressionUtils.print_log2subband_compression_results(input_string, overall_compressed, overall_uncompressed);
+        CompressionUtils.print_log2subband_compression_results(input_string, overall_compressed, bin_concat_input);
 
         String[] custom_codebook = input_menu.getCodebook_data();
         if (custom_codebook.length > 0) CompressionUtils.init_codebook_from_imported_codebook(custom_codebook);
@@ -43,9 +43,9 @@ public class MainExecution {
 
         String[] input_array = input_string.split(",");
         String[] output_array = output_string.split(",");
-        String[] binary_input = MyUtils.split_by_length(overall_uncompressed,12);
+        String[] binary_input = MyUtils.split_by_length(bin_concat_input,12);
         String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input);
-        CompressionUtils.print_Huffman_compression_results(input_array, overall_uncompressed);
+        CompressionUtils.print_Huffman_compression_results(input_array, bin_concat_input);
 
         CSVUtils.export_codebook(); // uses number_to_encoding_dict
         CSVUtils.write_CSV("compressed", export_data);
