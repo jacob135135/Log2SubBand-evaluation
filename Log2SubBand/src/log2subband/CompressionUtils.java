@@ -57,7 +57,7 @@ public class CompressionUtils {
      * @param raw_values String[] of numbers to compress
      * @param is_binary Boolean Set to true if input numbers are in binary
      * @return Map<String, String> to_return  (almost like an associative array), to get values:
-     *  <br><b>to_return.get("overall_compressed");</b> Binary concatenated string of all compressed values in given array
+     *  <br><b>to_return.get("compr");</b> Binary concatenated string of all compressed values in given array
         <br><b>to_return.get("bin_concat_input");</b> String concatenated binary input numbers (without commas)
         <br><b>to_return.get("cs_input");</b> Comma separated String of values in input
         <br><b>to_return.get("cs_output");</b> Comma separated String of compressed values (i.e. overall_compressed with commas in between)
