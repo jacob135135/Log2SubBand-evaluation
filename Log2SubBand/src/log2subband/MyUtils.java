@@ -41,10 +41,9 @@ public class MyUtils {
      * <br> Uses <code>number_to_encoding_dict</code> as mapping of numbers and their respective Huffman codes
      * @param cs_original Comma separated original data
      * @param cs_encoded Comma separated encoded data
-     * @param binary_input array of original data in binary
      * @return String[] of CSV table data
      */
-    public static String[] make_export_table(String cs_original, String cs_encoded, String[] binary_input) {
+    public static String[] make_export_table(String cs_original, String cs_encoded) {
         String[] orig = cs_original.split(",");
         String[] encod = cs_encoded.split(",");
         String result_string = "Original(dec)," + append_spaces("Original(bin),", 14) + append_spaces("Encoded", 14) + ",Huffman*";
