@@ -18,25 +18,19 @@ public class MainExecution {
     public static void main_execution(InputMenu input_menu) throws Exception {
         set_up(input_menu);
         String[] raw_values_array = input_menu.getInput_data();
-        
-        // @TODO I need to create fields for compressed/input/output variables to reduce clutter
-        // perform_log2_sub_band_compression() method should just populate those fields then
-        // I should create corresponding tests first though
         boolean is_bin_system = input_menu.is_binary_number_system();
-        Map<String, String> result = CompressionUtils.perform_log2_sub_band_compression(raw_values_array, is_bin_system);
-        String overall_compressed = result.get("overall_compressed");
+
+        Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_values_array, is_bin_system);
         String bin_concat_input = result.get("bin_concat_input");
         String cs_input_string = result.get("cs_input");
-        String cs_output_string = result.get("cs_output");
-
-        CompressionUtils.print_log2subband_compression_results(cs_input_string, overall_compressed, bin_concat_input);
+        CompressionUtils.print_log2subband_results(cs_input_string, result.get("compr"), bin_concat_input);
 
         String[] custom_codebook = input_menu.getCodebook_data();
         if (custom_codebook.length > 0) CompressionUtils.init_codebook_from_imported_codebook(custom_codebook);
         else HuffmanCode.init_ideal_huffman_dictionaries(raw_values_array, is_bin_system);
 
         String[] binary_input = MyUtils.split_by_length(bin_concat_input,12);
-        String[] export_data = MyUtils.make_export_table(cs_input_string, cs_output_string, binary_input);
+        String[] export_data = MyUtils.make_export_table(cs_input_string, result.get("cs_output"), binary_input);
         CompressionUtils.print_Huffman_compression_results(cs_input_string, bin_concat_input);
 
         CSVUtils.export_codebook(); // uses number_to_encoding_dict

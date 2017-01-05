@@ -41,7 +41,7 @@ public class CompressionUtils {
      * @param overall_compressed full compressed string [1,0]*
      * @param bin_concat_input original string compressed and then decompressed (ideally same as input string)
      */
-    public static void print_log2subband_compression_results(String input_string, String overall_compressed, String bin_concat_input) {
+    public static void print_log2subband_results(String input_string, String overall_compressed, String bin_concat_input) {
         System.out.println("Input:   " + input_string);
         System.out.println("Compressed data:   " + overall_compressed);
         System.out.println("Total compressed length = " + overall_compressed.length());
@@ -62,7 +62,7 @@ public class CompressionUtils {
         <br><b>to_return.get("cs_input");</b> Comma separated String of values in input
         <br><b>to_return.get("cs_output");</b> Comma separated String of compressed values (i.e. overall_compressed with commas in between)
      */
-    public static Map<String, String> perform_log2_sub_band_compression(String[] raw_values, boolean is_binary) {
+    public static Map<String, String> perform_log2_sub_band(String[] raw_values, boolean is_binary) {
         String ovrl_compr, bin_concat_input, cs_input, cs_output;
         ovrl_compr = bin_concat_input = cs_input = cs_output = "";
 
@@ -79,7 +79,7 @@ public class CompressionUtils {
         }
 
         Map<String, String> to_return = new HashMap<>();
-        to_return.put("overall_compressed", ovrl_compr);
+        to_return.put("compr", ovrl_compr);
         to_return.put("bin_concat_input", bin_concat_input);
         to_return.put("cs_input", cs_input.substring(1));
         to_return.put("cs_output", cs_output.substring(1));
