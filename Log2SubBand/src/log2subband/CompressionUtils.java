@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package log2subband;
 
 import java.util.HashMap;
@@ -16,7 +11,6 @@ import static log2subband.MyUtils.binary_to_decimal;
 import static log2subband.MyUtils.decimal_to_binary;
 
 /**
- *
  * @author JAKUB
  */
 public class CompressionUtils {
@@ -65,21 +59,21 @@ public class CompressionUtils {
      * @return Map<String, String> to_return  (almost like an associative array), to get values:
      *  <br><b>to_return.get("overall_compressed");</b> Binary concatenated string of all compressed values in given array
         <br><b>to_return.get("bin_concat_input");</b> String concatenated binary input numbers (without commas)
-        <br><b>to_return.get("input");</b> Comma separated String of values in inputted <code>raw_values_array</code>
-        <br><b>to_return.get("output");</b> Comma separated String of compressed values (i.e. overall_compressed with commas in between)
+        <br><b>to_return.get("cs_input");</b> Comma separated String of values in input <code>raw_values_array</code>
+        <br><b>to_return.get("cs_output");</b> Comma separated String of compressed values (i.e. overall_compressed with commas in between)
      */
     public static Map<String, String> perform_log2_sub_band_compression(String[] raw_values, boolean is_binary) {
-        String ovrl_compr, bin_concat_input, input, output;
-        ovrl_compr = bin_concat_input = input = output = "";
+        String ovrl_compr, bin_concat_input, cs_input, cs_output;
+        ovrl_compr = bin_concat_input = cs_input = cs_output = "";
 
         for (String raw_value : raw_values) {
             if(!is_binary) {raw_value = decimal_to_binary(raw_value);}
             else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
-            input += "," + raw_value;
+            cs_input += "," + raw_value;
 
             String current_compressed = Log2SubBand.log2_sub_band_compress_number(raw_value);
             ovrl_compr += current_compressed;
-            output += "," + current_compressed;
+            cs_output += "," + current_compressed;
             if (debug) System.out.println("Current compressed data: " + current_compressed);
             bin_concat_input += raw_value;
         }
@@ -87,8 +81,8 @@ public class CompressionUtils {
         Map<String, String> to_return = new HashMap<>();
         to_return.put("overall_compressed", ovrl_compr);
         to_return.put("bin_concat_input", bin_concat_input);
-        to_return.put("input", input.substring(1));
-        to_return.put("output", output.substring(1));
+        to_return.put("cs_input", cs_input.substring(1));
+        to_return.put("cs_output", cs_output.substring(1));
 
         return to_return;
     }

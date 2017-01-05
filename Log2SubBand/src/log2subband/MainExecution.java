@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package log2subband;
 
 import java.util.Map;
@@ -10,7 +5,6 @@ import static log2subband.Log2SubBand.parameters;
 import menuUI.InputMenu;
 
 /**
- *
  * @author JAKUB
  */
 public class MainExecution {
@@ -32,17 +26,17 @@ public class MainExecution {
         Map<String, String> result = CompressionUtils.perform_log2_sub_band_compression(raw_values_array, is_bin_system);
         String overall_compressed = result.get("overall_compressed");
         String bin_concat_input = result.get("bin_concat_input");
-        String input_string = result.get("input");
-        String output_string = result.get("output");
+        String cs_input_string = result.get("cs_input");
+        String cs_output_string = result.get("cs_output");
 
-        CompressionUtils.print_log2subband_compression_results(input_string, overall_compressed, bin_concat_input);
+        CompressionUtils.print_log2subband_compression_results(cs_input_string, overall_compressed, bin_concat_input);
 
         String[] custom_codebook = input_menu.getCodebook_data();
         if (custom_codebook.length > 0) CompressionUtils.init_codebook_from_imported_codebook(custom_codebook);
         else HuffmanCode.init_ideal_huffman_dictionaries(raw_values_array, is_bin_system);
 
-        String[] input_array = input_string.split(",");
-        String[] output_array = output_string.split(",");
+        String[] input_array = cs_input_string.split(",");
+        String[] output_array = cs_output_string.split(",");
         String[] binary_input = MyUtils.split_by_length(bin_concat_input,12);
         String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input);
         CompressionUtils.print_Huffman_compression_results(input_array, bin_concat_input);
