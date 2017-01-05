@@ -107,10 +107,11 @@ public class CompressionUtils {
     /**
      * Prints information regarding Huffman compression results.
      * Prints Full compressed string and ratio (with respect to original binary concatenated input string)
-     * @param input_array
+     * @param cs_input
      * @param bin_concat_input
      */
-    static void print_Huffman_compression_results(String[] input_array, String bin_concat_input) {
+    static void print_Huffman_compression_results(String cs_input, String bin_concat_input) {
+        String[] input_array = cs_input.split(",");
         String compressed = get_full_huffman_encoding(input_array);
         double compression_rate = compression_rate(compressed, bin_concat_input);
         System.out.println("Huffman compressed: " + compressed);

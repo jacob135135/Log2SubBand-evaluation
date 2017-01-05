@@ -35,11 +35,9 @@ public class MainExecution {
         if (custom_codebook.length > 0) CompressionUtils.init_codebook_from_imported_codebook(custom_codebook);
         else HuffmanCode.init_ideal_huffman_dictionaries(raw_values_array, is_bin_system);
 
-        String[] input_array = cs_input_string.split(",");
-        String[] output_array = cs_output_string.split(",");
         String[] binary_input = MyUtils.split_by_length(bin_concat_input,12);
-        String[] export_data = MyUtils.make_export_table(input_array, output_array, binary_input);
-        CompressionUtils.print_Huffman_compression_results(input_array, bin_concat_input);
+        String[] export_data = MyUtils.make_export_table(cs_input_string, cs_output_string, binary_input);
+        CompressionUtils.print_Huffman_compression_results(cs_input_string, bin_concat_input);
 
         CSVUtils.export_codebook(); // uses number_to_encoding_dict
         CSVUtils.write_CSV("compressed", export_data);
