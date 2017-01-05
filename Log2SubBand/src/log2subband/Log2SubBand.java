@@ -112,42 +112,42 @@ public class Log2SubBand {
 
         String header = encoded_substring.substring(0,2);
         if (debug) System.out.print("Header: " + header + "\n");
-        String remaining_string = encoded_substring.substring(2); // Removing header from string
+        String remaining = encoded_substring.substring(2); // Removing header from string
 
         if(debug)System.out.println("PREV NUMBER " + previous_number);
         if(band3_bits == 0) {
             switch (header) {
                 case "00":  decoded_number = previous_number;
                     break;
-                case "01":  decoded_number = get_band0(previous_number) + get_band1(previous_number) + remaining_string.substring(0, parameters[2]);
-                            remaining_string = remaining_string.substring(band2_bits); // Exclude bits that were encoding
+                case "01":  decoded_number = get_band0(previous_number) + get_band1(previous_number) + remaining.substring(0, band2_bits);
+                            remaining = remaining.substring(band2_bits); // Exclude bits that were encoding
                     break;
-                case "10":  decoded_number = get_band0(previous_number) + remaining_string.substring(0, 12 - parameters[0]);
-                            remaining_string = remaining_string.substring(band2_bits + band1_bits); // Exclude bits that were encoding
+                case "10":  decoded_number = get_band0(previous_number) + remaining.substring(0, 12 - band0_bits);
+                            remaining = remaining.substring(band2_bits + band1_bits); // Exclude bits that were encoding
                     break;
-                case "11":  decoded_number = remaining_string.substring(0,12);
-                            remaining_string = remaining_string.substring(12); // Exclude bits that were encoding
+                case "11":  decoded_number = remaining.substring(0,12);
+                            remaining = remaining.substring(12); // Exclude bits that were encoding
                     break;
             }
         } else {
             switch (header) {
-                case "00":  decoded_number = previous_number.substring(0, 12 - band3_bits) + remaining_string.substring(0,band3_bits);
-                            remaining_string = remaining_string.substring(band3_bits);
+                case "00":  decoded_number = previous_number.substring(0, 12 - band3_bits) + remaining.substring(0, band3_bits);
+                            remaining = remaining.substring(band3_bits);
                     break;
                 case "01":  decoded_number = get_band0(previous_number) + get_band1(previous_number) +
-                                             remaining_string.substring(0, 12 - band2_bits - band3_bits);
-                                             remaining_string = remaining_string.substring(12 - band2_bits - band3_bits);
+                                             remaining.substring(0, 12 - band2_bits - band3_bits);
+                                             remaining = remaining.substring(12 - band2_bits - band3_bits);
                     break;
-                case "10":  decoded_number = get_band0(previous_number) + remaining_string.substring(0, 12 - band0_bits);
-                            remaining_string = remaining_string.substring(12-band0_bits); // Exclude bits that were encoding
+                case "10":  decoded_number = get_band0(previous_number) + remaining.substring(0, 12 - band0_bits);
+                            remaining = remaining.substring(12-band0_bits); // Exclude bits that were encoding
                     break;
-                case "11":  decoded_number = remaining_string.substring(0,12);
-                            remaining_string = remaining_string.substring(12); // Exclude bits that were encoding
+                case "11":  decoded_number = remaining.substring(0,12);
+                            remaining = remaining.substring(12); // Exclude bits that were encoding
                     break;
             }
         }
         if (debug) System.out.println("Current decoded: " + decoded_number + "\n");
-        String stuff_to_return[] = {decoded_number,remaining_string};
+        String stuff_to_return[] = {decoded_number,remaining};
         return stuff_to_return;
     }
 
