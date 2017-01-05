@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package log2subband;
 
 import java.util.HashMap;
@@ -16,7 +11,6 @@ import static log2subband.MyUtils.binary_to_decimal;
 import static log2subband.MyUtils.decimal_to_binary;
 
 /**
- *
  * @author JAKUB
  */
 public class CompressionUtils {
@@ -45,15 +39,15 @@ public class CompressionUtils {
      * Prints compression results
      * @param input_string original string to encode
      * @param overall_compressed full compressed string [1,0]*
-     * @param overall_uncompressed original string compressed and then decompressed (ideally same as input string)
+     * @param bin_concat_input original string compressed and then decompressed (ideally same as input string)
      */
-    public static void print_log2subband_compression_results(String input_string, String overall_compressed, String overall_uncompressed) {
+    public static void print_log2subband_results(String input_string, String overall_compressed, String bin_concat_input) {
         System.out.println("Input:   " + input_string);
         System.out.println("Compressed data:   " + overall_compressed);
         System.out.println("Total compressed length = " + overall_compressed.length());
-        System.out.println("Uncompressed data: " + overall_uncompressed);
-        System.out.println("Total uncompressed length = " + overall_uncompressed.length());
-        double compression_rate = compression_rate(overall_compressed, overall_uncompressed);
+        System.out.println("Original binary concatenated input data: " + bin_concat_input);
+        System.out.println("Total binary concatenated input data length = " + bin_concat_input.length());
+        double compression_rate = compression_rate(overall_compressed, bin_concat_input);
         System.out.println("Log2SubBand Original/Compressed: " + compression_rate);
         System.out.println("Decompressed data: " + Log2SubBand.log2_sub_band_decode_string(overall_compressed));
     }
@@ -63,32 +57,32 @@ public class CompressionUtils {
      * @param raw_values String[] of numbers to compress
      * @param is_binary Boolean Set to true if input numbers are in binary
      * @return Map<String, String> to_return  (almost like an associative array), to get values:
-     *  <br><b>to_return.get("overall_compressed");</b> Binary concatenated string of all compressed values in given array
-        <br><b>to_return.get("overall_uncompressed");</b> Binary concatenated string of all compressed values in given array
-        <br><b>to_return.get("input");</b> Comma separated String of values in inputted <code>raw_values_array</code>
-        <br><b>to_return.get("output");</b> Comma separated String of compressed values (i.e. overall_compressed with commas in between)
+     *  <br><b>to_return.get("compr");</b> Binary concatenated string of all compressed values in given array
+        <br><b>to_return.get("bin_concat_input");</b> String concatenated binary input numbers (without commas)
+        <br><b>to_return.get("cs_input");</b> Comma separated String of values in input
+        <br><b>to_return.get("cs_output");</b> Comma separated String of compressed values (i.e. overall_compressed with commas in between)
      */
-    public static Map<String, String> perform_log2_sub_band_compression(String[] raw_values, boolean is_binary) {
-        String ovrl_compr, ovrl_uncompr, input, output;
-        ovrl_compr = ovrl_uncompr = input = output = "";
+    public static Map<String, String> perform_log2_sub_band(String[] raw_values, boolean is_binary) {
+        String ovrl_compr, bin_concat_input, cs_input, cs_output;
+        ovrl_compr = bin_concat_input = cs_input = cs_output = "";
 
         for (String raw_value : raw_values) {
             if(!is_binary) {raw_value = decimal_to_binary(raw_value);}
             else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
-            input += "," + raw_value;
+            cs_input += "," + raw_value;
 
             String current_compressed = Log2SubBand.log2_sub_band_compress_number(raw_value);
             ovrl_compr += current_compressed;
-            output += "," + current_compressed;
+            cs_output += "," + current_compressed;
             if (debug) System.out.println("Current compressed data: " + current_compressed);
-            ovrl_uncompr += raw_value;
+            bin_concat_input += raw_value;
         }
 
         Map<String, String> to_return = new HashMap<>();
-        to_return.put("overall_compressed", ovrl_compr);
-        to_return.put("overall_uncompressed", ovrl_uncompr);
-        to_return.put("input", input.substring(1));
-        to_return.put("output", output.substring(1));
+        to_return.put("compr", ovrl_compr);
+        to_return.put("bin_concat_input", bin_concat_input);
+        to_return.put("cs_input", cs_input.substring(1));
+        to_return.put("cs_output", cs_output.substring(1));
 
         return to_return;
     }
@@ -106,19 +100,20 @@ public class CompressionUtils {
         }
     }
     
-    public static Double compression_rate(String overall_compressed, String overall_uncompressed) {
-        return Math.round(100.0 * overall_uncompressed.length()/overall_compressed.length())/100.0;
+    public static Double compression_rate(String overall_compressed, String bin_concat_input) {
+        return Math.round(100.0 * bin_concat_input.length()/overall_compressed.length())/100.0;
     }
     
     /**
      * Prints information regarding Huffman compression results.
-     * Prints Full compressed string and ratio (with respect to original/uncompressed string)
-     * @param input_array
-     * @param overall_uncompressed
+     * Prints Full compressed string and ratio (with respect to original binary concatenated input string)
+     * @param cs_input
+     * @param bin_concat_input
      */
-    static void print_Huffman_compression_results(String[] input_array, String overall_uncompressed) {
+    static void print_Huffman_compression_results(String cs_input, String bin_concat_input) {
+        String[] input_array = cs_input.split(",");
         String compressed = get_full_huffman_encoding(input_array);
-        double compression_rate = compression_rate(compressed, overall_uncompressed);
+        double compression_rate = compression_rate(compressed, bin_concat_input);
         System.out.println("Huffman compressed: " + compressed);
         System.out.println("Huffman Original/Compressed: " + compression_rate);
     }

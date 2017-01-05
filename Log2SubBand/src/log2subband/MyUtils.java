@@ -39,17 +39,19 @@ public class MyUtils {
      * Creates CSV table outlining original and encoded values of strings using
        <code>original</code> and <code>encoded</code>
      * <br> Uses <code>number_to_encoding_dict</code> as mapping of numbers and their respective Huffman codes
-     * @param original array of original data
-     * @param encoded array of encoded data
+     * @param cs_original Comma separated original data
+     * @param cs_encoded Comma separated encoded data
      * @param binary_input array of original data in binary
      * @return String[] of CSV table data
      */
-    public static String[] make_export_table(String[] original, String[] encoded, String[] binary_input) {
+    public static String[] make_export_table(String cs_original, String cs_encoded, String[] binary_input) {
+        String[] orig = cs_original.split(",");
+        String[] encod = cs_encoded.split(",");
         String result_string = "Original(dec)," + append_spaces("Original(bin),", 14) + append_spaces("Encoded", 14) + ",Huffman*";
-        for (int i=0; i<original.length; i++) {
-            String crap = binary_to_decimal(original[i]);
-            result_string += "\n" + append_spaces(crap, 13) + "," + append_spaces(original[i], 13) + "," + append_spaces(encoded[i],14);
-            result_string += "," + CompressionUtils.get_huffman_encoding(original[i]);
+        for (int i=0; i<orig.length; i++) {
+            String crap = binary_to_decimal(orig[i]);
+            result_string += "\n" + append_spaces(crap, 13) + "," + append_spaces(orig[i], 13) + "," + append_spaces(encod[i],14);
+            result_string += "," + CompressionUtils.get_huffman_encoding(orig[i]);
         }
         String[] result = result_string.split(",");
         return result;
