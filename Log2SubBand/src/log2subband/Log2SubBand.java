@@ -8,6 +8,7 @@
  */
 package log2subband;
 
+import java.util.Map;
 import static log2subband.MainExecution.debug;
 import static log2subband.CompressionUtils.get_band0;
 import static log2subband.CompressionUtils.get_band1;
@@ -156,6 +157,15 @@ public class Log2SubBand {
         Log2SubBand.previous_band1 = MyUtils.generate_zeroes(parameters[1]);
         Log2SubBand.previous_band2 = MyUtils.generate_zeroes(parameters[2]);
         Log2SubBand.previous_band3 = MyUtils.generate_zeroes(parameters[3]);
+    }
+
+    static void single_subband_compress(String[] raw_val_arr, String input_str, String bin_concat_input, boolean is_bin_system) {
+        Log2SubBand.update_previous_bands(parameters);
+        CompressionUtils.perform_log2_sub_band(raw_val_arr, is_bin_system);
+        Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr, is_bin_system);
+        CompressionUtils.print_log2subband_results(input_str, result.get("compr"), bin_concat_input);
+        String[] export_data = MyUtils.make_export_table(input_str, result.get("cs_output"));
+        CSVUtils.write_CSV("compressed", export_data);
     }
 
 }

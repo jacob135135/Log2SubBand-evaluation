@@ -63,25 +63,20 @@ public class CompressionUtils {
         <br><b>to_return.get("cs_output");</b> Comma separated String of compressed values (i.e. overall_compressed with commas in between)
      */
     public static Map<String, String> perform_log2_sub_band(String[] raw_values, boolean is_binary) {
-        String ovrl_compr, bin_concat_input, cs_input, cs_output;
-        ovrl_compr = bin_concat_input = cs_input = cs_output = "";
+        String ovrl_compr = "",cs_output = "";
 
         for (String raw_value : raw_values) {
             if(!is_binary) {raw_value = decimal_to_binary(raw_value);}
             else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
-            cs_input += "," + raw_value;
 
             String current_compressed = Log2SubBand.log2_sub_band_compress_number(raw_value);
             ovrl_compr += current_compressed;
             cs_output += "," + current_compressed;
             if (debug) System.out.println("Current compressed data: " + current_compressed);
-            bin_concat_input += raw_value;
         }
 
         Map<String, String> to_return = new HashMap<>();
         to_return.put("compr", ovrl_compr);
-        to_return.put("bin_concat_input", bin_concat_input);
-        to_return.put("cs_input", cs_input.substring(1));
         to_return.put("cs_output", cs_output.substring(1));
 
         return to_return;
@@ -196,4 +191,33 @@ public class CompressionUtils {
         return binary_input.substring(0, parameters[0]);
     }
     
+    static Map<String, String> GetDataInfo(String[] raw_values, boolean is_binary) {
+        String bin_concat_input = "", cs_input = "";
+
+        for (String raw_value : raw_values) {
+            if(!is_binary) {raw_value = decimal_to_binary(raw_value);}
+            else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
+            cs_input += "," + raw_value;
+            bin_concat_input += raw_value;
+        }
+
+        Map<String, String> to_return = new HashMap<>();
+        to_return.put("bin_concat_input", bin_concat_input);
+        to_return.put("cs_input", cs_input.substring(1));
+
+        return to_return;
+    }
+
+    /**
+     * Initialises codebook for Huffman. If codebook is not imported, optimal codebook is created
+     * @param custom_codebook Codebook provided by user, possibly empty
+     * @param raw_values_array Array with input data
+     * @param is_bin_system Whether input data is in binary
+     * @throws Exception
+     */
+    static void setUpHuffman(String[] custom_codebook , String[] raw_values_array, boolean is_bin_system) throws Exception {
+        if (custom_codebook.length > 0) CompressionUtils.init_codebook_from_imported_codebook(custom_codebook );
+        else HuffmanCode.init_ideal_huffman_dictionaries(raw_values_array, is_bin_system);
+    }
+
 }
