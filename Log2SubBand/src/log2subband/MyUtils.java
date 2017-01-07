@@ -43,7 +43,7 @@ public class MyUtils {
      * @param cs_encoded Comma separated encoded data
      * @return String[] of CSV table data
      */
-    public static String[] make_export_table(String cs_original, String cs_encoded) {
+    public static String[] make_single_param_export_table(String cs_original, String cs_encoded) {
         String[] orig = cs_original.split(",");
         String[] encod = cs_encoded.split(",");
         String result_string = "Original(dec)," + append_spaces("Original(bin),", 14) + append_spaces("Encoded", 14) + ",Huffman*";
@@ -51,6 +51,24 @@ public class MyUtils {
             String crap = binary_to_decimal(orig[i]);
             result_string += "\n" + append_spaces(crap, 13) + "," + append_spaces(orig[i], 13) + "," + append_spaces(encod[i],14);
             result_string += "," + CompressionUtils.get_huffman_encoding(orig[i]);
+        }
+        String[] result = result_string.split(",");
+        return result;
+    }
+
+    /**
+     * Creates CSV table outlining Log2subband compression rate for every parameter + Huffman compression rate
+       <code>original</code> and <code>encoded</code>
+     * <br> Uses <code>number_to_encoding_dict</code> as mapping of numbers and their respective Huffman codes
+     * @param permutations String[]  Array containing all permutations. Individual bands separated by '
+     * @param CRs String[] of compression rates for Log2subband parameters
+     * @param huff_compr_rate double Huffman compression rate for input array
+     * @return String[] of CSV table data
+     */
+    public static String[] make_all_permutations_export_table(String[] permutations, String[] CRs, double huff_compr_rate) {
+        String result_string = "Permutation," + append_spaces("Compression rate,", 14) + "Huffman rate";
+        for (int i=0; i<permutations.length; i++) {
+            result_string += "\n" + append_spaces(permutations[i], 13) + "," + append_spaces(CRs[i], 13) + "," + huff_compr_rate;
         }
         String[] result = result_string.split(",");
         return result;

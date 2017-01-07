@@ -124,14 +124,13 @@ public class HuffmanCode {
      * !!! Requires reading all data twice -> can't use "on the fly"/until all data arrived
      * Populates <code>number_to_encoding_dict</code> and <code>encoding_to_number_dict</code>
      * @param numbers_to_encode
-     * @param is_binary Boolean Set to true if input numbers are in binary
      * @throws Exception If for some reason string after its encoding and decoding results in different string
      *         (can occur only if this implementation is erroneous)
      */
-    public static void init_ideal_huffman_dictionaries(String[] numbers_to_encode, boolean is_binary) throws Exception {
+    public static void init_ideal_huffman_dictionaries(String[] numbers_to_encode) throws Exception {
         int[] charFreqs = new int[4096]; // Need to support all 4096 different numbers
 
-        if(is_binary) MyUtils.bin_array_to_dec_array(numbers_to_encode);
+        if(MainExecution.is_bin_system) MyUtils.bin_array_to_dec_array(numbers_to_encode);
         // Adds constant to every element to avoid negative numbers
         numbers_to_encode = MyUtils.add_to_string_array(numbers_to_encode, HUFFMAN_ADDITION);
 
