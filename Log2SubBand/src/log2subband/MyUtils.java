@@ -8,8 +8,6 @@ package log2subband;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -45,7 +43,7 @@ public class MyUtils {
      * @param cs_encoded Comma separated encoded data
      * @return String[] of CSV table data
      */
-    public static String[] make_export_table(String cs_original, String cs_encoded) {
+    public static String[] make_single_param_export_table(String cs_original, String cs_encoded) {
         String[] orig = cs_original.split(",");
         String[] encod = cs_encoded.split(",");
         String result_string = "Original(dec)," + append_spaces("Original(bin),", 14) + append_spaces("Encoded", 14) + ",Huffman*";
@@ -157,29 +155,6 @@ public class MyUtils {
             input_arr[i] = binary_to_decimal(binary_to_12_bits(input_arr[i]));
         }
         return input_arr;
-    }
-
-    /**
-     * Gives all valid parameter permutations.
-     * Every permutation has to have sum of all bands exactly 12.
-     * @return List<String> permutations all valid permutations
-     */
-    public static List<String> getAllParameters() {
-        List<String> permutations = new ArrayList<>();
-
-        for (int a=0; a<13; a++) {
-            for (int b=0; a+b<13; b++) {
-                for (int c=0; a+b+c<13; c++) {
-                    for (int d=0; a+b+c+d<13; d++) {
-                        if (a+b+c+d == 12) {
-                            permutations.add(a + "," + b + "," + c + "," + d);
-                        }
-                    }
-                }
-            }
-        }
-
-        return permutations;
     }
 
 }

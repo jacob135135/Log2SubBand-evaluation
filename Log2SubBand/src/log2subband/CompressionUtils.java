@@ -220,4 +220,39 @@ public class CompressionUtils {
         else HuffmanCode.init_ideal_huffman_dictionaries(raw_values_array, is_bin_system);
     }
 
+    /**
+     * Runs Log2subband on every valid permutation.
+     * Every permutation has to have sum of all bands exactly 12.
+     * @return Map<String, List<String>> all valid permutations and their log2subband compression rates
+     */
+    static Map<String, String[]> run_every_permutation(String[] raw_val_arr, boolean is_bin_system, String bin_concat_input) {
+        String[] permutations = new String[455];
+        String[] permutations_crs = new String[455];
+        int index = 0;
+
+        for (int a=0; a<13; a++) {
+            for (int b=0; a+b<13; b++) {
+                for (int c=0; a+b+c<13; c++) {
+                    for (int d=0; a+b+c+d<13; d++) {
+                        if (a+b+c+d == 12) {
+                            permutations[index] = (a + "," + b + "," + c + "," + d);
+                            parameters = new int[]{a, b, c, d};
+                            Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr, is_bin_system);
+                            double compression_rate = compression_rate(result.get("compr"), bin_concat_input);
+                            permutations_crs[index] = compression_rate + "";
+                            System.out.println("permutation: " + permutations[index] + " CR: " + compression_rate);
+                            index++;
+                        }
+                    }
+                }
+            }
+        }
+
+        Map<String, String[]> to_return = new HashMap<>();
+        to_return.put("permutations", permutations);
+        to_return.put("permutations_crs", permutations_crs);
+
+        return to_return;
+    }
+
 }

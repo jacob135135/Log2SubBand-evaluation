@@ -29,7 +29,7 @@ public class MainExecution {
             parameters = input_menu.getRun_parameters();
             Log2SubBand.single_subband_compress(raw_values_array, cs_input_string,bin_concat_input, is_bin_system);
         } else {
-            //@TODO
+            Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, is_bin_system);
         }
         finalise(cs_input_string, bin_concat_input, input_menu.getOpen_exported());
     }
