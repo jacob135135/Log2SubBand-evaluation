@@ -9,6 +9,7 @@ import menuUI.InputMenu;
  */
 public class MainExecution {
     public static boolean debug;
+    static boolean is_bin_system;
 
     public static void main(String[] args) {
         InputMenu input_menu = new InputMenu(); // ALL INPUT OBTAINED FROM THERE
@@ -16,21 +17,21 @@ public class MainExecution {
     
     public static void main_execution(InputMenu input_menu) throws Exception {
         String[] raw_values_array = input_menu.getInput_data();
-        boolean is_bin_system = input_menu.is_binary_number_system();
+        is_bin_system = input_menu.is_binary_number_system();
 
-        Map<String, String> data_info = CompressionUtils.GetDataInfo(raw_values_array, is_bin_system);
+        Map<String, String> data_info = CompressionUtils.GetDataInfo(raw_values_array);
         String bin_concat_input = data_info.get("bin_concat_input");
         String cs_input_string = data_info.get("cs_input");
 
-        CompressionUtils.set_up_Huffman(input_menu.getCodebook_data(), raw_values_array, is_bin_system);
+        CompressionUtils.set_up_Huffman(input_menu.getCodebook_data(), raw_values_array);
         double huff_compr_rate = CompressionUtils.print_Huffman_compression_results(cs_input_string, bin_concat_input);
 
         Boolean run_all_parameters = input_menu.getRun_all_parameters();
         if (!run_all_parameters) {
             parameters = input_menu.getRun_parameters();
-            Log2SubBand.single_subband_compress(raw_values_array, cs_input_string,bin_concat_input, is_bin_system);
+            Log2SubBand.single_subband_compress(raw_values_array, cs_input_string,bin_concat_input);
         } else {
-            Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, is_bin_system, huff_compr_rate);
+            Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, huff_compr_rate);
         }
         finalise(cs_input_string, bin_concat_input, input_menu.getOpen_exported());
     }

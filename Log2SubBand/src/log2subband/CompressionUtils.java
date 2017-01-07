@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import static log2subband.HuffmanCode.number_to_encoding_dict;
 import static log2subband.MainExecution.debug;
+import static log2subband.MainExecution.is_bin_system;
 import static log2subband.Log2SubBand.parameters;
 import static log2subband.MyUtils.binary_to_12_bits;
 import static log2subband.MyUtils.binary_to_decimal;
@@ -55,18 +56,17 @@ public class CompressionUtils {
     /**
      * Compresses input array of numbers, saving data through the process
      * @param raw_values String[] of numbers to compress
-     * @param is_binary Boolean Set to true if input numbers are in binary
      * @return Map<String, String> to_return  (almost like an associative array), to get values:
      *  <br><b>to_return.get("compr");</b> Binary concatenated string of all compressed values in given array
         <br><b>to_return.get("bin_concat_input");</b> String concatenated binary input numbers (without commas)
         <br><b>to_return.get("cs_input");</b> Comma separated String of values in input
         <br><b>to_return.get("cs_output");</b> Comma separated String of compressed values (i.e. overall_compressed with commas in between)
      */
-    public static Map<String, String> perform_log2_sub_band(String[] raw_values, boolean is_binary) {
+    public static Map<String, String> perform_log2_sub_band(String[] raw_values) {
         String ovrl_compr = "",cs_output = "";
 
         for (String raw_value : raw_values) {
-            if(!is_binary) {raw_value = decimal_to_binary(raw_value);}
+            if(!is_bin_system) {raw_value = decimal_to_binary(raw_value);}
             else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
 
             String current_compressed = Log2SubBand.log2_sub_band_compress_number(raw_value);
@@ -193,11 +193,11 @@ public class CompressionUtils {
         return binary_input.substring(0, parameters[0]);
     }
     
-    static Map<String, String> GetDataInfo(String[] raw_values, boolean is_binary) {
+    static Map<String, String> GetDataInfo(String[] raw_values) {
         String bin_concat_input = "", cs_input = "";
 
         for (String raw_value : raw_values) {
-            if(!is_binary) {raw_value = decimal_to_binary(raw_value);}
+            if(!is_bin_system) {raw_value = decimal_to_binary(raw_value);}
             else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
             cs_input += "," + raw_value;
             bin_concat_input += raw_value;
@@ -214,12 +214,11 @@ public class CompressionUtils {
      * Initialises codebook for Huffman. If codebook is not imported, optimal codebook is created
      * @param custom_codebook Codebook provided by user, possibly empty
      * @param raw_values_array Array with input data
-     * @param is_bin_system Whether input data is in binary
      * @throws Exception
      */
-    static void set_up_Huffman(String[] custom_codebook , String[] raw_values_array, boolean is_bin_system) throws Exception {
+    static void set_up_Huffman(String[] custom_codebook , String[] raw_values_array) throws Exception {
         if (custom_codebook.length > 0) CompressionUtils.init_codebook_from_imported_codebook(custom_codebook );
-        else HuffmanCode.init_ideal_huffman_dictionaries(raw_values_array, is_bin_system);
+        else HuffmanCode.init_ideal_huffman_dictionaries(raw_values_array);
     }
 
     /**
@@ -227,7 +226,7 @@ public class CompressionUtils {
      * Every permutation has to have sum of all bands exactly 12.
      * @return Map<String, List<String>> all valid permutations and their log2subband compression rates
      */
-    static Map<String, String[]> run_every_permutation(String[] raw_val_arr, boolean is_bin_system, String bin_concat_input) {
+    static Map<String, String[]> run_every_permutation(String[] raw_val_arr, String bin_concat_input) {
         String[] permutations = new String[455];
         String[] permutations_crs = new String[455];
         int index = 0;
@@ -239,7 +238,7 @@ public class CompressionUtils {
                         if (a+b+c+d == 12) {
                             permutations[index] = (a + "'" + b + "'" + c + "'" + d);
                             parameters = new int[]{a, b, c, d};
-                            Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr, is_bin_system);
+                            Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr);
                             double compression_rate = compression_rate(result.get("compr"), bin_concat_input);
                             permutations_crs[index] = compression_rate + "";
                             System.out.println("permutation: " + permutations[index] + " CR: " + compression_rate);

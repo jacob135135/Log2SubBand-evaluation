@@ -37,6 +37,7 @@ public class Log2SubBandTest {
     public void setUp() {
         parameters = new int[]{4,4,4,0};
         Log2SubBand.update_previous_bands(parameters);
+        MainExecution.is_bin_system = false;
     }
     
     @After
@@ -48,7 +49,7 @@ public class Log2SubBandTest {
         String[] input = new String[]{"1","2","3","4","5","6","7","8","9","10","15","20","40","80","120","131","131","131"};
         String expected_compressed = "010001010010010011010100010101010110010111011000011001011010011111100001010010001010001001010000100111100010100000110000";
         
-        Map<String, String> result = CompressionUtils.perform_log2_sub_band(input, false);
+        Map<String, String> result = CompressionUtils.perform_log2_sub_band(input);
         String compressed = result.get("compr");
 
         assertEquals(expected_compressed, compressed);   
@@ -57,7 +58,9 @@ public class Log2SubBandTest {
     @Test
     public void binary_input_test() {
         String[] input = new String[]{"111111110000","111111110111","111111110100","111110000100","111110000100","100000000000","100001000000"};
-        String compressed = CompressionUtils.perform_log2_sub_band(input, true).get("compr");
+        MainExecution.is_bin_system = true;
+
+        String compressed = CompressionUtils.perform_log2_sub_band(input).get("compr");
         String expected = "11111111110000010111010100101000010000111000000000001001000000";
         assertEquals(expected, compressed);
     }
@@ -67,7 +70,9 @@ public class Log2SubBandTest {
         parameters = new int[]{3,4,5,0};
         Log2SubBand.update_previous_bands(parameters);
         String[] input = new String[]{"111111100000","111111101111","111111101111","111100001111","000000000000","011000000000"};
-        String compressed = CompressionUtils.perform_log2_sub_band(input, true).get("compr");
+        MainExecution.is_bin_system = true;
+
+        String compressed = CompressionUtils.perform_log2_sub_band(input).get("compr");
         String expected = "11111111100000010111100101000011111100000000000011011000000000";
         assertEquals(expected, compressed);
     }
@@ -84,7 +89,7 @@ public class Log2SubBandTest {
     @Test
     public void full_log2_sub_band_test() {
         String[] input = new String[]{"11","23","23","24","45","46","47","68","9","10","15","20","40","80","120","131","131"};
-        String compressed = CompressionUtils.perform_log2_sub_band(input, false).get("compr");
+        String compressed = CompressionUtils.perform_log2_sub_band(input).get("compr");
 
         String decoded = log2_sub_band_decode_string(compressed);
         String[] decoded_array = MyUtils.CSstring_to_array(decoded);
@@ -97,7 +102,7 @@ public class Log2SubBandTest {
         parameters = new int[]{3,3,3,3};
         Log2SubBand.update_previous_bands(parameters);
         String[] input = new String[]{"11","23","23","24","45","46","47","68","9","10","15","20","40","80","120","131","131"};
-        String compressed = CompressionUtils.perform_log2_sub_band(input, false).get("compr");
+        String compressed = CompressionUtils.perform_log2_sub_band(input).get("compr");
 
         String decoded = log2_sub_band_decode_string(compressed);
         String[] decoded_array = MyUtils.CSstring_to_array(decoded);
@@ -112,7 +117,7 @@ public class Log2SubBandTest {
 
         String[] input = new String[]{"11","23","23","24","45","46","47","68","9","10","15","20","40","80","120","131","131"};
         String expected_compressed = "0110111000001011100011000100001011010111100111111000100010010000001001011010011111100000101001000010100010001010000100011110001001000001100";
-        String compressed = CompressionUtils.perform_log2_sub_band(input, false).get("compr");
+        String compressed = CompressionUtils.perform_log2_sub_band(input).get("compr");
         assertEquals(compressed, expected_compressed);
 
         String decoded = log2_sub_band_decode_string(compressed);
@@ -127,7 +132,7 @@ public class Log2SubBandTest {
 
         String[] input = new String[]{"11","23","23","24","45","46","47","68","9","10","15","20","40","80","120","131","131"};
         String expected_compressed = "100000001011100000010111001000000110001000001011010111001111100001000100100000001001010100111110000001010010000010100010000101000010000111100010001000001100";
-        String compressed = CompressionUtils.perform_log2_sub_band(input, false).get("compr");
+        String compressed = CompressionUtils.perform_log2_sub_band(input).get("compr");
         assertEquals(compressed, expected_compressed);
 
         String decoded = log2_sub_band_decode_string(compressed);
