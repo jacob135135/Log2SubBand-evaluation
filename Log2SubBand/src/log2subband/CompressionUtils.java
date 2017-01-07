@@ -105,12 +105,14 @@ public class CompressionUtils {
      * @param cs_input
      * @param bin_concat_input
      */
-    static void print_Huffman_compression_results(String cs_input, String bin_concat_input) {
+    static double print_Huffman_compression_results(String cs_input, String bin_concat_input) {
         String[] input_array = cs_input.split(",");
         String compressed = get_full_huffman_encoding(input_array);
         double compression_rate = compression_rate(compressed, bin_concat_input);
         System.out.println("Huffman compressed: " + compressed);
         System.out.println("Huffman Original/Compressed: " + compression_rate);
+
+        return compression_rate;
     }
     
         /**
@@ -215,7 +217,7 @@ public class CompressionUtils {
      * @param is_bin_system Whether input data is in binary
      * @throws Exception
      */
-    static void setUpHuffman(String[] custom_codebook , String[] raw_values_array, boolean is_bin_system) throws Exception {
+    static void set_up_Huffman(String[] custom_codebook , String[] raw_values_array, boolean is_bin_system) throws Exception {
         if (custom_codebook.length > 0) CompressionUtils.init_codebook_from_imported_codebook(custom_codebook );
         else HuffmanCode.init_ideal_huffman_dictionaries(raw_values_array, is_bin_system);
     }
@@ -235,7 +237,7 @@ public class CompressionUtils {
                 for (int c=0; a+b+c<13; c++) {
                     for (int d=0; a+b+c+d<13; d++) {
                         if (a+b+c+d == 12) {
-                            permutations[index] = (a + "," + b + "," + c + "," + d);
+                            permutations[index] = (a + "'" + b + "'" + c + "'" + d);
                             parameters = new int[]{a, b, c, d};
                             Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr, is_bin_system);
                             double compression_rate = compression_rate(result.get("compr"), bin_concat_input);
@@ -250,7 +252,7 @@ public class CompressionUtils {
 
         Map<String, String[]> to_return = new HashMap<>();
         to_return.put("permutations", permutations);
-        to_return.put("permutations_crs", permutations_crs);
+        to_return.put("crs", permutations_crs);
 
         return to_return;
     }

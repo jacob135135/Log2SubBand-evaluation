@@ -22,14 +22,15 @@ public class MainExecution {
         String bin_concat_input = data_info.get("bin_concat_input");
         String cs_input_string = data_info.get("cs_input");
 
-        CompressionUtils.setUpHuffman(input_menu.getCodebook_data(), raw_values_array, is_bin_system);
+        CompressionUtils.set_up_Huffman(input_menu.getCodebook_data(), raw_values_array, is_bin_system);
+        double huff_compr_rate = CompressionUtils.print_Huffman_compression_results(cs_input_string, bin_concat_input);
 
         Boolean run_all_parameters = input_menu.getRun_all_parameters();
         if (!run_all_parameters) {
             parameters = input_menu.getRun_parameters();
             Log2SubBand.single_subband_compress(raw_values_array, cs_input_string,bin_concat_input, is_bin_system);
         } else {
-            Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, is_bin_system);
+            Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, is_bin_system, huff_compr_rate);
         }
         finalise(cs_input_string, bin_concat_input, input_menu.getOpen_exported());
     }
@@ -41,8 +42,7 @@ public class MainExecution {
      * @param open_exported Boolean whether export generated file should be opened
      */
     public static void finalise(String cs_input_string, String bin_concat_input, boolean open_exported) {
-        CompressionUtils.print_Huffman_compression_results(cs_input_string, bin_concat_input);
-        CSVUtils.export_codebook(); // uses number_to_encoding_dict
+        CSVUtils.export_Huff_codebook(); // uses number_to_encoding_dict
         if(open_exported) MyUtils.open_file("compressed.csv");
         System.exit(0);
     }

@@ -57,6 +57,24 @@ public class MyUtils {
     }
 
     /**
+     * Creates CSV table outlining Log2subband compression rate for every parameter + Huffman compression rate
+       <code>original</code> and <code>encoded</code>
+     * <br> Uses <code>number_to_encoding_dict</code> as mapping of numbers and their respective Huffman codes
+     * @param permutations String[]  Array containing all permutations. Individual bands separated by '
+     * @param CRs String[] of compression rates for Log2subband parameters
+     * @param huff_compr_rate double Huffman compression rate for input array
+     * @return String[] of CSV table data
+     */
+    public static String[] make_all_permutations_export_table(String[] permutations, String[] CRs, double huff_compr_rate) {
+        String result_string = "Permutation," + append_spaces("Compression rate,", 14) + "Huffman rate";
+        for (int i=0; i<permutations.length; i++) {
+            result_string += "\n" + append_spaces(permutations[i], 13) + "," + append_spaces(CRs[i], 13) + "," + huff_compr_rate;
+        }
+        String[] result = result_string.split(",");
+        return result;
+    }
+
+    /**
      * Formatting method that appends spaces to <code>input</code> to achieve
        desired length of <code>input</code>
      * Only works when <code>desired_length > input</code>

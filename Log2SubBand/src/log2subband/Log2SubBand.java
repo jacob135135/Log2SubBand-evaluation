@@ -167,10 +167,10 @@ public class Log2SubBand {
         CSVUtils.write_CSV("compressed", export_data);
     }
 
-    static void all_permutations_subband_compress(String[] raw_val_arr, String input_str, String bin_concat_input, boolean is_bin_system) {
+    static void all_permutations_subband_compress(String[] raw_val_arr, String input_str, String bin_concat_input, boolean is_bin_system, double huff_compr_rate) {
         Map<String, String[]> result = CompressionUtils.run_every_permutation(raw_val_arr, is_bin_system, bin_concat_input);
-        //String[] export_data = MyUtils.make_export_table(input_str, result.get("cs_output"));
-        //CSVUtils.write_CSV("compressed", export_data);
+        String[] export_data = MyUtils.make_all_permutations_export_table(result.get("permutations"), result.get("crs"), huff_compr_rate);
+        CSVUtils.write_CSV("compressed", export_data);
     }
 
 }

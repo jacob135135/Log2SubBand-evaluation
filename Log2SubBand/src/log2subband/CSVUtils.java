@@ -81,7 +81,7 @@ public class CSVUtils {
      * Uses <code>number_to_encoding_dict</code> mapping of numbers and their encodings and creates csv file with
      * 2 columns, one for numbers and the other for their respective encodings
      */
-    public static void export_codebook() {
+    public static void export_Huff_codebook() {
         String to_export = "Original," + append_spaces("Encoded", 14);
         for (Map.Entry<String, String> entrySet : number_to_encoding_dict.entrySet()) {
             String key = entrySet.getKey();
