@@ -392,6 +392,11 @@ public class InputMenu extends javax.swing.JFrame {
 
         all_parameters_checkbox.setText("Run all parameters");
         all_parameters_checkbox.setToolTipText("");
+        all_parameters_checkbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                all_parameters_checkboxActionPerformed(evt);
+            }
+        });
 
         run_all_files_checkbox.setText("Run all files in the folder");
 
@@ -652,6 +657,13 @@ public class InputMenu extends javax.swing.JFrame {
             label_selected_codebook_file.setText(filepath);
         }
     }//GEN-LAST:event_btn_select_file_codebookActionPerformed
+
+    private void all_parameters_checkboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_all_parameters_checkboxActionPerformed
+        if(all_parameters_checkbox.isSelected())
+            jPanel6.setVisible(false);
+        else
+            jPanel6.setVisible(true);
+    }//GEN-LAST:event_all_parameters_checkboxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox all_parameters_checkbox;
