@@ -1,5 +1,6 @@
 package menuUI;
 
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -23,6 +24,7 @@ public class InputMenu extends javax.swing.JFrame {
     }
     
     private String[] input_data;
+    private File input_file;
     private String[] codebook_data = {};
     private boolean open_exported;
     private int[] run_parameters;
@@ -35,31 +37,35 @@ public class InputMenu extends javax.swing.JFrame {
         return this.is_bin_number_system;
     }
 
-    public String[] getInput_data() {
+    public String[] get_input_data() {
         return input_data;
     }
+
+    public File get_input_file() {
+        return input_file;
+    }
     
-    public String[] getCodebook_data() {
+    public String[] get_codebook_data() {
         return codebook_data;
     }
     
-    public Boolean getOpen_exported() {
+    public Boolean get_open_exported() {
         return open_exported;
     }
     
-    public Boolean getRun_all_parameters() {
+    public Boolean get_run_all_parameters() {
         return run_all_parameters;
     }
 
-    public Boolean getRun_all_files() {
+    public Boolean get_run_all_files() {
         return run_all_files;
     }
 
-    public int[] getRun_parameters() {
+    public int[] get_run_parameters() {
         return run_parameters;
     }
     
-    public boolean getUse_decimal_system() {
+    public boolean get_use_decimal_system() {
         return use_decimal_system;
     }
 
@@ -435,6 +441,7 @@ public class InputMenu extends javax.swing.JFrame {
 
         buttonGroup3.add(rad_btn_builtin_codebook);
         rad_btn_builtin_codebook.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        rad_btn_builtin_codebook.setSelected(true);
         rad_btn_builtin_codebook.setText("Built-in");
         rad_btn_builtin_codebook.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -444,7 +451,6 @@ public class InputMenu extends javax.swing.JFrame {
 
         buttonGroup3.add(rad_btn_import_codebook);
         rad_btn_import_codebook.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        rad_btn_import_codebook.setSelected(true);
         rad_btn_import_codebook.setText("Csv import");
         rad_btn_import_codebook.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -630,9 +636,10 @@ public class InputMenu extends javax.swing.JFrame {
                 
             if(all_parameters_checkbox.isSelected())
                 run_all_parameters = true;
-            if(run_all_files_checkbox.isSelected())
+            if(run_all_files_checkbox.isSelected()) {
                 run_all_files = true;
-
+                input_file = new File(label_selected_file.getText());
+            }
             if (cont) {
                 try {MainExecution.main_execution(this);}
                 catch (Exception ex) {Logger.getLogger(InputMenu.class.getName()).log(Level.SEVERE, null, ex);}

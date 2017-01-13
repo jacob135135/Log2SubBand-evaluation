@@ -1,5 +1,6 @@
 package log2subband;
 
+import java.io.File;
 import java.util.Map;
 import static log2subband.Log2SubBand.parameters;
 import menuUI.InputMenu;
@@ -16,24 +17,34 @@ public class MainExecution {
     }
     
     public static void main_execution(InputMenu input_menu) throws Exception {
-        String[] raw_values_array = input_menu.getInput_data();
+        boolean run_all_files = input_menu.get_run_all_files();
+
+        if (run_all_files) {
+            File input_file = input_menu.get_input_file();
+            File[] appropriate_files = MyUtils.get_appropriate_files_in_same_folder(input_file);
+            for (File f : appropriate_files) {
+                System.out.println(f);
+                String cur_name = f.getName();
+            }
+        }
+        System.exit(0);
+        String[] raw_values_array = input_menu.get_input_data();
         is_bin_system = input_menu.is_binary_number_system();
 
         Map<String, String> data_info = CompressionUtils.GetDataInfo(raw_values_array);
         String bin_concat_input = data_info.get("bin_concat_input");
         String cs_input_string = data_info.get("cs_input");
 
-        CompressionUtils.set_up_Huffman(input_menu.getCodebook_data(), raw_values_array);
+        CompressionUtils.set_up_Huffman(input_menu.get_codebook_data(), raw_values_array);
         double huff_compr_rate = CompressionUtils.print_Huffman_compression_results(cs_input_string, bin_concat_input);
 
-        Boolean run_all_parameters = input_menu.getRun_all_parameters();
-        if (!run_all_parameters) {
-            parameters = input_menu.getRun_parameters();
+        if (!input_menu.get_run_all_parameters()) {
+            parameters = input_menu.get_run_parameters();
             Log2SubBand.single_subband_compress(raw_values_array, cs_input_string,bin_concat_input);
         } else {
             Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, huff_compr_rate);
         }
-        finalise(cs_input_string, bin_concat_input, input_menu.getOpen_exported());
+        finalise(cs_input_string, bin_concat_input, input_menu.get_open_exported());
     }
     /**
      * Initialises variables with values given by input menu.

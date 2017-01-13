@@ -7,6 +7,7 @@ package log2subband;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 /**
@@ -173,6 +174,17 @@ public class MyUtils {
             input_arr[i] = binary_to_decimal(binary_to_12_bits(input_arr[i]));
         }
         return input_arr;
+    }
+
+    // http://stackoverflow.com/questions/1384947/java-find-txt-files-in-specified-folder
+    public static File[] get_appropriate_files_in_same_folder( File input_file){ // excludes files starting with codebook
+        File dir = new File(input_file.getParent());
+
+        return dir.listFiles(new FilenameFilter() {
+                 public boolean accept(File dir, String filename)
+                      { return filename.endsWith(".csv") & !filename.startsWith("codebook") ; }
+        } );
+
     }
 
 }
