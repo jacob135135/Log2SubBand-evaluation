@@ -615,6 +615,7 @@ public class InputMenu extends javax.swing.JFrame {
             this.open_exported = open_exported_checkbox.isSelected();
             this.use_decimal_system = rad_btn_decimal_system.isSelected();
             MainExecution.debug = more_info_checkbox.isSelected();
+            input_file = new File(label_selected_file.getText());
             
             if(rad_btn_csv_import.isSelected())
                 if (!"No file selected".equals(label_selected_file.getText()))
@@ -636,10 +637,8 @@ public class InputMenu extends javax.swing.JFrame {
                 
             if(all_parameters_checkbox.isSelected())
                 run_all_parameters = true;
-            if(run_all_files_checkbox.isSelected()) {
+            if(run_all_files_checkbox.isSelected())
                 run_all_files = true;
-                input_file = new File(label_selected_file.getText());
-            }
             if (cont) {
                 try {MainExecution.main_execution(this);}
                 catch (Exception ex) {Logger.getLogger(InputMenu.class.getName()).log(Level.SEVERE, null, ex);}

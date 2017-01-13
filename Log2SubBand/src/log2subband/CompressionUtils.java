@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import static log2subband.HuffmanCode.number_to_encoding_dict;
+import static log2subband.HuffmanCode.encoding_to_number_dict;
 import static log2subband.MainExecution.debug;
 import static log2subband.MainExecution.is_bin_system;
 import static log2subband.Log2SubBand.parameters;
@@ -217,6 +218,8 @@ public class CompressionUtils {
      * @throws Exception
      */
     static void set_up_Huffman(String[] custom_codebook , String[] raw_values_array) throws Exception {
+        number_to_encoding_dict = new HashMap<>();
+        encoding_to_number_dict = new HashMap<>();
         if (custom_codebook.length > 0) CompressionUtils.init_codebook_from_imported_codebook(custom_codebook );
         else HuffmanCode.init_ideal_huffman_dictionaries(raw_values_array);
     }
