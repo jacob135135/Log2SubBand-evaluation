@@ -22,7 +22,7 @@ public class MainExecution {
         if (input_menu.get_run_all_files()) {
             File[] appropriate_files = MyUtils.get_appropriate_files_in_same_folder(input_file);
             for (File f : appropriate_files) {
-                System.out.println(f);
+                if(debug) System.out.println(f);
                 String cur_name = f.getName();
                 String[] raw_values_array = CSVUtils.parse_CSV(f.getAbsolutePath());
                 Map<String, String> data_info = CompressionUtils.GetDataInfo(raw_values_array);

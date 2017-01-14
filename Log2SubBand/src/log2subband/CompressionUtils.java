@@ -110,8 +110,8 @@ public class CompressionUtils {
         String[] input_array = cs_input.split(",");
         String compressed = get_full_huffman_encoding(input_array);
         double compression_rate = compression_rate(compressed, bin_concat_input);
-        System.out.println("Huffman compressed: " + compressed);
-        System.out.println("Huffman Original/Compressed: " + compression_rate);
+        if(debug) System.out.println("Huffman compressed: " + compressed);
+        if(debug) System.out.println("Huffman Original/Compressed: " + compression_rate);
 
         return compression_rate;
     }
@@ -244,7 +244,7 @@ public class CompressionUtils {
                             Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr);
                             double compression_rate = compression_rate(result.get("compr"), bin_concat_input);
                             permutations_crs[index] = compression_rate + "";
-                            System.out.println("permutation: " + permutations[index] + " CR: " + compression_rate);
+                            if(debug) System.out.println("permutation: " + permutations[index] + " CR: " + compression_rate);
                             index++;
                         }
                     }

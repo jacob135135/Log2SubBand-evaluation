@@ -183,7 +183,7 @@ public class MyUtils {
 
         return dir.listFiles(new FilenameFilter() {
                  public boolean accept(File dir, String filename)
-                      { return filename.endsWith(".csv") & !filename.startsWith("codebook") ; }
+                      { return filename.endsWith(".csv") & !filename.startsWith("codebook") & !filename.startsWith("stats"); }
         } );
 
     }
