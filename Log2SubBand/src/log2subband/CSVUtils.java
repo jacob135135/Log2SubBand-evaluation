@@ -89,7 +89,7 @@ public class CSVUtils {
             to_export += "\n" + key + "," + value;
         }
         String[] export = to_export.split(",");
-        write_CSV("../test files/" + name + "_codebook", export);
+        write_CSV("../test files/codebook_" + name, export);
     }
     
 }
