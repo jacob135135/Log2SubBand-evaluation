@@ -37,7 +37,7 @@ public class MainExecution {
                     Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, huff_compr_rate, cur_name);
                 }
                     CSVUtils.export_Huff_codebook(cur_name);
-                    if(input_menu.get_open_exported()) MyUtils.open_file(cur_name+"_compressed.csv");
+                    if(input_menu.get_open_exported()) MyUtils.open_file("stats_" + cur_name+ ".csv");
             }
         }
 
