@@ -9,6 +9,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  *
@@ -185,6 +186,23 @@ public class MyUtils {
                       { return filename.endsWith(".csv") & !filename.startsWith("codebook") ; }
         } );
 
+    }
+
+    // http://stackoverflow.com/questions/80476/how-can-i-concatenate-two-arrays-in-java
+    public static <String> String[] concat(String[] first, String[] second) {
+        String[] result = Arrays.copyOf(first, first.length + second.length);
+        System.arraycopy(second, 0, result, first.length, second.length);
+        return result;
+    }
+
+    static String[] get_all_files_data(File input_file) {
+        String[] to_return = {};
+        File[] appropriate_files = get_appropriate_files_in_same_folder(input_file);
+            for (File f : appropriate_files) {
+                String[] raw_values_array = CSVUtils.parse_CSV(f.getAbsolutePath());
+                to_return = concat(to_return, raw_values_array);
+            }
+        return to_return;
     }
 
 }
