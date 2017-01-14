@@ -36,7 +36,8 @@ public class MainExecution {
                 } else {
                     Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, huff_compr_rate, cur_name);
                 }
-                    finalise(cs_input_string, bin_concat_input, input_menu.get_open_exported(), cur_name);
+                    CSVUtils.export_Huff_codebook(cur_name);
+                    if(input_menu.get_open_exported()) MyUtils.open_file(cur_name+"_compressed.csv");
             }
         } else {
             String[] raw_values_array = input_menu.get_input_data();
@@ -55,20 +56,10 @@ public class MainExecution {
             } else {
                 Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, huff_compr_rate, input_file.getName());
             }
-            finalise(cs_input_string, bin_concat_input, input_menu.get_open_exported(), input_file.getName());
+            CSVUtils.export_Huff_codebook(input_file.getName());
+            if(input_menu.get_open_exported()) MyUtils.open_file(input_file.getName()+"_compressed.csv");
         }
         System.exit(0);
-    }
-    /**
-     * Initialises variables with values given by input menu.
-     * This function reduces clutter in main_execution function
-     * @param cs_input_string Initial data to compress separated by comma
-     * @param bin_concat_input Initial data to compress concatenated (no spaces or commas)
-     * @param open_exported Boolean whether export generated file should be opened
-     */
-    public static void finalise(String cs_input_string, String bin_concat_input, boolean open_exported, String name) {
-        CSVUtils.export_Huff_codebook(name); // uses number_to_encoding_dict
-        if(open_exported) MyUtils.open_file("compressed.csv");
     }
 
 }
