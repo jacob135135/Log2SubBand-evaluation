@@ -22,7 +22,7 @@ public class MainExecution {
         if (input_menu.get_run_all_files()) {
             File[] appropriate_files = MyUtils.get_appropriate_files_in_same_folder(input_file);
             for (File f : appropriate_files) {
-                System.out.println(f);
+                if(debug) System.out.println(f);
                 String cur_name = f.getName();
                 String[] raw_values_array = CSVUtils.parse_CSV(f.getAbsolutePath());
                 Map<String, String> data_info = CompressionUtils.GetDataInfo(raw_values_array);
@@ -36,8 +36,8 @@ public class MainExecution {
                 } else {
                     Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, huff_compr_rate, cur_name);
                 }
-                    CSVUtils.export_Huff_codebook(cur_name);
-                    if(input_menu.get_open_exported()) MyUtils.open_file(cur_name+"_compressed.csv");
+                CSVUtils.export_Huff_codebook(cur_name);
+                if(input_menu.get_open_exported()) MyUtils.open_file("stats_" + cur_name+ ".csv");
             }
         }
 
@@ -69,7 +69,7 @@ public class MainExecution {
             Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, huff_compr_rate, filename);
         }
         CSVUtils.export_Huff_codebook(filename);
-        if(input_menu.get_open_exported()) MyUtils.open_file(filename+"_compressed.csv");
+        if(input_menu.get_open_exported()) MyUtils.open_file("stats_" + filename+".csv");
 
         System.exit(0);
     }
