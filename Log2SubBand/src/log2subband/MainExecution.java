@@ -29,10 +29,10 @@ public class MainExecution {
                 String bin_concat_input = data_info.get("bin_concat_input");
                 String cs_input_string = data_info.get("cs_input");
                 CompressionUtils.set_up_Huffman(input_menu.get_codebook_data(), raw_values_array);
-                double huff_compr_rate = CompressionUtils.print_Huffman_compression_results(cs_input_string, bin_concat_input);
+                double huff_compr_rate = CompressionUtils.get_Huffman_CR(cs_input_string, bin_concat_input);
                 if (!input_menu.get_run_all_parameters()) {
                     parameters = input_menu.get_run_parameters();
-                    Log2SubBand.single_subband_compress(raw_values_array, cs_input_string,bin_concat_input,cur_name);
+                    Log2SubBand.single_subband_compress(raw_values_array, cs_input_string,bin_concat_input, huff_compr_rate, cur_name);
                 } else {
                     Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, huff_compr_rate, cur_name);
                 }
@@ -60,11 +60,11 @@ public class MainExecution {
         String cs_input_string = data_info.get("cs_input");
 
         CompressionUtils.set_up_Huffman(input_menu.get_codebook_data(), raw_values_array);
-        double huff_compr_rate = CompressionUtils.print_Huffman_compression_results(cs_input_string, bin_concat_input);
+        double huff_compr_rate = CompressionUtils.get_Huffman_CR(cs_input_string, bin_concat_input);
 
         if (!input_menu.get_run_all_parameters()) {
             parameters = input_menu.get_run_parameters();
-            Log2SubBand.single_subband_compress(raw_values_array, cs_input_string,bin_concat_input, filename);
+            Log2SubBand.single_subband_compress(raw_values_array, cs_input_string,bin_concat_input, huff_compr_rate, filename);
         } else {
             Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, huff_compr_rate, filename);
         }

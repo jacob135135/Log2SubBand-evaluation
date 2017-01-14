@@ -159,11 +159,11 @@ public class Log2SubBand {
         Log2SubBand.previous_band3 = MyUtils.generate_zeroes(parameters[3]);
     }
 
-    static void single_subband_compress(String[] raw_val_arr, String input_str, String bin_concat_input, String filename) {
+    static void single_subband_compress(String[] raw_val_arr, String input_str, String bin_concat_input, double huff_compr_rate, String filename) {
         Log2SubBand.update_previous_bands(parameters);
         Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr);
-        if(debug) CompressionUtils.print_log2subband_results(input_str, result.get("compr"), bin_concat_input);
-        String[] export_data = MyUtils.make_single_param_export_table(input_str, result.get("cs_output"));
+        double subband_cr = CompressionUtils.get_log2subband_CR(input_str, result.get("compr"), bin_concat_input);
+        String[] export_data = MyUtils.make_single_param_export_table(input_str, result.get("cs_output"), huff_compr_rate, subband_cr);
         CSVUtils.write_CSV("stats_" + filename, export_data);
     }
 

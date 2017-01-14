@@ -43,15 +43,16 @@ public class CompressionUtils {
      * @param overall_compressed full compressed string [1,0]*
      * @param bin_concat_input original string compressed and then decompressed (ideally same as input string)
      */
-    public static void print_log2subband_results(String input_string, String overall_compressed, String bin_concat_input) {
-        System.out.println("Input:   " + input_string);
-        System.out.println("Compressed data:   " + overall_compressed);
-        System.out.println("Total compressed length = " + overall_compressed.length());
-        System.out.println("Original binary concatenated input data: " + bin_concat_input);
-        System.out.println("Total binary concatenated input data length = " + bin_concat_input.length());
+    public static double get_log2subband_CR(String input_string, String overall_compressed, String bin_concat_input) {
+        if(debug) System.out.println("Input:   " + input_string);
+        if(debug) System.out.println("Compressed data:   " + overall_compressed);
+        if(debug) System.out.println("Total compressed length = " + overall_compressed.length());
+        if(debug) System.out.println("Original binary concatenated input data: " + bin_concat_input);
+        if(debug) System.out.println("Total binary concatenated input data length = " + bin_concat_input.length());
         double compression_rate = compression_rate(overall_compressed, bin_concat_input);
-        System.out.println("Log2SubBand Original/Compressed: " + compression_rate);
-        System.out.println("Decompressed data: " + Log2SubBand.log2_sub_band_decode_string(overall_compressed));
+        if(debug) System.out.println("Log2SubBand Original/Compressed: " + compression_rate);
+        if(debug) System.out.println("Decompressed data: " + Log2SubBand.log2_sub_band_decode_string(overall_compressed));
+        return compression_rate;
     }
     
     /**
@@ -106,7 +107,7 @@ public class CompressionUtils {
      * @param cs_input
      * @param bin_concat_input
      */
-    static double print_Huffman_compression_results(String cs_input, String bin_concat_input) {
+    static double get_Huffman_CR(String cs_input, String bin_concat_input) {
         String[] input_array = cs_input.split(",");
         String compressed = get_full_huffman_encoding(input_array);
         double compression_rate = compression_rate(compressed, bin_concat_input);

@@ -45,7 +45,7 @@ public class MyUtils {
      * @param cs_encoded Comma separated encoded data
      * @return String[] of CSV table data
      */
-    public static String[] make_single_param_export_table(String cs_original, String cs_encoded) {
+    public static String[] make_single_param_export_table(String cs_original, String cs_encoded, double huff_compr_rate, double subband_cr) {
         String[] orig = cs_original.split(",");
         String[] encod = cs_encoded.split(",");
         String result_string = "Original(dec)," + append_spaces("Original(bin),", 14) + append_spaces("Encoded", 14) + ",Huffman*";
@@ -54,6 +54,7 @@ public class MyUtils {
             result_string += "\n" + append_spaces(crap, 13) + "," + append_spaces(orig[i], 13) + "," + append_spaces(encod[i],14);
             result_string += "," + CompressionUtils.get_huffman_encoding(orig[i]);
         }
+        result_string += "\n\n Log2SubBand CR: " + subband_cr  + "\n Huffman CR: " + huff_compr_rate;
         String[] result = result_string.split(",");
         return result;
     }
