@@ -159,18 +159,18 @@ public class Log2SubBand {
         Log2SubBand.previous_band3 = MyUtils.generate_zeroes(parameters[3]);
     }
 
-    static void single_subband_compress(String[] raw_val_arr, String input_str, String bin_concat_input) {
+    static void single_subband_compress(String[] raw_val_arr, String input_str, String bin_concat_input, String filename) {
         Log2SubBand.update_previous_bands(parameters);
         Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr);
         CompressionUtils.print_log2subband_results(input_str, result.get("compr"), bin_concat_input);
         String[] export_data = MyUtils.make_single_param_export_table(input_str, result.get("cs_output"));
-        CSVUtils.write_CSV("compressed", export_data);
+        CSVUtils.write_CSV(filename+"_compressed", export_data);
     }
 
-    static void all_permutations_subband_compress(String[] raw_val_arr, String input_str, String bin_concat_input, double huff_compr_rate) {
+    static void all_permutations_subband_compress(String[] raw_val_arr, String input_str, String bin_concat_input, double huff_compr_rate, String filename) {
         Map<String, String[]> result = CompressionUtils.run_every_permutation(raw_val_arr, bin_concat_input);
         String[] export_data = MyUtils.make_all_permutations_export_table(result.get("permutations"), result.get("crs"), huff_compr_rate);
-        CSVUtils.write_CSV("compressed", export_data);
+        CSVUtils.write_CSV(filename+"_compressed", export_data);
     }
 
 }
