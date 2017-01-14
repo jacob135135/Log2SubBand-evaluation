@@ -36,8 +36,8 @@ public class MainExecution {
                 } else {
                     Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, huff_compr_rate, cur_name);
                 }
-                    CSVUtils.export_Huff_codebook(cur_name);
-                    if(input_menu.get_open_exported()) MyUtils.open_file("stats_" + cur_name+ ".csv");
+                CSVUtils.export_Huff_codebook(cur_name);
+                if(input_menu.get_open_exported()) MyUtils.open_file("stats_" + cur_name+ ".csv");
             }
         }
 
@@ -69,7 +69,7 @@ public class MainExecution {
             Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, huff_compr_rate, filename);
         }
         CSVUtils.export_Huff_codebook(filename);
-        if(input_menu.get_open_exported()) MyUtils.open_file(filename+"_compressed.csv");
+        if(input_menu.get_open_exported()) MyUtils.open_file("stats_" + filename+".csv");
 
         System.exit(0);
     }
