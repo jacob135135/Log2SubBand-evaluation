@@ -14,6 +14,8 @@ import static log2subband.CompressionUtils.get_band0;
 import static log2subband.CompressionUtils.get_band1;
 import static log2subband.CompressionUtils.get_band2;
 import static log2subband.CompressionUtils.get_band3;
+import static log2subband.MainExecution.is_bin_system;
+import static log2subband.MyUtils.decimal_to_binary;
 
 /**
  * @author Jakub
@@ -161,7 +163,13 @@ public class Log2SubBand {
 
     static void single_subband_compress(String[] raw_val_arr, String input_str, String bin_concat_input, double huff_compr_rate, String filename) {
         Log2SubBand.update_previous_bands(parameters);
-        Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr);
+        
+        for (int i=0; i<raw_val_arr.length; i++) {
+            if(!is_bin_system) {raw_val_arr[i] = decimal_to_binary(raw_val_arr[i]);}
+            else {raw_val_arr[i] = MyUtils.binary_to_12_bits(raw_val_arr[i]);}
+        }
+        
+        Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr, true);
         double subband_cr = CompressionUtils.get_log2subband_CR(input_str, result.get("compr"), bin_concat_input);
         String[] export_data = MyUtils.make_single_param_export_table(input_str, result.get("cs_output"), huff_compr_rate, subband_cr);
         CSVUtils.write_CSV("stats_" + filename, export_data);

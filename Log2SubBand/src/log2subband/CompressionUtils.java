@@ -65,12 +65,14 @@ public class CompressionUtils {
         <br><b>to_return.get("cs_input");</b> Comma separated String of values in input
         <br><b>to_return.get("cs_output");</b> Comma separated String of compressed values (i.e. overall_compressed with commas in between)
      */
-    public static Map<String, String> perform_log2_sub_band(String[] raw_values) {
+    public static Map<String, String> perform_log2_sub_band(String[] raw_values, boolean data_ready) {
         String ovrl_compr = "",cs_output = "";
 
         for (String raw_value : raw_values) {
-            if(!is_bin_system) {raw_value = decimal_to_binary(raw_value);}
-            else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
+            if (!data_ready) {
+                if(!is_bin_system) {raw_value = decimal_to_binary(raw_value);}
+                else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
+            }
 
             String current_compressed = Log2SubBand.log2_sub_band_compress_number(raw_value);
             ovrl_compr += current_compressed;
@@ -202,7 +204,7 @@ public class CompressionUtils {
         int i = 0;
         for (String raw_value : raw_values) {
             if (i%4098 == 0) {
-                System.out.println("Got data from file" + i/4098 +" : (" + LocalDateTime.now() + ")" );
+                System.out.println("Got data info from file" + i/4098 +" : (" + LocalDateTime.now() + ")" );
             }
             if(!is_bin_system) {raw_value = decimal_to_binary(raw_value);}
             else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
@@ -244,6 +246,13 @@ public class CompressionUtils {
         String[] permutations = new String[455];
         String[] permutations_crs = new String[455];
         int index = 0;
+        
+        for (int i=0; i<raw_val_arr.length; i++) {
+            if(!is_bin_system) {raw_val_arr[i] = decimal_to_binary(raw_val_arr[i]);}
+            else {raw_val_arr[i] = MyUtils.binary_to_12_bits(raw_val_arr[i]);}
+        }
+        
+        
 
         for (int a=0; a<13; a++) {
             for (int b=0; a+b<13; b++) {
@@ -253,11 +262,12 @@ public class CompressionUtils {
                             permutations[index] = (a + "'" + b + "'" + c + "'" + d);
                             parameters = new int[]{a, b, c, d};
                             System.out.println("Permutation: " + permutations[index] + "("  + LocalDateTime.now() + ")" );
-                            Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr);
+                            Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr, true);
                             double compression_rate = compression_rate(result.get("compr"), bin_concat_input);
                             permutations_crs[index] = compression_rate + "";
                             System.out.println("permutation: " + permutations[index] + " CR: " + compression_rate);
                             index++;
+                            System.out.println(index + " of 455 permutations completed");
                         }
                     }
                 }
