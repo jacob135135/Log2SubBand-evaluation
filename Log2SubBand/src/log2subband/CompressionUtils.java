@@ -27,13 +27,13 @@ public class CompressionUtils {
      * @return Concatenation of Huffman encodings of all symbols (characters) in <code>to_encode</code>
      */
     public static String get_huffman_encoding(String to_encode) {
-        if(debug) System.out.println("INITIAL TO ENCODE: " + to_encode);
+        //if(debug) System.out.println("INITIAL TO ENCODE: " + to_encode);
         to_encode = binary_to_decimal(binary_to_12_bits(to_encode));//binary_to_decimal(String.valueOf(transformed));
-        if(debug) System.out.println("DECIMAL TO ENCODE: " + to_encode);
+        //if(debug) System.out.println("DECIMAL TO ENCODE: " + to_encode);
         to_encode = String.valueOf(Integer.valueOf(to_encode) + HuffmanCode.HUFFMAN_ADDITION);
-        if(debug) System.out.println("TRANSFORMED TO ENCODE: " + to_encode);
+        //if(debug) System.out.println("TRANSFORMED TO ENCODE: " + to_encode);
         String result = number_to_encoding_dict.get(to_encode);
-        if(debug) System.out.println("ENCODED INTO :" + result);
+        //if(debug) System.out.println("ENCODED INTO :" + result);
         if (result == null) throw new NoSuchElementException("Codebook ERROR, no encoding found for '" + to_encode + "'");
         return result;
     }
@@ -52,7 +52,7 @@ public class CompressionUtils {
         if(debug) System.out.println("Total binary concatenated input data length = " + bin_concat_input.length());
         double compression_rate = compression_rate(overall_compressed, bin_concat_input);
         if(debug) System.out.println("Log2SubBand Original/Compressed: " + compression_rate);
-        if(debug) System.out.println("Decompressed data: " + Log2SubBand.log2_sub_band_decode_string(overall_compressed));
+        //if(debug) System.out.println("Decompressed data: " + Log2SubBand.log2_sub_band_decode_string(overall_compressed));
         return compression_rate;
     }
     
@@ -101,7 +101,10 @@ public class CompressionUtils {
     }
     
     public static Double compression_rate(String overall_compressed, String bin_concat_input) {
-        return Math.round(100.0 * bin_concat_input.length()/overall_compressed.length())/100.0;
+        System.out.println("overall compr length: " + overall_compressed.length());
+        System.out.println("bin_concat_input length: " + bin_concat_input.length());
+        double compr_ratio =  (1.0 * bin_concat_input.length())/ overall_compressed.length();
+        return compr_ratio;
     }
     
     /**
@@ -204,7 +207,7 @@ public class CompressionUtils {
         int i = 0;
         for (String raw_value : raw_values) {
             if (i%4098 == 0) {
-                System.out.println("Got data info from file" + i/4098 +" : (" + LocalDateTime.now() + ")" );
+                System.out.println("Got data info from file" + (i/4098 + 1) +" : (" + LocalDateTime.now() + ")" );
             }
             if(!is_bin_system) {raw_value = decimal_to_binary(raw_value);}
             else {raw_value = MyUtils.binary_to_12_bits(raw_value);}

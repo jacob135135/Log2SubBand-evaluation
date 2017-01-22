@@ -32,6 +32,8 @@ public class InputMenu extends javax.swing.JFrame {
     private boolean is_bin_number_system;
     private boolean run_all_parameters;
     private boolean run_all_files;
+    public static boolean export_all_encoding_info;
+    public static boolean give_stats_for_every_file;
 
     public boolean is_binary_number_system() {
         return this.is_bin_number_system;
@@ -122,11 +124,6 @@ public class InputMenu extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         band3_bits = new javax.swing.JComboBox();
-        jPanel7 = new javax.swing.JPanel();
-        open_exported_checkbox = new javax.swing.JCheckBox();
-        more_info_checkbox = new javax.swing.JCheckBox();
-        all_parameters_checkbox = new javax.swing.JCheckBox();
-        run_all_files_checkbox = new javax.swing.JCheckBox();
         codebook_panel = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
@@ -135,6 +132,13 @@ public class InputMenu extends javax.swing.JFrame {
         codebook_panel_csv_import = new javax.swing.JPanel();
         btn_select_file_codebook = new javax.swing.JButton();
         label_selected_codebook_file = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        open_exported_checkbox = new javax.swing.JCheckBox();
+        more_info_checkbox = new javax.swing.JCheckBox();
+        all_parameters_checkbox = new javax.swing.JCheckBox();
+        run_all_files_checkbox = new javax.swing.JCheckBox();
+        all_encoding_export_info_checkbox = new javax.swing.JCheckBox();
+        stats_for_every_file_checkbox = new javax.swing.JCheckBox();
         btn_OK = new javax.swing.JButton();
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
@@ -364,7 +368,7 @@ public class InputMenu extends javax.swing.JFrame {
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(band3_bits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(42, Short.MAX_VALUE))
+                        .addContainerGap(39, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel3)
@@ -387,51 +391,6 @@ public class InputMenu extends javax.swing.JFrame {
                     .addComponent(jLabel10)
                     .addComponent(band3_bits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        open_exported_checkbox.setSelected(true);
-        open_exported_checkbox.setText("Open csv with results");
-
-        more_info_checkbox.setText("Print more  info");
-
-        all_parameters_checkbox.setText("Run all parameters");
-        all_parameters_checkbox.setToolTipText("");
-        all_parameters_checkbox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                all_parameters_checkboxActionPerformed(evt);
-            }
-        });
-
-        run_all_files_checkbox.setText("Run all files in the folder");
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(open_exported_checkbox)
-                    .addComponent(more_info_checkbox))
-                .addGap(46, 46, 46)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(run_all_files_checkbox)
-                    .addComponent(all_parameters_checkbox))
-                .addContainerGap(36, Short.MAX_VALUE))
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(open_exported_checkbox)
-                    .addComponent(all_parameters_checkbox))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(more_info_checkbox)
-                    .addComponent(run_all_files_checkbox)))
         );
 
         codebook_panel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -531,6 +490,64 @@ public class InputMenu extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        open_exported_checkbox.setSelected(true);
+        open_exported_checkbox.setText("Open csv with results");
+
+        more_info_checkbox.setText("Print more  info");
+
+        all_parameters_checkbox.setText("Run all parameters");
+        all_parameters_checkbox.setToolTipText("");
+        all_parameters_checkbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                all_parameters_checkboxActionPerformed(evt);
+            }
+        });
+
+        run_all_files_checkbox.setText("Run all files in the folder");
+
+        all_encoding_export_info_checkbox.setText("Export all encoding info");
+
+        stats_for_every_file_checkbox.setText("Stats file for every data file");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(open_exported_checkbox)
+                            .addComponent(all_encoding_export_info_checkbox))
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(run_all_files_checkbox)
+                            .addComponent(all_parameters_checkbox)
+                            .addComponent(stats_for_every_file_checkbox)))
+                    .addComponent(more_info_checkbox))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(open_exported_checkbox)
+                    .addComponent(all_parameters_checkbox))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(more_info_checkbox)
+                    .addComponent(run_all_files_checkbox))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(all_encoding_export_info_checkbox)
+                    .addComponent(stats_for_every_file_checkbox))
+                .addGap(0, 7, Short.MAX_VALUE))
+        );
+
         btn_OK.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_OK.setText("OK");
         btn_OK.addActionListener(new java.awt.event.ActionListener() {
@@ -552,15 +569,15 @@ public class InputMenu extends javax.swing.JFrame {
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(codebook_panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_OK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_OK, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -568,10 +585,10 @@ public class InputMenu extends javax.swing.JFrame {
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(codebook_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btn_OK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(20, 20, 20))
@@ -639,6 +656,10 @@ public class InputMenu extends javax.swing.JFrame {
                 run_all_parameters = true;
             if(run_all_files_checkbox.isSelected())
                 run_all_files = true;
+            if(all_encoding_export_info_checkbox.isSelected())
+                export_all_encoding_info = true;
+            if (stats_for_every_file_checkbox.isSelected())
+                give_stats_for_every_file = true;
             if (cont) {
                 try {MainExecution.main_execution(this);}
                 catch (Exception ex) {Logger.getLogger(InputMenu.class.getName()).log(Level.SEVERE, null, ex);}
@@ -672,6 +693,7 @@ public class InputMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_all_parameters_checkboxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox all_encoding_export_info_checkbox;
     private javax.swing.JCheckBox all_parameters_checkbox;
     private javax.swing.JComboBox band0_bits;
     private javax.swing.JComboBox band1_bits;
@@ -716,6 +738,7 @@ public class InputMenu extends javax.swing.JFrame {
     private javax.swing.JRadioButton rad_btn_import_codebook;
     private javax.swing.JRadioButton rad_btn_manual_entry;
     private javax.swing.JCheckBox run_all_files_checkbox;
+    private javax.swing.JCheckBox stats_for_every_file_checkbox;
     private javax.swing.JTextField text_field_input;
     // End of variables declaration//GEN-END:variables
 }

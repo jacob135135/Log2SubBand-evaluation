@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Arrays;
+import menuUI.InputMenu;
 
 /**
  *
@@ -48,13 +49,18 @@ public class MyUtils {
     public static String[] make_single_param_export_table(String cs_original, String cs_encoded, double huff_compr_rate, double subband_cr) {
         String[] orig = cs_original.split(",");
         String[] encod = cs_encoded.split(",");
-        String result_string = "Original(dec)," + append_spaces("Original(bin),", 14) + append_spaces("Encoded", 14) + ",Huffman*";
-        for (int i=0; i<orig.length; i++) {
-            String crap = binary_to_decimal(orig[i]);
-            result_string += "\n" + append_spaces(crap, 13) + "," + append_spaces(orig[i], 13) + "," + append_spaces(encod[i],14);
-            result_string += "," + CompressionUtils.get_huffman_encoding(orig[i]);
+        String result_string = "";
+        if (InputMenu.export_all_encoding_info) {
+            result_string = "Original(dec)," + append_spaces("Original(bin),", 14) + append_spaces("Encoded", 14) + ",Huffman*";
+            for (int i=0; i<orig.length; i++) {
+                String crap = binary_to_decimal(orig[i]);
+                result_string += "\n" + append_spaces(crap, 13) + "," + append_spaces(orig[i], 13) + "," + append_spaces(encod[i],14);
+                result_string += "," + CompressionUtils.get_huffman_encoding(orig[i]);
+            }
         }
         result_string += "\n\n Log2SubBand CR: " + subband_cr  + "\n Huffman CR: " + huff_compr_rate;
+        result_string += "\n\n " + MainExecution.running_setting;
+        result_string += "\n\n Data files imported: " + MainExecution.data_files;
         String[] result = result_string.split(",");
         return result;
     }
@@ -73,6 +79,7 @@ public class MyUtils {
         for (int i=0; i<permutations.length; i++) {
             result_string += "\n" + append_spaces(permutations[i], 13) + "," + append_spaces(CRs[i], 13) + "," + huff_compr_rate;
         }
+        result_string += "\n\n Data files imported: " + MainExecution.data_files;
         String[] result = result_string.split(",");
         return result;
     }
@@ -198,11 +205,17 @@ public class MyUtils {
 
     static String[] get_all_files_data(File input_file) {
         String[] to_return = {};
+        MainExecution.data_files = "";
         File[] appropriate_files = get_appropriate_files_in_same_folder(input_file);
-            for (File f : appropriate_files) {
-                String[] raw_values_array = CSVUtils.parse_CSV(f.getAbsolutePath());
-                to_return = concat(to_return, raw_values_array);
-            }
+        for (File f : appropriate_files) {
+            MainExecution.data_files += f.getName() + ", ";
+            System.out.println("File " + f.getName() + " successfully loaded");
+            String[] raw_values_array = CSVUtils.parse_CSV(f.getAbsolutePath());
+            to_return = concat(to_return, raw_values_array);
+        }
+        MainExecution.data_files = MainExecution.data_files.substring(0, MainExecution.data_files.length() -2);
+        System.out.println("Data files: " + MainExecution.data_files);
+
         return to_return;
     }
 

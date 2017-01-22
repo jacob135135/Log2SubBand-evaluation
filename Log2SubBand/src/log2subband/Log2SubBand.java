@@ -8,6 +8,7 @@
  */
 package log2subband;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import static log2subband.MainExecution.debug;
 import static log2subband.CompressionUtils.get_band0;
@@ -168,7 +169,7 @@ public class Log2SubBand {
             if(!is_bin_system) {raw_val_arr[i] = decimal_to_binary(raw_val_arr[i]);}
             else {raw_val_arr[i] = MyUtils.binary_to_12_bits(raw_val_arr[i]);}
         }
-        
+        System.out.println("Data in correct format: (" + LocalDateTime.now() + ")" );
         Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr, true);
         double subband_cr = CompressionUtils.get_log2subband_CR(input_str, result.get("compr"), bin_concat_input);
         String[] export_data = MyUtils.make_single_param_export_table(input_str, result.get("cs_output"), huff_compr_rate, subband_cr);

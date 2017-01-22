@@ -142,6 +142,7 @@ public class HuffmanCode {
         charFreqs = CompressionUtils.make_frequencies_significant(charFreqs); // also forces Huffman to create encoding for all
         HuffmanTree tree = buildTree(charFreqs); // build tree
         create_huffman_tree(tree, new StringBuffer());
+        numbers_to_encode = MyUtils.add_to_string_array(numbers_to_encode, -HUFFMAN_ADDITION);
 
 //        String encoded = "";
 //        for (String number : numbers_to_encode) encoded += number_to_encoding_dict.get(number);
