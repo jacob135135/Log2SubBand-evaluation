@@ -14,6 +14,7 @@ public class MainExecution {
     static boolean is_bin_system;
     static String running_setting;
     static String data_files = "";
+    public static boolean DPCM_for_Huffman;
 
     public static void main(String[] args) {
         InputMenu input_menu = new InputMenu(); // ALL INPUT OBTAINED FROM THERE

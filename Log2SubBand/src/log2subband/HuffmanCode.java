@@ -2,6 +2,8 @@
 package log2subband;
 import java.util.*;
 import static log2subband.MainExecution.debug;
+import static log2subband.MainExecution.is_bin_system;
+import static log2subband.MyUtils.decimal_to_binary;
 
 /* Downloaded from https://rosettacode.org/wiki/Huffman_coding under GNU Free Documentation License 1.2  */
 abstract class HuffmanTree implements Comparable<HuffmanTree> {
@@ -41,6 +43,7 @@ public class HuffmanCode {
     public static Map<String, String> encoding_to_number_dict = new HashMap<>(); // encoding => number
     public static final int HUFFMAN_ADDITION = 2048; // NEED TO ADD TO HUFFMAN TO PREVENT NEGATIVE NUMBER INDEXES
     public static final int FREQUENCY_SIGNIFICANCE_MULTIPLIER = 1000;
+    public static String[] huffman_DPCM_data; // Input data after running DPCM on them
 
     public static HuffmanTree buildTree(int[] charFreqs) {
         PriorityQueue<HuffmanTree> trees = new PriorityQueue<>();
@@ -89,12 +92,15 @@ public class HuffmanCode {
         }
     }
 
+    // decode_huffman method currently TEMPORARILY does not work as huffman uses DPCM and it is not yet compatible
+    // disabling DPCM_for_Huffman (setting it to false) would make it work again.
     /**
      * Decodes a String input consisting only of ones and zeroes using inputted dictionary
      * @param encoded String of 1s and 0s
      * @param encod_to_number_dict Dictionary mapping of Huffman codes and their respective numbers
      * @return decoded String of decoded values
      */
+    @Deprecated
     public static String decode_huffman(String encoded, Map<String, String> encod_to_number_dict) {
         if(debug) System.out.println("DECODE HUFF encoded: " + encoded);
         String current = encoded.substring(0,1);
@@ -131,18 +137,29 @@ public class HuffmanCode {
         int[] charFreqs = new int[4096]; // Need to support all 4096 different numbers
 
         if(MainExecution.is_bin_system) MyUtils.bin_array_to_dec_array(numbers_to_encode);
-        // Adds constant to every element to avoid negative numbers
-        numbers_to_encode = MyUtils.add_to_string_array(numbers_to_encode, HUFFMAN_ADDITION);
 
-        for (String numb : numbers_to_encode) {
-            int number = Integer.valueOf(numb);
+        String[] cloned_numbers_to_encode =  numbers_to_encode.clone();
+        if (MainExecution.DPCM_for_Huffman) {
+            cloned_numbers_to_encode = CompressionUtils.DPCM(cloned_numbers_to_encode);
+            huffman_DPCM_data = new String[cloned_numbers_to_encode.length];
+
+            // Need to convert data to 12-bit binary numbers
+            for(int i=0; i<cloned_numbers_to_encode.length; i++) {
+                String cur_number = cloned_numbers_to_encode[i];
+                if(!is_bin_system) {cur_number = decimal_to_binary(cur_number);}
+                else {cur_number = MyUtils.binary_to_12_bits(cur_number);}
+                huffman_DPCM_data[i] = cur_number;
+            }
+        }
+        for (String numb : cloned_numbers_to_encode) {
+            int number = Integer.valueOf(numb) + HUFFMAN_ADDITION; // Adds constant to avoid negative numbers
+            //System.out.println(number);
             charFreqs[number]++; // Read each Number (represented as String) and record the frequencies
             if(debug) System.out.println(numb + ": " + charFreqs[number]);
         }
         charFreqs = CompressionUtils.make_frequencies_significant(charFreqs); // also forces Huffman to create encoding for all
         HuffmanTree tree = buildTree(charFreqs); // build tree
         create_huffman_tree(tree, new StringBuffer());
-        numbers_to_encode = MyUtils.add_to_string_array(numbers_to_encode, -HUFFMAN_ADDITION);
 
 //        String encoded = "";
 //        for (String number : numbers_to_encode) encoded += number_to_encoding_dict.get(number);

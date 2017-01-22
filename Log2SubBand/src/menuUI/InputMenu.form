@@ -61,7 +61,10 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jPanel7" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="btn_OK" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="btn_OK" max="-2" attributes="0"/>
+                          <Component id="run_DPCM_for_Huf" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -82,9 +85,13 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="codebook_panel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jPanel7" max="32767" attributes="0"/>
-                  <Component id="btn_OK" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jPanel7" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="run_DPCM_for_Huf" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <Component id="btn_OK" min="-2" pref="60" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace pref="20" max="32767" attributes="0"/>
           </Group>
@@ -776,7 +783,7 @@
                       <Component id="all_encoding_export_info_checkbox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="stats_for_every_file_checkbox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="7" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -804,7 +811,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="run_all_files_checkbox">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Run all files in the folder"/>
+            <Property name="text" type="java.lang.String" value="Run all csv files in the folder"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="all_encoding_export_info_checkbox">
@@ -835,6 +842,11 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_OKActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="run_DPCM_for_Huf">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="DPCM for Huffman"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
