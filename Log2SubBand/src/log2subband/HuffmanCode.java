@@ -142,18 +142,19 @@ public class HuffmanCode {
         charFreqs = CompressionUtils.make_frequencies_significant(charFreqs); // also forces Huffman to create encoding for all
         HuffmanTree tree = buildTree(charFreqs); // build tree
         create_huffman_tree(tree, new StringBuffer());
-
-        String encoded = "";
-        for (String number : numbers_to_encode) encoded += number_to_encoding_dict.get(number);
-        String decoded = decode_huffman(encoded, encoding_to_number_dict);
-        String[] decod = decoded.split(",[ ]*");
-
-        // CHECK that original data is same as one that was encoded and then decoded
         numbers_to_encode = MyUtils.add_to_string_array(numbers_to_encode, -HUFFMAN_ADDITION);
-        if (Arrays.equals(decod, numbers_to_encode)) System.out.println("\nSUCCESS -> DECODED STRING ENCODED SAME AS ORIGINAL STRING");
-        else {
-            System.err.println("nSOMETHING WENT WRONG -> DECODED STRING ENCODED RESULTED IN DIFFERENT STRING");
-            throw new Exception("");
-        }
+
+//        String encoded = "";
+//        for (String number : numbers_to_encode) encoded += number_to_encoding_dict.get(number);
+//        String decoded = decode_huffman(encoded, encoding_to_number_dict);
+//        String[] decod = decoded.split(",[ ]*");
+//
+//        // CHECK that original data is same as one that was encoded and then decoded
+//        numbers_to_encode = MyUtils.add_to_string_array(numbers_to_encode, -HUFFMAN_ADDITION);
+//        if (Arrays.equals(decod, numbers_to_encode)) System.out.println("\nSUCCESS -> DECODED STRING ENCODED SAME AS ORIGINAL STRING");
+//        else {
+//            System.err.println("nSOMETHING WENT WRONG -> DECODED STRING ENCODED RESULTED IN DIFFERENT STRING");
+//            throw new Exception("");
+//        }
     }
 }
