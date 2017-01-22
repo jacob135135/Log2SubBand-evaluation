@@ -90,6 +90,7 @@ public class HuffmanCodeTest {
     
     @Test
     public void init_ideal_huffman_dictionaries_test() throws Exception {
+        MainExecution.DPCM_for_Huffman = false;
         String[] input = new String[]{"1","2","3","4","5","6","7","8","9","10","15","20","40","80","120","131","131","131"};
         HuffmanCode.init_ideal_huffman_dictionaries(input);
 
@@ -107,6 +108,28 @@ public class HuffmanCodeTest {
         
         assertEquals(HuffmanCode.number_to_encoding_dict.get("2179"),"100");
         assertEquals(HuffmanCode.encoding_to_number_dict.get("100"),"2179");
+    }
+
+    @Test
+    public void init_ideal_huffman_dictionaries_test2() throws Exception {
+        String[] input = new String[]{"1","2","3","4","5","6","7","8","9","10","15","20","40","80","120","131","131","131"};
+        MainExecution.DPCM_for_Huffman = true;
+        HuffmanCode.init_ideal_huffman_dictionaries(input);
+
+        assertEquals(HuffmanCode.number_to_encoding_dict.get("2049"),"0");
+        assertEquals(HuffmanCode.encoding_to_number_dict.get("0"),"2049");
+
+        assertEquals(HuffmanCode.number_to_encoding_dict.get("2068"),"11110");
+        assertEquals(HuffmanCode.encoding_to_number_dict.get("11110"),"2068");
+
+        assertEquals(HuffmanCode.number_to_encoding_dict.get("2050"),"10000000001111");
+        assertEquals(HuffmanCode.encoding_to_number_dict.get("10000000001111"),"2050");
+
+        assertEquals(HuffmanCode.number_to_encoding_dict.get("2052"),"10111001111111");
+        assertEquals(HuffmanCode.encoding_to_number_dict.get("10111001111111"),"2052");
+
+        assertEquals(HuffmanCode.number_to_encoding_dict.get("2179"),"10101011010101");
+        assertEquals(HuffmanCode.encoding_to_number_dict.get("10101011010101"),"2179");
     }
 
     @Test

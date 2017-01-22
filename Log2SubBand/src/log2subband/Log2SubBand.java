@@ -172,6 +172,7 @@ public class Log2SubBand {
         System.out.println("Data in correct format: (" + LocalDateTime.now() + ")" );
         Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr, true);
         double subband_cr = CompressionUtils.get_log2subband_CR(input_str, result.get("compr"), bin_concat_input);
+        System.out.println("Started making export table: (" + LocalDateTime.now() + ")" );
         String[] export_data = MyUtils.make_single_param_export_table(input_str, result.get("cs_output"), huff_compr_rate, subband_cr);
         CSVUtils.write_CSV("stats_" + filename, export_data);
     }

@@ -141,6 +141,7 @@ public class InputMenu extends javax.swing.JFrame {
         all_encoding_export_info_checkbox = new javax.swing.JCheckBox();
         stats_for_every_file_checkbox = new javax.swing.JCheckBox();
         btn_OK = new javax.swing.JButton();
+        run_DPCM_for_Huf = new javax.swing.JCheckBox();
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
 
@@ -504,7 +505,7 @@ public class InputMenu extends javax.swing.JFrame {
             }
         });
 
-        run_all_files_checkbox.setText("Run all files in the folder");
+        run_all_files_checkbox.setText("Run all csv files in the folder");
 
         all_encoding_export_info_checkbox.setText("Export all encoding info");
 
@@ -544,7 +545,7 @@ public class InputMenu extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(all_encoding_export_info_checkbox)
                     .addComponent(stats_for_every_file_checkbox))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 7, Short.MAX_VALUE))
         );
 
         btn_OK.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -556,6 +557,8 @@ public class InputMenu extends javax.swing.JFrame {
                 btn_OKActionPerformed(evt);
             }
         });
+
+        run_DPCM_for_Huf.setText("DPCM for Huffman");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -572,7 +575,9 @@ public class InputMenu extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btn_OK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btn_OK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(run_DPCM_for_Huf))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -589,9 +594,12 @@ public class InputMenu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(codebook_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_OK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(run_DPCM_for_Huf)
+                        .addGap(5, 5, 5)
+                        .addComponent(btn_OK, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
@@ -674,17 +682,18 @@ public class InputMenu extends javax.swing.JFrame {
                 cont = false;
             }
 
+            if (run_DPCM_for_Huf.isSelected())
+                MainExecution.DPCM_for_Huffman = true;
             if(rad_btn_import_codebook.isSelected())
-            this.codebook_data = CSVUtils.parse_CSV(label_selected_codebook_file.getText());
-
+                this.codebook_data = CSVUtils.parse_CSV(label_selected_codebook_file.getText());
             if(all_parameters_checkbox.isSelected())
-            run_all_parameters = true;
+                run_all_parameters = true;
             if(run_all_files_checkbox.isSelected())
-            run_all_files = true;
+                run_all_files = true;
             if(all_encoding_export_info_checkbox.isSelected())
-            export_all_encoding_info = true;
+                export_all_encoding_info = true;
             if (stats_for_every_file_checkbox.isSelected())
-            give_stats_for_every_file = true;
+                give_stats_for_every_file = true;
             if (cont) {
                 try {MainExecution.main_execution(this);}
                 catch (Exception ex) {Logger.getLogger(InputMenu.class.getName()).log(Level.SEVERE, null, ex);}
@@ -738,6 +747,7 @@ public class InputMenu extends javax.swing.JFrame {
     private javax.swing.JRadioButton rad_btn_decimal_system;
     private javax.swing.JRadioButton rad_btn_import_codebook;
     private javax.swing.JRadioButton rad_btn_manual_entry;
+    private javax.swing.JCheckBox run_DPCM_for_Huf;
     private javax.swing.JCheckBox run_all_files_checkbox;
     private javax.swing.JCheckBox stats_for_every_file_checkbox;
     private javax.swing.JTextField text_field_input;

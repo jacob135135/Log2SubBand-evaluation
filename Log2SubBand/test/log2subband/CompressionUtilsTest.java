@@ -99,4 +99,20 @@ public class CompressionUtilsTest {
         result = get_band2(sample_bin_input);
         assertEquals("", result);
     }
+
+    @Test
+    public void DPCM_test1() {
+        String[] input = {"5","6","4","3","6","8","1"};
+        String[] expected = {"5","1","-2","-1","3","2","-7"};
+        String[] reslt = CompressionUtils.DPCM(input);
+        assertArrayEquals(expected, reslt);
+    }
+
+    @Test
+    public void DPCM_test2() {
+        String[] input = {"1","3","5","7","9","7","5","-2"};
+        String[] expected = {"1","2","2","2","2","-2","-2","-7"};
+        String[] reslt = CompressionUtils.DPCM(input);
+        assertArrayEquals(expected, reslt);
+    }
 }

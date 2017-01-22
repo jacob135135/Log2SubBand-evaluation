@@ -66,8 +66,12 @@ public class CompressionUtils {
         <br><b>to_return.get("cs_output");</b> Comma separated String of compressed values (i.e. overall_compressed with commas in between)
      */
     public static Map<String, String> perform_log2_sub_band(String[] raw_values, boolean data_ready) {
+        System.out.println("Starting performing log2SubBand: (" + LocalDateTime.now() + ")" );
         String ovrl_compr = "",cs_output = "";
 
+        int total_to_encode = raw_values.length;
+        int index = 0;
+        int percentage = 0;
         for (String raw_value : raw_values) {
             if (!data_ready) {
                 if(!is_bin_system) {raw_value = decimal_to_binary(raw_value);}
@@ -78,6 +82,11 @@ public class CompressionUtils {
             ovrl_compr += current_compressed;
             cs_output += "," + current_compressed;
             if (debug) System.out.println("Current compressed data: " + current_compressed);
+            index++;
+            if (total_to_encode > 100 && index%(total_to_encode/100) == 0) {
+                System.out.println("Approx " + percentage + "% complete");
+                percentage++;
+            }
         }
 
         Map<String, String> to_return = new HashMap<>();
@@ -114,7 +123,13 @@ public class CompressionUtils {
      * @param bin_concat_input
      */
     static double get_Huffman_CR(String cs_input, String bin_concat_input) {
-        String[] input_array = cs_input.split(",");
+        String[] input_array;
+        if (MainExecution.DPCM_for_Huffman) {
+            input_array = HuffmanCode.huffman_DPCM_data;
+        } else {
+           input_array = cs_input.split(",");
+        }
+
         String compressed = get_full_huffman_encoding(input_array);
         double compression_rate = compression_rate(compressed, bin_concat_input);
         if(debug) System.out.println("Huffman compressed: " + compressed);
@@ -146,8 +161,16 @@ public class CompressionUtils {
      */
     public static String get_full_huffman_encoding(String[] to_encode) {
         String encoded = "";
+        int total_to_encode = to_encode.length;
+        int index = 0;
+        int percentage = 0;
         for(String element : to_encode) {
             encoded += CompressionUtils.get_huffman_encoding(element);
+            index++;
+            if (total_to_encode > 100 && index%(total_to_encode/100) == 0) {
+                System.out.println("Approx " + percentage + "% complete");
+                percentage++;
+            }
         }
         return encoded;
     }
@@ -207,6 +230,7 @@ public class CompressionUtils {
         int i = 0;
         for (String raw_value : raw_values) {
             if (i%4098 == 0) {
+                // Assuming files have 4097 numbers in them
                 System.out.println("Got data info from file" + (i/4098 + 1) +" : (" + LocalDateTime.now() + ")" );
             }
             if(!is_bin_system) {raw_value = decimal_to_binary(raw_value);}
@@ -281,6 +305,16 @@ public class CompressionUtils {
         to_return.put("permutations", permutations);
         to_return.put("crs", permutations_crs);
 
+        return to_return;
+    }
+
+    public static String[] DPCM(String[] input) {
+        String[] to_return = new String[input.length];
+        to_return[0] = input[0];
+        for(int i=1;i<input.length;i++) {
+            int temp = Integer.parseInt(input[i]) - Integer.parseInt(input[i-1]);
+            to_return[i] = String.valueOf(temp);
+        }
         return to_return;
     }
 
