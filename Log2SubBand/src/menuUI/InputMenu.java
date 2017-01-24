@@ -79,6 +79,7 @@ public class InputMenu extends javax.swing.JFrame {
                     InputMenu the_menu = new InputMenu();
                     the_menu.setVisible(true);
                     the_menu.manual_input_panel.setVisible(false);
+                    the_menu.jPanel6.setVisible(false);
                     menu_created = true;
                 }
                 codebook_panel_csv_import.setVisible(false);
