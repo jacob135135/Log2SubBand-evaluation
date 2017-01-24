@@ -159,4 +159,18 @@ public class Log2SubBandTest {
         String expected = "000001010110010100001101010000000010001100000100010011000000000000000000000000000100010100100101000110001000010000100010000010010000001010000000100000000000000000000000";
         assertEquals(expected.length(), compressed.length());
     }
+
+    @Test
+    public void Huffman_CR_6_test() {
+        String[] input = new String[]{"000000000000","000000000000","000000000000","000000000000","000000000000","000000000000"};
+        MainExecution.is_bin_system = true;
+
+        String bin_concat_input = "";
+        for (String s : input) bin_concat_input += s;
+
+        String compressed = CompressionUtils.perform_log2_sub_band(input, false).get("compr");
+        double CR = CompressionUtils.compression_rate(compressed,bin_concat_input);
+        double expected = 6.0;
+        assertTrue(expected == CR);
+    }
 }

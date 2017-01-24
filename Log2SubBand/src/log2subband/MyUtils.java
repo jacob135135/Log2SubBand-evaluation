@@ -58,7 +58,9 @@ public class MyUtils {
                 result_string += "," + CompressionUtils.get_huffman_encoding(orig[i]);
             }
         }
-        result_string += "\n\n Log2SubBand CR: " + subband_cr  + "\n Huffman CR: " + huff_compr_rate;
+        String huf_mode = "Huffman CR: ";
+        if (MainExecution.DPCM_for_Huffman) huf_mode = "DPCM + Huffman CR: ";
+        result_string += "\n\n Log2SubBand CR: " + subband_cr  + "\n " + huf_mode + huff_compr_rate;
         result_string += "\n\n " + MainExecution.running_setting;
         result_string += "\n\n Data files imported: " + MainExecution.data_files;
         String[] result = result_string.split(",");
