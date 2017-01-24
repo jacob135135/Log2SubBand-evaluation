@@ -161,6 +161,7 @@ public class Log2SubBandTest {
     }
 
     @Test
+    // CR of 6: output always 00 => 12/2 = 6
     public void Huffman_CR_6_test() {
         String[] input = new String[]{"000000000000","000000000000","000000000000","000000000000","000000000000","000000000000"};
         MainExecution.is_bin_system = true;
@@ -171,6 +172,124 @@ public class Log2SubBandTest {
         String compressed = CompressionUtils.perform_log2_sub_band(input, false).get("compr");
         double CR = CompressionUtils.compression_rate(compressed,bin_concat_input);
         double expected = 6.0;
+        assertTrue(expected == CR);
+    }
+
+    @Test
+    // WORST CR: output always 14bits => first (most significant) band has to always change
+    public void Huffman_worst_CR_test() {
+        String[] input = new String[]{"100000000000","000000000000","100000000000","000000000000","100000000000","000000000000"};
+        MainExecution.is_bin_system = true;
+
+        String bin_concat_input = "";
+        for (String s : input) bin_concat_input += s;
+
+        String compressed = CompressionUtils.perform_log2_sub_band(input, false).get("compr");
+        double CR = CompressionUtils.compression_rate(compressed,bin_concat_input);
+        CR = Math.round(CR * 1000)/1000.0;
+        double expected = 0.857;
+        assertTrue(expected == CR);
+    }
+
+    @Test
+    // CR of 1.2: output average length 10 => 12/10 = 1.2 This is achieved by always changing middle band
+    public void Huffman_1p2_CR_test() {
+        String[] input = new String[]{"000010000000","000000000000","000010000000","000000000000","000010000000","000000000000"};
+        MainExecution.is_bin_system = true;
+
+        String bin_concat_input = "";
+        for (String s : input) bin_concat_input += s;
+
+        String compressed = CompressionUtils.perform_log2_sub_band(input, false).get("compr");
+        double CR = CompressionUtils.compression_rate(compressed,bin_concat_input);
+        double expected = 1.2;
+        assertTrue(expected == CR);
+    }
+
+    @Test
+     // CR of 2: output average length 6 => 12/6 = 2 This is achieved by alternating least significant band
+    public void Huffman_2_CR_test() {
+        String[] input = new String[]{"000000000001","000000000000","000000000001","000000000000","000000000001","000000000000"};
+        MainExecution.is_bin_system = true;
+
+        String bin_concat_input = "";
+        for (String s : input) bin_concat_input += s;
+
+        String compressed = CompressionUtils.perform_log2_sub_band(input, false).get("compr");
+        double CR = CompressionUtils.compression_rate(compressed,bin_concat_input);
+        double expected = 2.0;
+        assertTrue(expected == CR);
+    }
+
+    @Test
+    // CR of 1.5: output average length 8 => 12/8 = 1.5 This is achieved by alternating changing least significant band
+    // and  middle band. i.e on average: length 6 once + length 10 once
+    public void Huffman_1p5_CR_test() {
+        String[] input = new String[]{"000010000000","000010000001","000000000000","000000000001","000010000000","000010000001"};
+        MainExecution.is_bin_system = true;
+
+        String bin_concat_input = "";
+        for (String s : input) bin_concat_input += s;
+
+        String compressed = CompressionUtils.perform_log2_sub_band(input, false).get("compr");
+        double CR = CompressionUtils.compression_rate(compressed,bin_concat_input);
+        double expected = 1.5;
+        assertTrue(expected == CR);
+    }
+
+    @Test
+    // CR of 3: output average length 4 => 12/4 = 3 This is achieved by having half consecutive values same and half with least
+    // significant nibble different
+    public void Huffman_3_CR_test() {
+        String[] input = new String[]{"000000000000","000000000000","000000000001","000000000000","000000000000","000000000001"};
+        MainExecution.is_bin_system = true;
+
+        String bin_concat_input = "";
+        for (String s : input) bin_concat_input += s;
+
+        String compressed = CompressionUtils.perform_log2_sub_band(input, false).get("compr");
+        double CR = CompressionUtils.compression_rate(compressed,bin_concat_input);
+        double expected = 3.0;
+        assertTrue(expected == CR);
+    }
+
+    @Test
+    // CR of 3: output average length 4 => 12/4 = 3 This is achieved by alternating least significant band half the time
+    public void Huffman_dec_3_CR_test() {
+        String[] input = new String[]{"0","0","1","0","0","1"};
+        int input_length = 6*12;
+
+        String bin_concat_input = "";
+        for (String s : input) bin_concat_input += "000000000000"; // need to pretend input is 12 bits long
+
+        MainExecution.debug = true;
+        String compressed = CompressionUtils.perform_log2_sub_band(input, false).get("compr");
+        MainExecution.debug = false;
+        double CR = CompressionUtils.compression_rate(compressed,bin_concat_input);
+        double expected = 3.0;
+        System.out.println("CR: " + CR);
+        assertTrue(expected == CR);
+    }
+
+    @Test
+    // CR of 2.5: output average length 4.8 => 12/4.8 = 2.5
+    // Data has ON AVERAGE (in terms of consecutive numbers):
+    // 40% of them are the same, 50% differ only in last band (difference btw 2 consecutive numbers at most 16)
+    // 10% of them differ by middle and least significant band
+    // no band difference by 3 bands
+    public void Huffman_dec_2p5_CR_test() {
+        String[] input = new String[]{"0","0","1","0","0","1","0","0","1","17"};
+        int input_length = 6*12;
+
+        String bin_concat_input = "";
+        for (String s : input) bin_concat_input += "000000000000"; // need to pretend input is 12 bits long
+
+        MainExecution.debug = true;
+        String compressed = CompressionUtils.perform_log2_sub_band(input, false).get("compr");
+        MainExecution.debug = false;
+        double CR = CompressionUtils.compression_rate(compressed,bin_concat_input);
+        double expected = 2.5;
+        System.out.println("CR: " + CR);
         assertTrue(expected == CR);
     }
 }
