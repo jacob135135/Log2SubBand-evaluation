@@ -12,7 +12,9 @@ import com.opencsv.CSVReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -26,9 +28,9 @@ public class Log2SubBand {
         
     // position 0 is most signifficant bit, position n is least signifficant bit
     // static so that they can be referenced and changed in get_compressed_data method 
-    static int previous_digit_pos2 = 0;
-    static int previous_digit_pos1 = 0; 
-    static int previous_digit_pos0 = 0;
+    static char previous_digit_pos2 = '0';
+    static char previous_digit_pos1 = '0'; 
+    static char previous_digit_pos0 = '0';
     static boolean debug = false;
     
     /**
@@ -284,5 +286,13 @@ public class Log2SubBand {
         System.out.println("Decompressed data: " + decode_string(overall_compressed));
         
     }
-    
+
+    static void single_subband_compress(String[] raw_val_arr, String input_str, String bin_concat_input, double huff_compr_rate, String filename) {
+        System.out.println("Data in correct format: (" + LocalDateTime.now() + ")" );
+        Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr, true);
+        double subband_cr = CompressionUtils.get_log2subband_CR(input_str, result.get("compr"), bin_concat_input);
+        System.out.println("Started making export table: (" + LocalDateTime.now() + ")" );
+        String[] export_data = MyUtils.make_single_param_export_table(input_str, result.get("cs_output"), huff_compr_rate, subband_cr);
+        CSVUtils.write_CSV("stats_" + filename, export_data);  
+    }
 }

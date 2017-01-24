@@ -34,6 +34,9 @@ public class Log2SubBandTest {
     
     @Before
     public void setUp() {
+        Log2SubBand.previous_digit_pos2 = '0';
+        Log2SubBand.previous_digit_pos1 = '0'; 
+        Log2SubBand.previous_digit_pos0 = '0';
         MainExecution.is_bin_system = false;
     }
     
@@ -81,15 +84,17 @@ public class Log2SubBandTest {
 
         String input = "";
         for (String raw_value : file_contents) {
-            raw_value = decimal_to_binary(raw_value);
-            input += raw_value + ",";
+            input += Log2SubBand.prepend_zeroes_if_needed(raw_value) + ",";
         }
         input = input.substring(0,input.length()-1);
         String[] input_data = MyUtils.CSstring_to_array(input);
+        
         MainExecution.debug = true;
         String compressed = CompressionUtils.perform_log2_sub_band(input_data, true).get("compr");
         MainExecution.debug = false;
         String expected = "000001010110010100001101010000000010001100000100010011000000000000000000000000000100010100100101000110001000010000100010000010010000001010000000100000000000000000000000";
-        assertEquals(expected.length(), compressed.length());
+        System.out.println("IN THESIS: " + expected + " length: " + expected.length());
+        System.out.println("I GOT: " + compressed + " length: " + compressed.length());
+        assertEquals(expected, compressed);
     }
 }

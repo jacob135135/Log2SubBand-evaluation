@@ -72,7 +72,7 @@ public class MainExecution {
         System.out.println("Starting to get Huffman CR: (" + LocalDateTime.now() + ")" );
         double huff_compr_rate = CompressionUtils.get_Huffman_CR(cs_input_string, bin_concat_input);
 
-        running_setting = "RUNNING: RUNNING: ORIGINAL LOG2SUBBAND";
+        running_setting = "RUNNING: ORIGINAL LOG2SUBBAND";
         System.out.println("Starting to run parameter: (" + LocalDateTime.now() + ")" );
         Log2SubBand.single_subband_compress(raw_values_array, cs_input_string,bin_concat_input, huff_compr_rate, filename);
 

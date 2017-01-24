@@ -72,12 +72,8 @@ public class CompressionUtils {
         int index = 0;
         int percentage = 0;
         for (String raw_value : raw_values) {
-            if (!data_ready) {
-                if(!is_bin_system) {raw_value = decimal_to_binary(raw_value);}
-                else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
-            }
-
-            String current_compressed = Log2SubBand.log2_sub_band_compress_number(raw_value);
+            raw_value = Log2SubBand.prepend_zeroes_if_needed(raw_value);
+            String current_compressed = Log2SubBand.get_compressed_data(raw_value);
             ovrl_compr += current_compressed;
             cs_output += "," + current_compressed;
             if (debug) System.out.println("Current compressed data: " + current_compressed);
