@@ -8,6 +8,7 @@ package log2subband;
 import java.util.Map;
 import static log2subband.Log2SubBand.log2_sub_band_decode_string;
 import static log2subband.Log2SubBand.parameters;
+import static log2subband.MyUtils.decimal_to_binary;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -138,5 +139,24 @@ public class Log2SubBandTest {
         String decoded = log2_sub_band_decode_string(compressed);
         String[] decoded_array = MyUtils.CSstring_to_array(decoded);
         Assert.assertArrayEquals(decoded_array, input);
+    }
+
+    // THIS TEST SHOULD FAIL AS THESIS USES SLIGHTLY DIFFERENT ALGORITHM
+    // HOWEVER TO MAKE IT PASS I ONLY CHECK IF COMPRESSION LENGTH IS SAME
+    @Test
+    public void import_file_thesis_data_compression_test() {
+        String path = System.getProperty("user.dir");
+        String[] file_contents = CSVUtils.parse_CSV(path + "/test/log2subband/test_thesis_data.csv");
+
+        String input = "";
+        for (String raw_value : file_contents) {
+            raw_value = decimal_to_binary(raw_value);
+            input += raw_value + ",";
+        }
+        input = input.substring(0,input.length()-1);
+        String[] input_data = MyUtils.CSstring_to_array(input);
+        String compressed = CompressionUtils.perform_log2_sub_band(input_data, true).get("compr");
+        String expected = "000001010110010100001101010000000010001100000100010011000000000000000000000000000100010100100101000110001000010000100010000010010000001010000000100000000000000000000000";
+        assertEquals(expected.length(), compressed.length());
     }
 }

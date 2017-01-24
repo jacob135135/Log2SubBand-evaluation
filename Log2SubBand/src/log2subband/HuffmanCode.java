@@ -74,7 +74,7 @@ public class HuffmanCode {
             HuffmanLeaf leaf = (HuffmanLeaf)tree;
 
             number_to_encoding_dict.put(String.valueOf(leaf.value), String.valueOf(prefix));
-            if(debug) System.out.println("ADDING number: " + leaf.value + " ; encoding: " + prefix);
+            //if(debug) System.out.println("ADDING number: " + leaf.value + " ; encoding: " + prefix);
             encoding_to_number_dict.put(String.valueOf(prefix), String.valueOf(leaf.value));
 
         } else if (tree instanceof HuffmanNode) {
