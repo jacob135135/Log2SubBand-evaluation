@@ -3,7 +3,6 @@ package log2subband;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.Map;
-import static log2subband.Log2SubBand.parameters;
 import menuUI.InputMenu;
 
 /**
@@ -35,15 +34,10 @@ public class MainExecution {
                 String cs_input_string = data_info.get("cs_input");
                 CompressionUtils.set_up_Huffman(input_menu.get_codebook_data(), raw_values_array);
                 double huff_compr_rate = CompressionUtils.get_Huffman_CR(cs_input_string, bin_concat_input);
-                if (!input_menu.get_run_all_parameters()) {
-                    parameters = input_menu.get_run_parameters();
-                    running_setting = "RUNNING: " + parameters[0] + "`" + parameters[1] + "`" + parameters[2] + "`" + parameters[3];
+
+                    running_setting = "RUNNING: ORIGINAL LOG2SUBBAND";
                     Log2SubBand.single_subband_compress(raw_values_array, cs_input_string,bin_concat_input, huff_compr_rate, cur_name);
-                } else {
-                    running_setting = "ALL PARAMETERS";
-                    Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, huff_compr_rate, cur_name);
-                }
-                CSVUtils.export_Huff_codebook(cur_name);
+                    
                 if(input_menu.get_open_exported()) MyUtils.open_file("stats_" + cur_name+ ".csv");
             }
         }
@@ -78,16 +72,10 @@ public class MainExecution {
         System.out.println("Starting to get Huffman CR: (" + LocalDateTime.now() + ")" );
         double huff_compr_rate = CompressionUtils.get_Huffman_CR(cs_input_string, bin_concat_input);
 
-        if (!input_menu.get_run_all_parameters()) {
-            parameters = input_menu.get_run_parameters();
-            running_setting = "RUNNING: " + parameters[0] + "`" + parameters[1] + "`" + parameters[2] + "`" + parameters[3];
-            System.out.println("Starting to run parameter: (" + LocalDateTime.now() + ")" );
-            Log2SubBand.single_subband_compress(raw_values_array, cs_input_string,bin_concat_input, huff_compr_rate, filename);
-        } else {
-            running_setting = "ALL PARAMETERS";
-            System.out.println("Starting to run all parameters: (" + LocalDateTime.now() + ")" );
-            Log2SubBand.all_permutations_subband_compress(raw_values_array, cs_input_string, bin_concat_input, huff_compr_rate, filename);
-        }
+        running_setting = "RUNNING: RUNNING: ORIGINAL LOG2SUBBAND";
+        System.out.println("Starting to run parameter: (" + LocalDateTime.now() + ")" );
+        Log2SubBand.single_subband_compress(raw_values_array, cs_input_string,bin_concat_input, huff_compr_rate, filename);
+
         CSVUtils.export_Huff_codebook(filename);
         System.out.println("Huffman CR: " + huff_compr_rate);
         if(input_menu.get_open_exported()) MyUtils.open_file("stats_" + filename+".csv");

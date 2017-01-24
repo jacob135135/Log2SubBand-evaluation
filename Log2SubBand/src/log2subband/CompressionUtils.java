@@ -8,7 +8,6 @@ import static log2subband.HuffmanCode.number_to_encoding_dict;
 import static log2subband.HuffmanCode.encoding_to_number_dict;
 import static log2subband.MainExecution.debug;
 import static log2subband.MainExecution.is_bin_system;
-import static log2subband.Log2SubBand.parameters;
 import static log2subband.MyUtils.binary_to_12_bits;
 import static log2subband.MyUtils.binary_to_decimal;
 import static log2subband.MyUtils.decimal_to_binary;
@@ -175,55 +174,6 @@ public class CompressionUtils {
         return encoded;
     }
 
-    /**
-     * WARNING: returns "" if string is not long enough
-     * Gets least significant band
-     * Uses static <code>parameters</code> variable and return substring of input.
-     * Returns last <code>parameters[2]</code> digits (represented as String) of input
-     * @param binary_input String input of length 12
-     * @return Last <code>parameters[2]</code> digits of input
-     */
-    static String get_band3(String binary_input) {
-        if (binary_input.length() > 11) return binary_input.substring(parameters[0] + parameters[1] + parameters[2], 12);
-        else {System.out.println("NO BAND3 FOUND"); return "";}
-    }
-    
-     /**
-     * WARNING: returns "" if string is not long enough
-     * Gets least significant band
-     * Uses static <code>parameters</code> variable and return substring of input.
-     * Returns last <code>parameters[2]</code> digits (represented as String) of input
-     * @param binary_input String input of length 12
-     * @return Last <code>parameters[2]</code> digits of input
-     */
-    static String get_band2(String binary_input) {
-        if (binary_input.length() > 11) return binary_input.substring(parameters[0] + parameters[1], 12 - parameters[3]);
-        else {System.out.println("NO BAND2 FOUND"); return "";}
-    }
-
-    /**
-     * WARNING: returns "" if string is not long enough
-     * Uses static <code>parameters</code> variable and return substring of input.
-     * Returns middle <code>parameters[1]</code> digits (represented as String) of input
-     * @param binary_input String input of length 12
-     * @return Input string without first <code>parameters[0]</code> digits and last <code>parameters[2]</code> digits of input
-     */
-    static String get_band1(String binary_input) {
-        if (binary_input.length() > (11 - parameters[2])) return binary_input.substring(parameters[0], parameters[0] + parameters[1]);
-        else {System.out.println("NO BAND1 FOUND"); return "";}
-    }
-
-    /**
-     * ASSUMES input is of length 12
-     * Uses static <code>parameters</code> variable and return substring of input.
-     * Returns middle <code>parameters[1]</code> digits (represented as String) of input
-     * @param binary_input String input of length 12
-     * @return First <code>parameters[0]</code> digits of input string
-     */
-    static String get_band0(String binary_input) {
-        return binary_input.substring(0, parameters[0]);
-    }
-    
     static Map<String, String> GetDataInfo(String[] raw_values) {
         String bin_concat_input = "", cs_input = "";
 
@@ -262,50 +212,6 @@ public class CompressionUtils {
             HuffmanCode.init_ideal_huffman_dictionaries(raw_values_array);
             System.out.println("Ideal Huff dictionary : (" + LocalDateTime.now() + ")" );
         }
-    }
-
-    /**
-     * Runs Log2subband on every valid permutation.
-     * Every permutation has to have sum of all bands exactly 12.
-     * @return Map<String, List<String>> all valid permutations and their log2subband compression rates
-     */
-    static Map<String, String[]> run_every_permutation(String[] raw_val_arr, String bin_concat_input) {
-        String[] permutations = new String[455];
-        String[] permutations_crs = new String[455];
-        int index = 0;
-        
-        for (int i=0; i<raw_val_arr.length; i++) {
-            if(!is_bin_system) {raw_val_arr[i] = decimal_to_binary(raw_val_arr[i]);}
-            else {raw_val_arr[i] = MyUtils.binary_to_12_bits(raw_val_arr[i]);}
-        }
-        
-        
-
-        for (int a=0; a<13; a++) {
-            for (int b=0; a+b<13; b++) {
-                for (int c=0; a+b+c<13; c++) {
-                    for (int d=0; a+b+c+d<13; d++) {
-                        if (a+b+c+d == 12) {
-                            permutations[index] = (a + "'" + b + "'" + c + "'" + d);
-                            parameters = new int[]{a, b, c, d};
-                            System.out.println("Permutation: " + permutations[index] + "("  + LocalDateTime.now() + ")" );
-                            Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr, true);
-                            double compression_rate = compression_rate(result.get("compr"), bin_concat_input);
-                            permutations_crs[index] = compression_rate + "";
-                            System.out.println("permutation: " + permutations[index] + " CR: " + compression_rate);
-                            index++;
-                            System.out.println(index + " of 455 permutations completed");
-                        }
-                    }
-                }
-            }
-        }
-
-        Map<String, String[]> to_return = new HashMap<>();
-        to_return.put("permutations", permutations);
-        to_return.put("crs", permutations_crs);
-
-        return to_return;
     }
 
     public static String[] DPCM(String[] input) {

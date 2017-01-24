@@ -8,7 +8,6 @@ package log2subband;
 import static log2subband.CompressionUtils.get_band0;
 import static log2subband.CompressionUtils.get_band1;
 import static log2subband.CompressionUtils.get_band2;
-import static log2subband.Log2SubBand.parameters;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -38,8 +37,6 @@ public class CompressionUtilsTest {
     
     @Before
     public void setUp() {
-        Log2SubBand.parameters = new int[] {4,4,4,0};
-        Log2SubBand.update_previous_bands(parameters);
         sample_bin_input = "010110101110";
     }
     
@@ -67,8 +64,6 @@ public class CompressionUtilsTest {
     
     @Test
     public void bands_test0() {
-        Log2SubBand.parameters = new int[] {5,0,7,0};
-        
         result = get_band0(sample_bin_input);
         assertEquals("01011", result);
         result = get_band1(sample_bin_input);
@@ -79,8 +74,6 @@ public class CompressionUtilsTest {
     
     @Test
     public void bands_test1() {
-        Log2SubBand.parameters = new int[] {0,6,6,0};
-        
         result = get_band0(sample_bin_input);
         assertEquals("", result);
         result = get_band1(sample_bin_input);
@@ -91,7 +84,6 @@ public class CompressionUtilsTest {
     
     @Test
     public void bands_test2() {
-        Log2SubBand.parameters = new int[] {1,11,0,0};
         result = get_band0(sample_bin_input);
         assertEquals("0", result);
         result = get_band1(sample_bin_input);
