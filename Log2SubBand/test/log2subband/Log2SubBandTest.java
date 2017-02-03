@@ -9,6 +9,7 @@ import java.util.Map;
 import static log2subband.Log2SubBand.log2_sub_band_decode_string;
 import static log2subband.Log2SubBand.parameters;
 import static log2subband.MyUtils.decimal_to_binary;
+import menuUI.InputMenu;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -39,6 +40,9 @@ public class Log2SubBandTest {
         parameters = new int[]{4,4,4,0};
         Log2SubBand.update_previous_bands(parameters);
         MainExecution.is_bin_system = false;
+        InputMenu.export_all_encoding_info = true;
+        MainExecution.run_all_parameters = false;
+        MainExecution.run_all_files = false;
     }
     
     @After
