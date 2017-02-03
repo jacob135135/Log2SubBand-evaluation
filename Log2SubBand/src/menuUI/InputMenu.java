@@ -671,6 +671,10 @@ public class InputMenu extends javax.swing.JFrame {
                 cont = false;
             }
 
+            MainExecution.run_all_files = false;
+            MainExecution.DPCM_for_Huffman = false;
+            MainExecution.give_stats_for_every_file = false;
+            MainExecution.run_all_parameters = false;
             if (run_DPCM_for_Huf.isSelected())
                 MainExecution.DPCM_for_Huffman = true;
             if(rad_btn_import_codebook.isSelected())

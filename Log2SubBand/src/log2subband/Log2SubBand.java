@@ -178,7 +178,8 @@ public class Log2SubBand {
     }
 
     static void all_permutations_subband_compress(String[] raw_val_arr, String input_str, String bin_concat_input, double huff_compr_rate, String filename) {
-        Map<String, String[]> result = CompressionUtils.run_every_permutation(raw_val_arr, bin_concat_input);
+        int bin_concat_input_size =  raw_val_arr.length * 12; // Every number is array is converted to 12 bit binary,
+        Map<String, String[]> result = CompressionUtils.run_every_permutation(raw_val_arr, bin_concat_input_size);
         String[] export_data = MyUtils.make_all_permutations_export_table(result.get("permutations"), result.get("crs"), huff_compr_rate);
         CSVUtils.write_CSV("stats_" + filename, export_data);
     }
