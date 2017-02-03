@@ -86,6 +86,10 @@ public class MainExecution {
             running_setting = "RUNNING: " + parameters[0] + "`" + parameters[1] + "`" + parameters[2] + "`" + parameters[3];
             System.out.println("Starting to run parameter: (" + LocalDateTime.now() + ")" );
             Log2SubBand.single_subband_compress(raw_values_array, cs_input_string,bin_concat_input, huff_compr_rate, filename);
+            System.out.println("HEADER 00 count: " + Log2SubBand.header00_count);
+            System.out.println("HEADER 01 count: " + Log2SubBand.header01_count);
+            System.out.println("HEADER 10 count: " + Log2SubBand.header10_count);
+            System.out.println("HEADER 11 count: " + Log2SubBand.header11_count);
         } else {
             running_setting = "ALL PARAMETERS";
             System.out.println("Starting to run all parameters: (" + LocalDateTime.now() + ")" );

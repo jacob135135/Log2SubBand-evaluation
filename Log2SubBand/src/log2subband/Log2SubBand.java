@@ -10,6 +10,7 @@ package log2subband;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import static log2subband.CompressionUtils.compression_rate;
 import static log2subband.MainExecution.debug;
 import static log2subband.CompressionUtils.get_band0;
 import static log2subband.CompressionUtils.get_band1;
@@ -30,6 +31,11 @@ public class Log2SubBand {
     static String previous_band3;
     static int[] parameters;
     
+    public static int header00_count = 0;
+    public static int header01_count = 0;
+    public static int header10_count = 0;
+    public static int header11_count = 0;
+
     /**
      * Takes a BINARY number in string representation (e.g. "10") and returns compressed binary version based
        on real time-data (same number will be encoded differently in various inputs)
@@ -54,19 +60,19 @@ public class Log2SubBand {
         if (band0.equals(previous_band0)) {
             if (band1.equals(previous_band1)){
                 if (band2.equals(previous_band2)) {
-                    return_value = "00";
+                    return_value = "00"; header00_count++;
                     if (parameters[3] != 0) return_value += band3;
                 }
                 else {
-                    return_value = "01" + band2;
+                    return_value = "01" + band2; header01_count++;
                     if (parameters[3] != 0) return_value += band3;
                 }
             } else {
-                return_value = "10" + band1 + band2;
+                return_value = "10" + band1 + band2; header10_count++;
                 if (parameters[3] != 0) return_value += band3;
             }
         } else {
-            return_value = "11" + band0 + band1 + band2;
+            return_value = "11" + band0 + band1 + band2; header11_count++;
             if (parameters[3] != 0) return_value += band3;
         }
         previous_band0 = band0;
@@ -171,7 +177,10 @@ public class Log2SubBand {
         }
         System.out.println("Data in correct format: (" + LocalDateTime.now() + ")" );
         Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr, true);
-        double subband_cr = CompressionUtils.get_log2subband_CR(input_str, result.get("compr"), bin_concat_input);
+        int bin_concat_input_size =  raw_val_arr.length * 12;
+        int compr_length = Integer.valueOf(result.get("compressed_length"));
+        double subband_cr = compression_rate(compr_length, bin_concat_input_size);
+
         System.out.println("Started making export table: (" + LocalDateTime.now() + ")" );
         String[] export_data = MyUtils.make_single_param_export_table(input_str, result.get("cs_output"), huff_compr_rate, subband_cr);
         CSVUtils.write_CSV("stats_" + filename, export_data);

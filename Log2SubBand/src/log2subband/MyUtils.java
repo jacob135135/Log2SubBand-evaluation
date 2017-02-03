@@ -58,11 +58,17 @@ public class MyUtils {
                 result_string += "," + CompressionUtils.get_huffman_encoding(orig[i]);
             }
         }
+        int total_headers = Log2SubBand.header00_count + Log2SubBand.header01_count + Log2SubBand.header10_count + Log2SubBand.header11_count;
+
         String huf_mode = "Huffman CR: ";
         if (MainExecution.DPCM_for_Huffman) huf_mode = "DPCM + Huffman CR: ";
         result_string += "\n\n Log2SubBand CR: " + subband_cr  + "\n " + huf_mode + huff_compr_rate;
         result_string += "\n\n " + MainExecution.running_setting;
         result_string += "\n\n Data files imported: " + MainExecution.data_files;
+        result_string += "\n\nHEADER 00 count: " + Log2SubBand.header00_count + "(" + Log2SubBand.header00_count*(100.0)/total_headers + "%)";
+        result_string += "\nHEADER 01 count: " + Log2SubBand.header01_count + "(" + Log2SubBand.header01_count*(100.0)/total_headers + "%)";
+        result_string += "\nHEADER 10 count: " + Log2SubBand.header10_count + "(" + Log2SubBand.header10_count*(100.0)/total_headers + "%)";
+        result_string += "\nHEADER 11 count: " + Log2SubBand.header11_count + "(" + Log2SubBand.header11_count*(100.0)/total_headers + "%)";
         String[] result = result_string.split(",");
         return result;
     }

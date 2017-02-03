@@ -12,6 +12,7 @@ import static log2subband.Log2SubBand.parameters;
 import static log2subband.MyUtils.binary_to_12_bits;
 import static log2subband.MyUtils.binary_to_decimal;
 import static log2subband.MyUtils.decimal_to_binary;
+import menuUI.InputMenu;
 
 /**
  * @author JAKUB
@@ -81,7 +82,7 @@ public class CompressionUtils {
 
             String current_compressed = Log2SubBand.log2_sub_band_compress_number(raw_value);
             compressed_size += current_compressed.length();
-            if (!(MainExecution.run_all_parameters || MainExecution.run_all_files)) {
+            if (!(MainExecution.run_all_parameters || MainExecution.run_all_files) || InputMenu.export_all_encoding_info) {
                 ovrl_compr += current_compressed;
                 cs_output += "," + current_compressed;
             }
@@ -97,10 +98,10 @@ public class CompressionUtils {
         }
 
         Map<String, String> to_return = new HashMap<>();
-        if (MainExecution.run_all_parameters || MainExecution.run_all_files) {
+        if ((MainExecution.run_all_parameters || MainExecution.run_all_files) && !InputMenu.export_all_encoding_info) {
             cs_output = "0";
-            to_return.put("compressed_length", compressed_size + "");
         }
+        to_return.put("compressed_length", compressed_size + "");
         to_return.put("compr", ovrl_compr);
         to_return.put("cs_output", cs_output.substring(1));
 
@@ -259,14 +260,14 @@ public class CompressionUtils {
             if (i%4098 == 0) {
                 // Assuming files have 4097 numbers in them
                 System.out.println("Got data info from file" + (i/4098 + 1) +" : (" + LocalDateTime.now() + ")" );
-                cs_input += "," + temp_cs;
+                cs_input += temp_cs;
                 bin_concat_input += temp_bin;
                 temp_cs = "";
                 temp_bin = "";
             }
             i++;
         }
-        cs_input += "," + temp_cs;
+        cs_input += temp_cs;
         bin_concat_input += temp_bin;
 
         Map<String, String> to_return = new HashMap<>();
