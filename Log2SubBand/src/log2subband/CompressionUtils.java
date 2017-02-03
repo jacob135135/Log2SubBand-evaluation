@@ -88,7 +88,7 @@ public class CompressionUtils {
             }
             if (debug) System.out.println("Current compressed data: " + current_compressed);
 
-            if (MainExecution.run_all_parameters || MainExecution.run_all_files) {
+            if (!MainExecution.run_all_parameters) {
                 index++;
                 if (total_to_encode > 100 && index%(total_to_encode/100) == 0) {
                     System.out.println("Approx " + percentage + "% complete (Step 2 of 2)");
