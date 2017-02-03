@@ -81,13 +81,13 @@ public class CompressionUtils {
 
             String current_compressed = Log2SubBand.log2_sub_band_compress_number(raw_value);
             compressed_size += current_compressed.length();
-            if (!MainExecution.run_all_parameters) {
+            if (!(MainExecution.run_all_parameters || MainExecution.run_all_files)) {
                 ovrl_compr += current_compressed;
                 cs_output += "," + current_compressed;
             }
             if (debug) System.out.println("Current compressed data: " + current_compressed);
 
-            if (!MainExecution.run_all_parameters) {
+            if (MainExecution.run_all_parameters || MainExecution.run_all_files) {
                 index++;
                 if (total_to_encode > 100 && index%(total_to_encode/100) == 0) {
                     System.out.println("Approx " + percentage + "% complete (Step 2 of 2)");
@@ -97,7 +97,7 @@ public class CompressionUtils {
         }
 
         Map<String, String> to_return = new HashMap<>();
-        if (MainExecution.run_all_parameters) {
+        if (MainExecution.run_all_parameters || MainExecution.run_all_files) {
             cs_output = "0";
             to_return.put("compressed_length", compressed_size + "");
         }
