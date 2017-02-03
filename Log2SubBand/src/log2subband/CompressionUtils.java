@@ -82,10 +82,13 @@ public class CompressionUtils {
             ovrl_compr += current_compressed;
             cs_output += "," + current_compressed;
             if (debug) System.out.println("Current compressed data: " + current_compressed);
-            index++;
-            if (total_to_encode > 100 && index%(total_to_encode/100) == 0) {
-                System.out.println("Approx " + percentage + "% complete");
-                percentage++;
+
+            if (!MainExecution.run_all_parameters) {
+                index++;
+                if (total_to_encode > 100 && index%(total_to_encode/100) == 0) {
+                    System.out.println("Approx " + percentage + "% complete (Step 2 of 2)");
+                    percentage++;
+                }
             }
         }
 
@@ -164,12 +167,15 @@ public class CompressionUtils {
         int total_to_encode = to_encode.length;
         int index = 0;
         int percentage = 0;
+
         for(String element : to_encode) {
             encoded += CompressionUtils.get_huffman_encoding(element);
-            index++;
-            if (total_to_encode > 100 && index%(total_to_encode/100) == 0) {
-                System.out.println("Approx " + percentage + "% complete");
-                percentage++;
+            if (!MainExecution.run_all_parameters) {
+                index++;
+                if (total_to_encode > 100 && index%(total_to_encode/100) == 0) {
+                    System.out.println("Approx " + percentage + "% complete (Step 1 of 2)");
+                    percentage++;
+                }
             }
         }
         return encoded;

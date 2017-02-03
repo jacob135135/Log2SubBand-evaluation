@@ -30,10 +30,7 @@ public class InputMenu extends javax.swing.JFrame {
     private int[] run_parameters;
     private boolean use_decimal_system;
     private boolean is_bin_number_system;
-    private boolean run_all_parameters;
-    private boolean run_all_files;
     public static boolean export_all_encoding_info;
-    public static boolean give_stats_for_every_file;
 
     public boolean is_binary_number_system() {
         return this.is_bin_number_system;
@@ -53,14 +50,6 @@ public class InputMenu extends javax.swing.JFrame {
     
     public Boolean get_open_exported() {
         return open_exported;
-    }
-    
-    public Boolean get_run_all_parameters() {
-        return run_all_parameters;
-    }
-
-    public Boolean get_run_all_files() {
-        return run_all_files;
     }
 
     public int[] get_run_parameters() {
@@ -687,13 +676,13 @@ public class InputMenu extends javax.swing.JFrame {
             if(rad_btn_import_codebook.isSelected())
                 this.codebook_data = CSVUtils.parse_CSV(label_selected_codebook_file.getText());
             if(all_parameters_checkbox.isSelected())
-                run_all_parameters = true;
+                MainExecution.run_all_parameters = true;
             if(run_all_files_checkbox.isSelected())
-                run_all_files = true;
+                MainExecution.run_all_files = true;
             if(all_encoding_export_info_checkbox.isSelected())
                 export_all_encoding_info = true;
             if (stats_for_every_file_checkbox.isSelected())
-                give_stats_for_every_file = true;
+                MainExecution.give_stats_for_every_file = true;
             if (cont) {
                 try {MainExecution.main_execution(this);}
                 catch (Exception ex) {Logger.getLogger(InputMenu.class.getName()).log(Level.SEVERE, null, ex);}
