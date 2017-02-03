@@ -170,12 +170,10 @@ public class CompressionUtils {
 
         for(String element : to_encode) {
             encoded += CompressionUtils.get_huffman_encoding(element);
-            if (!MainExecution.run_all_parameters) {
-                index++;
-                if (total_to_encode > 100 && index%(total_to_encode/100) == 0) {
-                    System.out.println("Approx " + percentage + "% complete (Step 1 of 2)");
-                    percentage++;
-                }
+            index++;
+            if (total_to_encode > 100 && index%(total_to_encode/100) == 0) {
+                System.out.println("Approx " + percentage + "% complete (Step 1 of 2)");
+                percentage++;
             }
         }
         return encoded;
