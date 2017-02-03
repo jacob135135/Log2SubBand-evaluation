@@ -225,20 +225,27 @@ public class CompressionUtils {
     }
     
     static Map<String, String> GetDataInfo(String[] raw_values) {
-        String bin_concat_input = "", cs_input = "";
+        String bin_concat_input = "", cs_input = "", temp_bin = "", temp_cs = "";
 
         int i = 0;
         for (String raw_value : raw_values) {
+            if(!is_bin_system) {raw_value = decimal_to_binary(raw_value);}
+            else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
+            temp_cs += "," + raw_value;
+            temp_bin += raw_value;
+            
             if (i%4098 == 0) {
                 // Assuming files have 4097 numbers in them
                 System.out.println("Got data info from file" + (i/4098 + 1) +" : (" + LocalDateTime.now() + ")" );
+                cs_input += "," + temp_cs;
+                bin_concat_input += temp_bin;
+                temp_cs = "";
+                temp_bin = "";
             }
-            if(!is_bin_system) {raw_value = decimal_to_binary(raw_value);}
-            else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
-            cs_input += "," + raw_value;
-            bin_concat_input += raw_value;
             i++;
         }
+        cs_input += "," + temp_cs;
+        bin_concat_input += temp_bin;
 
         Map<String, String> to_return = new HashMap<>();
         to_return.put("bin_concat_input", bin_concat_input);
