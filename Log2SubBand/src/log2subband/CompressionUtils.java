@@ -178,19 +178,22 @@ public class CompressionUtils {
      * @return
      */
     public static String get_full_huffman_encoding(String[] to_encode) {
-        String encoded = "";
+        String encoded = "", temp_encoded = "";
         int total_to_encode = to_encode.length;
         int index = 0;
         int percentage = 0;
 
         for(String element : to_encode) {
-            encoded += CompressionUtils.get_huffman_encoding(element);
+            temp_encoded += CompressionUtils.get_huffman_encoding(element);
             index++;
             if (total_to_encode > 100 && index%(total_to_encode/100) == 0) {
                 System.out.println("Approx " + percentage + "% complete (Step 1 of 2)");
                 percentage++;
+                encoded += temp_encoded;
+                temp_encoded = "";
             }
         }
+        encoded += temp_encoded;
         return encoded;
     }
 
