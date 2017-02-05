@@ -344,6 +344,8 @@ public class CompressionUtils {
         to_return[0] = input[0];
         for(int i=1;i<input.length;i++) {
             int temp = Integer.parseInt(input[i]) - Integer.parseInt(input[i-1]);
+            if (temp < -2048) temp = -2048;
+            if (temp > 2047) temp = 2047;
             to_return[i] = String.valueOf(temp);
         }
         return to_return;
