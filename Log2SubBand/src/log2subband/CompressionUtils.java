@@ -12,6 +12,7 @@ import static log2subband.Log2SubBand.parameters;
 import static log2subband.MyUtils.binary_to_12_bits;
 import static log2subband.MyUtils.binary_to_decimal;
 import static log2subband.MyUtils.decimal_to_binary;
+import menuUI.InputMenu;
 
 /**
  * @author JAKUB
@@ -68,6 +69,7 @@ public class CompressionUtils {
     public static Map<String, String> perform_log2_sub_band(String[] raw_values, boolean data_ready) {
         System.out.println("Starting performing log2SubBand: (" + LocalDateTime.now() + ")" );
         String ovrl_compr = "",cs_output = "";
+        int compressed_size = 0;
 
         int total_to_encode = raw_values.length;
         int index = 0;
@@ -79,17 +81,27 @@ public class CompressionUtils {
             }
 
             String current_compressed = Log2SubBand.log2_sub_band_compress_number(raw_value);
-            ovrl_compr += current_compressed;
-            cs_output += "," + current_compressed;
+            compressed_size += current_compressed.length();
+            if (!(MainExecution.run_all_parameters || MainExecution.run_all_files) || InputMenu.export_all_encoding_info) {
+                ovrl_compr += current_compressed;
+                cs_output += "," + current_compressed;
+            }
             if (debug) System.out.println("Current compressed data: " + current_compressed);
-            index++;
-            if (total_to_encode > 100 && index%(total_to_encode/100) == 0) {
-                System.out.println("Approx " + percentage + "% complete");
-                percentage++;
+
+            if (!MainExecution.run_all_parameters) {
+                index++;
+                if (total_to_encode > 100 && index%(total_to_encode/100) == 0) {
+                    System.out.println("Approx " + percentage + "% complete (Step 2 of 2)");
+                    percentage++;
+                }
             }
         }
 
         Map<String, String> to_return = new HashMap<>();
+        if ((MainExecution.run_all_parameters || MainExecution.run_all_files) && !InputMenu.export_all_encoding_info) {
+            cs_output = "0";
+        }
+        to_return.put("compressed_length", compressed_size + "");
         to_return.put("compr", ovrl_compr);
         to_return.put("cs_output", cs_output.substring(1));
 
@@ -116,6 +128,13 @@ public class CompressionUtils {
         return compr_ratio;
     }
     
+    public static Double compression_rate(int compressed_length, int input_length) {
+        System.out.println("overall compr length: " + input_length);
+        System.out.println("bin_concat_input length: " + compressed_length);
+        double compr_ratio =  (1.0 * input_length)/ compressed_length;
+        return compr_ratio;
+    }
+
     /**
      * Prints information regarding Huffman compression results.
      * Prints Full compressed string and ratio (with respect to original binary concatenated input string)
@@ -160,18 +179,22 @@ public class CompressionUtils {
      * @return
      */
     public static String get_full_huffman_encoding(String[] to_encode) {
-        String encoded = "";
+        String encoded = "", temp_encoded = "";
         int total_to_encode = to_encode.length;
         int index = 0;
         int percentage = 0;
+
         for(String element : to_encode) {
-            encoded += CompressionUtils.get_huffman_encoding(element);
+            temp_encoded += CompressionUtils.get_huffman_encoding(element);
             index++;
             if (total_to_encode > 100 && index%(total_to_encode/100) == 0) {
-                System.out.println("Approx " + percentage + "% complete");
+                System.out.println("Approx " + percentage + "% complete (Step 1 of 2)");
                 percentage++;
+                encoded += temp_encoded;
+                temp_encoded = "";
             }
         }
+        encoded += temp_encoded;
         return encoded;
     }
 
@@ -225,20 +248,27 @@ public class CompressionUtils {
     }
     
     static Map<String, String> GetDataInfo(String[] raw_values) {
-        String bin_concat_input = "", cs_input = "";
+        String bin_concat_input = "", cs_input = "", temp_bin = "", temp_cs = "";
 
         int i = 0;
         for (String raw_value : raw_values) {
+            if(!is_bin_system) {raw_value = decimal_to_binary(raw_value);}
+            else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
+            temp_cs += "," + raw_value;
+            temp_bin += raw_value;
+            
             if (i%4098 == 0) {
                 // Assuming files have 4097 numbers in them
                 System.out.println("Got data info from file" + (i/4098 + 1) +" : (" + LocalDateTime.now() + ")" );
+                cs_input += temp_cs;
+                bin_concat_input += temp_bin;
+                temp_cs = "";
+                temp_bin = "";
             }
-            if(!is_bin_system) {raw_value = decimal_to_binary(raw_value);}
-            else {raw_value = MyUtils.binary_to_12_bits(raw_value);}
-            cs_input += "," + raw_value;
-            bin_concat_input += raw_value;
             i++;
         }
+        cs_input += temp_cs;
+        bin_concat_input += temp_bin;
 
         Map<String, String> to_return = new HashMap<>();
         to_return.put("bin_concat_input", bin_concat_input);
@@ -269,7 +299,7 @@ public class CompressionUtils {
      * Every permutation has to have sum of all bands exactly 12.
      * @return Map<String, List<String>> all valid permutations and their log2subband compression rates
      */
-    static Map<String, String[]> run_every_permutation(String[] raw_val_arr, String bin_concat_input) {
+    static Map<String, String[]> run_every_permutation(String[] raw_val_arr, int bin_concat_input_length) {
         String[] permutations = new String[455];
         String[] permutations_crs = new String[455];
         int index = 0;
@@ -290,7 +320,8 @@ public class CompressionUtils {
                             parameters = new int[]{a, b, c, d};
                             System.out.println("Permutation: " + permutations[index] + "("  + LocalDateTime.now() + ")" );
                             Map<String, String> result = CompressionUtils.perform_log2_sub_band(raw_val_arr, true);
-                            double compression_rate = compression_rate(result.get("compr"), bin_concat_input);
+                            int compr_length = Integer.valueOf(result.get("compressed_length"));
+                            double compression_rate = compression_rate(compr_length, bin_concat_input_length);
                             permutations_crs[index] = compression_rate + "";
                             System.out.println("permutation: " + permutations[index] + " CR: " + compression_rate);
                             index++;
@@ -313,6 +344,8 @@ public class CompressionUtils {
         to_return[0] = input[0];
         for(int i=1;i<input.length;i++) {
             int temp = Integer.parseInt(input[i]) - Integer.parseInt(input[i-1]);
+            if (temp < -2048) temp = -2048;
+            if (temp > 2047) temp = 2047;
             to_return[i] = String.valueOf(temp);
         }
         return to_return;
