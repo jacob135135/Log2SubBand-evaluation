@@ -31,6 +31,7 @@ public class InputMenu extends javax.swing.JFrame {
     private boolean use_decimal_system;
     private boolean is_bin_number_system;
     public static boolean export_all_encoding_info;
+    public static String codebook_filename = "";
 
     public boolean is_binary_number_system() {
         return this.is_bin_number_system;
@@ -677,8 +678,10 @@ public class InputMenu extends javax.swing.JFrame {
             MainExecution.run_all_parameters = false;
             if (run_DPCM_for_Huf.isSelected())
                 MainExecution.DPCM_for_Huffman = true;
-            if(rad_btn_import_codebook.isSelected())
-                this.codebook_data = CSVUtils.parse_CSV(label_selected_codebook_file.getText());
+            if(rad_btn_import_codebook.isSelected()) {
+                codebook_filename = label_selected_codebook_file.getText();
+                this.codebook_data = CSVUtils.parse_CSV(codebook_filename);
+            }
             if(all_parameters_checkbox.isSelected())
                 MainExecution.run_all_parameters = true;
             if(run_all_files_checkbox.isSelected())

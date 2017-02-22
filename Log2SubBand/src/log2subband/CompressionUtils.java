@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import static log2subband.HuffmanCode.number_to_encoding_dict;
 import static log2subband.HuffmanCode.encoding_to_number_dict;
+import static log2subband.HuffmanCode.huffman_DPCM_data;
 import static log2subband.MainExecution.debug;
 import static log2subband.MainExecution.is_bin_system;
 import static log2subband.Log2SubBand.parameters;
@@ -286,7 +287,23 @@ public class CompressionUtils {
     static void set_up_Huffman(String[] custom_codebook , String[] raw_values_array) throws Exception {
         number_to_encoding_dict = new HashMap<>();
         encoding_to_number_dict = new HashMap<>();
-        if (custom_codebook.length > 0) CompressionUtils.init_codebook_from_imported_codebook(custom_codebook );
+        if (custom_codebook.length > 0) {
+            CompressionUtils.init_codebook_from_imported_codebook(custom_codebook );
+
+            if (MainExecution.DPCM_for_Huffman) {
+                String[] cloned_numbers_to_encode =  raw_values_array.clone();
+                cloned_numbers_to_encode = CompressionUtils.DPCM(cloned_numbers_to_encode);
+                huffman_DPCM_data = new String[cloned_numbers_to_encode.length];
+
+                // Need to convert data to 12-bit binary numbers
+                for(int i=0; i<cloned_numbers_to_encode.length; i++) {
+                    String cur_number = cloned_numbers_to_encode[i];
+                    if(!is_bin_system) {cur_number = decimal_to_binary(cur_number);}
+                    else {cur_number = MyUtils.binary_to_12_bits(cur_number);}
+                    huffman_DPCM_data[i] = cur_number;
+                }
+            }
+        }
         else {
             System.out.println("Starting to initialise ideal huffman dict from data: (" + LocalDateTime.now() + ")" );
             HuffmanCode.init_ideal_huffman_dictionaries(raw_values_array);

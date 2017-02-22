@@ -64,6 +64,11 @@ public class MyUtils {
         if (MainExecution.DPCM_for_Huffman) huf_mode = "DPCM + Huffman CR: ";
         result_string += "\n\n Log2SubBand CR: " + subband_cr  + "\n " + huf_mode + huff_compr_rate;
         result_string += "\n\n " + MainExecution.running_setting;
+
+        if (!"".equals(InputMenu.codebook_filename)) {
+            result_string += "\n Codebook imported from " + InputMenu.codebook_filename;
+        }
+
         result_string += "\n\n Data files imported: " + MainExecution.data_files;
         result_string += "\n\nHEADER 00 count: " + Log2SubBand.header00_count + "(" + Log2SubBand.header00_count*(100.0)/total_headers + "%)";
         result_string += "\nHEADER 01 count: " + Log2SubBand.header01_count + "(" + Log2SubBand.header01_count*(100.0)/total_headers + "%)";
@@ -87,6 +92,11 @@ public class MyUtils {
         for (int i=0; i<permutations.length; i++) {
             result_string += "\n" + append_spaces(permutations[i], 13) + "," + append_spaces(CRs[i], 13) + "," + huff_compr_rate;
         }
+
+        if (!"".equals(InputMenu.codebook_filename)) {
+            result_string += "\n\n Codebook imported from " + InputMenu.codebook_filename;
+        }
+
         result_string += "\n\n Data files imported: " + MainExecution.data_files;
         String[] result = result_string.split(",");
         return result;
