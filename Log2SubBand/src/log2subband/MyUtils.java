@@ -237,4 +237,20 @@ public class MyUtils {
         return to_return;
     }
 
+    /**
+     * Goes through input array and checks for values that are outside of 12 bit signed int range
+     * Numbers outside of range get saturated values
+     *
+     * @param raw_input_array input array
+     * @return input array with values out of range replaced by saturated values (2047 or -2048)
+     */
+    public static String[] fit_data_into_boundary(String[] raw_input_array) {
+        for(int i=0; i<raw_input_array.length; i++) {
+            int temp = Integer.valueOf(raw_input_array[i]);
+            if (temp > 2047) raw_input_array[i] = "2047";
+            if (temp < -2048) raw_input_array[i] = "-2048";
+        }
+        return raw_input_array;
+    }
+
 }

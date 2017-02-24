@@ -33,6 +33,7 @@ public class MainExecution {
                 String cur_name = f.getName();
                 data_files = f.getName();
                 String[] raw_values_array = CSVUtils.parse_CSV(f.getAbsolutePath());
+                raw_values_array = MyUtils.fit_data_into_boundary(raw_values_array);
                 Map<String, String> data_info = CompressionUtils.GetDataInfo(raw_values_array);
                 String bin_concat_input = data_info.get("bin_concat_input");
                 String cs_input_string = data_info.get("cs_input");
@@ -71,6 +72,7 @@ public class MainExecution {
         System.out.println("TOTAL DATA NUMBERS: " + raw_values_array.length);
         System.out.println("Got data from files: (" + LocalDateTime.now() + ")" );
 
+        raw_values_array = MyUtils.fit_data_into_boundary(raw_values_array);
         Map<String, String> data_info = CompressionUtils.GetDataInfo(raw_values_array);
         System.out.println("Got basic data info from files: (" + LocalDateTime.now() + ")" );
         String bin_concat_input = data_info.get("bin_concat_input");
